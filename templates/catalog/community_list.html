@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Communities · Heritage RCH{% endblock %}
+{% block content %}
+<h1>Communities</h1>
+<form method="get" style="margin-bottom:1rem;">
+  <input type="text" name="q" placeholder="Search name/description" value="{{ request.GET.q }}"/>
+  <input type="text" name="city" placeholder="City" value="{{ request.GET.city }}"/>
+  <select name="status">
+    <option value="">Any status</option>
+    {% for value,label in status_choices %}
+      <option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit">Filter</button>
+</form>
+<ul>
+  {% for obj in object_list %}
+    <li><a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a> — {{ obj.city }}, {{ obj.state }} ({{ obj.get_status_display }})</li>
+  {% empty %}
+    <li>No communities yet.</li>
+  {% endfor %}
+</ul>
+{% if is_paginated %}
+  <div>
+    {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">Prev</a>{% endif %}
+    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">Next</a>{% endif %}
+  </div>
+{% endif %}
+{% endblock %}

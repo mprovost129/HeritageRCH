@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Floor Plans · Heritage RCH{% endblock %}
+{% block content %}
+<h1>Floor Plans</h1>
+<form method="get" style="margin-bottom:1rem;">
+  <input type="text" name="q" placeholder="Search name/description" value="{{ request.GET.q }}"/>
+  <input type="number" name="beds" placeholder="Min beds" value="{{ request.GET.beds }}"/>
+  <input type="number" name="min_sqft" placeholder="Min sq ft" value="{{ request.GET.min_sqft }}"/>
+  <input type="number" name="max_sqft" placeholder="Max sq ft" value="{{ request.GET.max_sqft }}"/>
+  <button type="submit">Filter</button>
+</form>
+<ul>
+  {% for obj in object_list %}
+    <li><a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a> — {{ obj.beds }} bd · {{ obj.baths }} ba · {{ obj.sq_ft_min }}–{{ obj.sq_ft_max }} sf</li>
+  {% empty %}
+    <li>No plans yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

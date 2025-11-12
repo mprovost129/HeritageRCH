@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Available Homes · Heritage RCH{% endblock %}
+{% block content %}
+<h1>Available Homes</h1>
+<form method="get" style="margin-bottom:1rem;">
+  <input type="text" name="q" placeholder="Search address/description" value="{{ request.GET.q }}"/>
+  <input type="text" name="city" placeholder="City" value="{{ request.GET.city }}"/>
+  <input type="number" name="beds" placeholder="Min beds" value="{{ request.GET.beds }}"/>
+  <input type="number" name="max_price" placeholder="Max price" value="{{ request.GET.max_price }}"/>
+  <select name="status">
+    <option value="">Any status</option>
+    {% for value,label in status_choices %}
+      <option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit">Filter</button>
+</form>
+<ul>
+  {% for obj in object_list %}
+    <li>
+      <a href="{{ obj.get_absolute_url }}">{{ obj.full_address|default:obj.slug }}</a>
+      — {{ obj.beds }} bd · {{ obj.baths }} ba · {{ obj.sq_ft }} sf — {{ obj.get_status_display }}
+    </li>
+  {% empty %}
+    <li>No homes yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

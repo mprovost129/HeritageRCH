@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}{{ object.name }} · Plan · Heritage RCH{% endblock %}
+{% block content %}
+<h1>{{ object.name }}</h1>
+<p>{{ object.beds }} bd · {{ object.baths }} ba · {{ object.sq_ft_min }}–{{ object.sq_ft_max }} sf</p>
+<div>{{ object.description|linebreaks }}</div>
+<h3>Available in these communities</h3>
+<ul>
+  {% for c in object.available_in.all %}
+    <li><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></li>
+  {% empty %}<li>—</li>{% endfor %}
+</ul>
+{% endblock %}
