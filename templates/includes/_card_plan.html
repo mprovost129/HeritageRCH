@@ -1,0 +1,12 @@
+<div class="card h-100">
+  {% with photo=obj.photos.all|first %}
+    {% if photo %}
+      <img src="{{ photo.image.url }}" class="card-img-top" alt="{{ photo.caption }}">
+    {% endif %}
+  {% endwith %}
+  <div class="card-body">
+    <h5 class="card-title mb-1"><a class="stretched-link" href="{{ obj.get_absolute_url }}">{{ obj.name }}</a></h5>
+    <div class="text-muted small">{{ obj.beds }} bd • {{ obj.baths }} ba</div>
+    <div class="text-muted small">{% if obj.sq_ft_min %}{{ obj.sq_ft_min }}{% endif %}{% if obj.sq_ft_max %}–{{ obj.sq_ft_max }}{% endif %} sf</div>
+  </div>
+</div>

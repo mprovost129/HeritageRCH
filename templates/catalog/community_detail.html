@@ -5,17 +5,30 @@
 <p>{{ object.tagline }}</p>
 <p>{{ object.city }}, {{ object.state }} — {{ object.get_status_display }}</p>
 <div>{{ object.description|linebreaks }}</div>
-<h3>Amenities</h3>
+<p class="mt-2">
+  <a class="btn btn-primary" href="/contact/?message={{ 'I\'m interested in community: ' }}{{ object.name }}">Request Info</a>
+</p>
+
+{% if object.photos.all %}
+  <h3>Photos</h3>
+  <div class="row row-cols-2 row-cols-md-3 g-2">
+    {% for ph in object.photos.all %}
+      <div class="col"><img src="{{ ph.image.url }}" alt="{{ ph.caption }}" class="img-fluid rounded"></div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<h3 class="mt-4">Amenities</h3>
 <ul>
   {% for a in object.amenities.all %}<li>{{ a.name }}</li>{% empty %}<li>—</li>{% endfor %}
 </ul>
-<h3>Available Homes</h3>
+<h3 class="mt-4">Available Homes</h3>
 <ul>
   {% for h in object.homes.all %}
     <li><a href="{{ h.get_absolute_url }}">{{ h.full_address|default:h.slug }}</a> — {{ h.get_status_display }}</li>
   {% empty %}<li>—</li>{% endfor %}
 </ul>
-<h3>Plans available in this community</h3>
+<h3 class="mt-4">Plans available in this community</h3>
 <ul>
   {% for p in object.available_plans.all %}
     <li><a href="{{ p.get_absolute_url }}">{{ p.name }}</a></li>

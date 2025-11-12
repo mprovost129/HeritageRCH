@@ -4,7 +4,20 @@
 <h1>{{ object.name }}</h1>
 <p>{{ object.beds }} bd · {{ object.baths }} ba · {{ object.sq_ft_min }}–{{ object.sq_ft_max }} sf</p>
 <div>{{ object.description|linebreaks }}</div>
-<h3>Available in these communities</h3>
+<p class="mt-2">
+  <a class="btn btn-primary" href="/contact/?message={{ 'I\'m interested in plan: ' }}{{ object.name }}">Request Info</a>
+</p>
+
+{% if object.photos.all %}
+  <h3>Photos</h3>
+  <div class="row row-cols-2 row-cols-md-3 g-2">
+    {% for ph in object.photos.all %}
+      <div class="col"><img src="{{ ph.image.url }}" alt="{{ ph.caption }}" class="img-fluid rounded"></div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<h3 class="mt-4">Available in these communities</h3>
 <ul>
   {% for c in object.available_in.all %}
     <li><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></li>

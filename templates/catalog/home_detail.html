@@ -6,6 +6,19 @@
 <p>{{ object.beds }} bd · {{ object.baths }} ba · {{ object.sq_ft }} sf — {{ object.get_status_display }}</p>
 <p>Price: {% if object.price %}${{ object.price|floatformat:0 }}{% else %}TBD{% endif %}</p>
 <div>{{ object.description|linebreaks }}</div>
+<p class="mt-2">
+  <a class="btn btn-primary" href="/contact/?message={{ 'I\'m interested in home at ' }}{{ object.full_address|default:object.slug }}">Request Info</a>
+</p>
+
+{% if object.photos.all %}
+  <h3>Photos</h3>
+  <div class="row row-cols-2 row-cols-md-3 g-2">
+    {% for ph in object.photos.all %}
+      <div class="col"><img src="{{ ph.image.url }}" alt="{{ ph.caption }}" class="img-fluid rounded"></div>
+    {% endfor %}
+  </div>
+{% endif %}
+
 {% if object.plan %}
   <p>Based on plan: <a href="{{ object.plan.get_absolute_url }}">{{ object.plan.name }}</a></p>
 {% endif %}

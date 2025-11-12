@@ -1,6 +1,6 @@
-# ──────────────────────────────────────────────────────────────────────────────
-# catalog/views/home.py
-# ──────────────────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------------------
+# catalog/views/home.py  (for reference)
+# -----------------------------------------------------------------------------
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
 from ..models import AvailableHome, HomeStatus

@@ -1,28 +1,61 @@
 {% extends 'base.html' %}
 {% block title %}Available Homes · Heritage RCH{% endblock %}
 {% block content %}
-<h1>Available Homes</h1>
-<form method="get" style="margin-bottom:1rem;">
-  <input type="text" name="q" placeholder="Search address/description" value="{{ request.GET.q }}"/>
-  <input type="text" name="city" placeholder="City" value="{{ request.GET.city }}"/>
-  <input type="number" name="beds" placeholder="Min beds" value="{{ request.GET.beds }}"/>
-  <input type="number" name="max_price" placeholder="Max price" value="{{ request.GET.max_price }}"/>
-  <select name="status">
-    <option value="">Any status</option>
-    {% for value,label in status_choices %}
-      <option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>
-    {% endfor %}
-  </select>
-  <button type="submit">Filter</button>
+<h1 class="mb-3">Available Homes</h1>
+<form method="get" class="row g-2 align-items-end mb-3">
+  <div class="col-md-4">
+    <label class="form-label">Search</label>
+    <input class="form-control" type="text" name="q" placeholder="Address or description" value="{{ request.GET.q }}"/>
+  </div>
+  <div class="col-md-2">
+    <label class="form-label">City</label>
+    <input class="form-control" type="text" name="city" value="{{ request.GET.city }}"/>
+  </div>
+  <div class="col-md-2">
+    <label class="form-label">Min beds</label>
+    <input class="form-control" type="number" name="beds" value="{{ request.GET.beds }}"/>
+  </div>
+  <div class="col-md-2">
+    <label class="form-label">Max price</label>
+    <input class="form-control" type="number" name="max_price" value="{{ request.GET.max_price }}"/>
+  </div>
+  <div class="col-md-2">
+    <label class="form-label">Status</label>
+    <select name="status" class="form-select">
+      <option value="">Any status</option>
+      {% for value,label in status_choices %}
+        <option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-2">
+    <button type="submit" class="btn btn-primary w-100">Filter</button>
+  </div>
 </form>
-<ul>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
   {% for obj in object_list %}
-    <li>
-      <a href="{{ obj.get_absolute_url }}">{{ obj.full_address|default:obj.slug }}</a>
-      — {{ obj.beds }} bd · {{ obj.baths }} ba · {{ obj.sq_ft }} sf — {{ obj.get_status_display }}
-    </li>
+    <div class="col">{% include 'includes/_card_home.html' with obj=obj %}</div>
   {% empty %}
-    <li>No homes yet.</li>
+    <div class="col"><div class="alert alert-light border">No homes yet.</div></div>
   {% endfor %}
-</ul>
+</div>
+
+{% if is_paginated %}
+  <nav class="mt-3" aria-label="Homes pagination">
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">Previous</span></li>
+      {% endif %}
+      <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+      {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+      {% else %}
+        <li class="page-item disabled"><span class="page-link">Next</span></li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endif %}
 {% endblock %}

@@ -5,14 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Heritage RCH{% endblock %}</title>
-
-  {# --- Bootstrap CSS (serve from /static). Place files at static/vendor/bootstrap/ --- #}
   <link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.min.css' %}">
-
-  {# Project overrides #}
   <link rel="stylesheet" href="{% static 'site.css' %}">
-
-  {# Per-page additions #}
   {% block extra_head %}{% endblock %}
 </head>
 <body>
@@ -44,7 +38,6 @@
     {% block content %}{% endblock %}
   </main>
 
-  {# --- Bootstrap JS bundle (includes Popper). Place file at static/vendor/bootstrap/ --- #}
   <script src="{% static 'vendor/bootstrap/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'site.js' %}"></script>
   {% block extra_js %}{% endblock %}

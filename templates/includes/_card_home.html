@@ -1,0 +1,30 @@
+<div class="card h-100">
+  {% with photo=obj.photos.all|first %}
+    {% if photo %}
+      <img src="{{ photo.image.url }}" class="card-img-top" alt="{{ photo.caption }}">
+    {% endif %}
+  {% endwith %}
+  <div class="card-body">
+    <h5 class="card-title mb-1"><a class="stretched-link" href="{{ obj.get_absolute_url }}">{{ obj.full_address|default:obj.slug }}</a></h5>
+    <div class="text-muted small">{{ obj.community.name }}</div>
+    <div class="text-muted small mb-2">{{ obj.beds }} bd • {{ obj.baths }} ba • {{ obj.sq_ft }} sf</div>
+    <div>
+      {% if obj.price %}
+        <span class="badge text-bg-primary">${{ obj.price|floatformat:0 }}</span>
+      {% else %}
+        <span class="badge text-bg-secondary">Price TBD</span>
+      {% endif %}
+      {% if obj.status == 'uc' %}
+        <span class="badge text-bg-warning">Under Construction</span>
+      {% elif obj.status == 'active' %}
+        <span class="badge text-bg-success">Active</span>
+      {% elif obj.status == 'pending' %}
+        <span class="badge text-bg-info">Pending</span>
+      {% elif obj.status == 'sold' %}
+        <span class="badge text-bg-secondary">Sold</span>
+      {% elif obj.status == 'coming' %}
+        <span class="badge text-bg-light text-dark">Coming Soon</span>
+      {% endif %}
+    </div>
+  </div>
+</div>

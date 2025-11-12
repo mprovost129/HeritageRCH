@@ -1,6 +1,6 @@
-# ──────────────────────────────────────────────────────────────────────────────
-# catalog/views/community.py
-# ──────────────────────────────────────────────────────────────────────────────
+# -----------------------------------------------------------------------------
+# catalog/views/community.py  (for reference)
+# -----------------------------------------------------------------------------
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
 from ..models import Community, CommunityStatus
