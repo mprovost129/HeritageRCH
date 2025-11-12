@@ -1,24 +1,52 @@
 {% load static %}
-
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Heritage RCH{% endblock %}</title>
+
+  {# --- Bootstrap CSS (serve from /static). Place files at static/vendor/bootstrap/ --- #}
+  <link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.min.css' %}">
+
+  {# Project overrides #}
   <link rel="stylesheet" href="{% static 'site.css' %}">
+
+  {# Per-page additions #}
+  {% block extra_head %}{% endblock %}
 </head>
 <body>
-  <header>
-    <nav>
-      <a href="/">Home</a> ·
-      <a href="/communities/">Communities</a> ·
-      <a href="/plans/">Floor Plans</a> ·
-      <a href="/homes/">Available Homes</a>
+  <header class="border-bottom mb-4">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container">
+        <a class="navbar-brand" href="/">Heritage RCH</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="nav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link" href="/communities/">Communities</a></li>
+            <li class="nav-item"><a class="nav-link" href="/plans/">Floor Plans</a></li>
+            <li class="nav-item"><a class="nav-link" href="/homes/">Available Homes</a></li>
+            <li class="nav-item"><a class="nav-link" href="/contact/">Contact</a></li>
+          </ul>
+        </div>
+      </div>
     </nav>
   </header>
-  <main>
+
+  <main class="container">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-info" role="alert">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
     {% block content %}{% endblock %}
   </main>
+
+  {# --- Bootstrap JS bundle (includes Popper). Place file at static/vendor/bootstrap/ --- #}
+  <script src="{% static 'vendor/bootstrap/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'site.js' %}"></script>
+  {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -20,3 +20,18 @@ CSRF_TRUSTED_ORIGINS = [
 # Static assets (WhiteNoise pattern)
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+USE_S3 = os.getenv("USE_S3", "False").lower() == "true"
+if USE_S3:
+    INSTALLED_APPS.append("storages")
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")
+    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME")
+    AWS_QUERYSTRING_AUTH = False
+else:
+    # Fallback to local disk if not using S3
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = BASE_DIR / "media"
