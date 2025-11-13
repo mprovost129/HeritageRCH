@@ -9,6 +9,7 @@ from django.conf import settings
 from pages.forms import LeadForm
 from catalog.models import Lead, LeadSource, Community, FloorPlan, AvailableHome
 
+
 class HomeView(TemplateView):
     template_name = "pages/home.html"
 
@@ -31,6 +32,15 @@ class HomeView(TemplateView):
         ctx["featured_plans"] = plan_qs
         ctx["featured_homes"] = home_qs
         return ctx
+
+
+class AboutView(TemplateView):
+    template_name = "pages/about.html"
+
+
+class CustomHomesView(TemplateView):
+    template_name = "pages/custom_homes.html"
+
 
 class ContactView(FormView):
     template_name = "pages/contact.html"
@@ -57,9 +67,9 @@ class ContactView(FormView):
             to_addr = getattr(settings, "CONTACT_NOTIFY_EMAIL", "")
             if to_addr:
                 body = (
-                    f"From: {lead.name}"
-                    f"Email: {lead.email}"
-                    f"Phone: {lead.phone}"
+                    f"From: {lead.name}\n"
+                    f"Email: {lead.email}\n"
+                    f"Phone: {lead.phone}\n\n"
                     f"{lead.message}"
                 )
                 send_mail(

@@ -5,11 +5,31 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
+from django.contrib.sitemaps.views import sitemap
+
+from catalog.sitemaps import CommunitySitemap, FloorPlanSitemap, HomeSitemap
+from pages.sitemaps import StaticViewSitemap
+
+sitemaps = {
+    "communities": CommunitySitemap,
+    "plans": FloorPlanSitemap,
+    "homes": HomeSitemap,
+    "static": StaticViewSitemap,
+}
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include(("pages.urls", "pages"), namespace="pages")),  # home & contact
-    path("", include(("catalog.urls", "catalog"), namespace="catalog")),  # communities, plans, homes
+    path("", include(("pages.urls", "pages"), namespace="pages")),
+    path("", include(("catalog.urls", "catalog"), namespace="catalog")),
+
+    # SEO endpoints
+    path(
+        "robots.txt",
+        TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
+        name="robots",
+    ),
+    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
 ]
 
 if settings.DEBUG:

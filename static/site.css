@@ -1,0 +1,237 @@
+/* ==========================================================================
+   Heritage Realty & Custom Homes – Site Styles
+   ========================================================================== */
+
+/* Brand palette
+   -------------------------------------------------------------------------- */
+:root {
+  --heritage-green: #056838;
+  --heritage-green-light: #1f7e4b;
+  --heritage-green-dark: #034325;
+
+  --heritage-gray-100: #f7f7f7;
+  --heritage-gray-200: #eeeeee;
+  --heritage-gray-600: #6c757d;
+  --heritage-gray-800: #343a40;
+
+  --heritage-border-radius: 0.5rem;
+}
+
+/* Global
+   -------------------------------------------------------------------------- */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  color: var(--heritage-gray-800);
+  background-color: #ffffff;
+}
+
+a {
+  color: var(--heritage-green);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+a:hover {
+  color: var(--heritage-green-dark);
+  text-decoration: underline;
+}
+
+/* Headings slightly tighter letter-spacing */
+h1, h2, h3, h4, h5 {
+  letter-spacing: 0.02em;
+}
+
+/* Buttons
+   -------------------------------------------------------------------------- */
+.btn-primary {
+  background-color: var(--heritage-green);
+  border-color: var(--heritage-green);
+  color: #ffffff;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--heritage-green-light);
+  border-color: var(--heritage-green-light);
+  color: #ffffff;
+}
+
+.btn-outline-primary {
+  color: var(--heritage-green);
+  border-color: var(--heritage-green);
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  background-color: var(--heritage-green);
+  color: #ffffff;
+  border-color: var(--heritage-green);
+}
+
+/* Navbar
+   -------------------------------------------------------------------------- */
+.navbar {
+  /* background set inline via var in header include; this just helps on fallback */
+  background-color: var(--heritage-green);
+}
+
+.navbar .nav-link {
+  color: #ffffff;
+  font-weight: 500;
+  padding-inline: 0.9rem;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+  color: #ffffff;
+  opacity: 0.85;
+  text-decoration: none;
+}
+
+.navbar .navbar-brand img {
+  display: block;
+}
+
+/* Make toggler icon visible on dark background */
+.navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+
+.navbar-toggler-icon {
+  filter: invert(1);
+}
+
+/* Navbar active state */
+.navbar .nav-link.active {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  font-weight: 600;
+}
+
+/* Hero section (home page)
+   -------------------------------------------------------------------------- */
+.hero-home {
+  position: relative;
+  min-height: 77vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #ffffff;
+  padding: 3rem 1rem;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: var(--heritage-border-radius);
+  overflow: hidden;
+}
+
+.hero-home__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(3, 67, 37, 0.85),
+    rgba(5, 104, 56, 0.65)
+  );
+}
+
+.hero-home__content {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+}
+
+.hero-home .btn {
+  padding-inline: 1.5rem;
+}
+
+@media (min-width: 992px) {
+  .hero-home {
+    min-height: 80vh;
+  }
+}
+
+/* Cards
+   -------------------------------------------------------------------------- */
+.card {
+  border-radius: var(--heritage-border-radius);
+}
+
+.card img {
+  object-fit: cover;
+}
+
+/* Simple card “eyebrow” heading style */
+.card-title {
+  font-weight: 600;
+}
+
+/* Sticky sidebar cards on detail pages
+   (we’re also using Bootstrap’s position-sticky) */
+.sticky-card {
+  position: sticky;
+  top: 5rem;
+}
+
+/* Sections / spacing
+   -------------------------------------------------------------------------- */
+main.container {
+  margin-top: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+section + section {
+  margin-top: 2.5rem;
+}
+
+/* Forms
+   -------------------------------------------------------------------------- */
+form .form-label {
+  font-weight: 500;
+}
+
+form .form-control {
+  border-radius: 0.4rem;
+}
+
+/* Footer
+   -------------------------------------------------------------------------- */
+footer {
+  background-color: var(--heritage-gray-100);
+  border-top: 1px solid var(--heritage-gray-200);
+}
+
+footer img {
+  max-height: 40px;
+}
+
+/* Utility classes
+   -------------------------------------------------------------------------- */
+.bg-heritage {
+  background-color: var(--heritage-green) !important;
+  color: #ffffff !important;
+}
+
+.text-heritage {
+  color: var(--heritage-green) !important;
+}
+
+.badge-heritage {
+  background-color: var(--heritage-green);
+  color: #ffffff;
+}
+
+/* Responsive tweaks
+   -------------------------------------------------------------------------- */
+@media (min-width: 992px) {
+  .hero-home {
+    padding: 4rem 1rem;
+  }
+}
+
+.bg-heritage {
+  background-color: var(--heritage-green) !important;
+  color: #ffffff !important;
+}

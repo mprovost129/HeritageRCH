@@ -1,0 +1,10 @@
+{% load static %}
+<footer class="mt-5 py-4" style="background-color: #f3f3f3;">
+  <div class="container text-center">
+    <img src="{% static 'img/heritage-logo.svg' %}" alt="Heritage Realty & Custom Homes Logo"
+         style="height: 40px; opacity: 0.85;" class="mb-2">
+    <p class="small text-muted mb-0">
+      © {{ now|date:"Y" }} Heritage Realty & Custom Homes — All rights reserved.
+    </p>
+  </div>
+</footer>

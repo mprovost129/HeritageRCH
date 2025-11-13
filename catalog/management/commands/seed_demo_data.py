@@ -28,7 +28,6 @@ class Command(BaseCommand):
             slug="harborview",
             defaults=dict(name="Harborview", beds=3, baths=2.5, sq_ft_min=1800, sq_ft_max=2200),
         )
-        p.available_in.add(c)
 
         h, _ = AvailableHome.objects.get_or_create(
             slug="lot-12-eastwood",

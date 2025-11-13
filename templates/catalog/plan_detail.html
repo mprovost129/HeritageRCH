@@ -1,26 +1,116 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}{{ object.name }} · Plan · Heritage RCH{% endblock %}
+
 {% block content %}
-<h1>{{ object.name }}</h1>
-<p>{{ object.beds }} bd · {{ object.baths }} ba · {{ object.sq_ft_min }}–{{ object.sq_ft_max }} sf</p>
-<div>{{ object.description|linebreaks }}</div>
-<p class="mt-2">
-  <a class="btn btn-primary" href="/contact/?message={{ 'I\'m interested in plan: ' }}{{ object.name }}">Request Info</a>
-</p>
+<div class="row g-4">
+  <!-- Main content -->
+  <div class="col-lg-8">
+    <h1 class="mb-1">{{ object.name }}</h1>
+    <p class="text-muted mb-3">
+      {{ object.beds }} bd · {{ object.baths }} ba
+      {% if object.sq_ft_min or object.sq_ft_max %}
+        ·
+        {% if object.sq_ft_min and object.sq_ft_max %}
+          {{ object.sq_ft_min }}–{{ object.sq_ft_max }} sq ft
+        {% elif object.sq_ft_min %}
+          {{ object.sq_ft_min }}+ sq ft
+        {% elif object.sq_ft_max %}
+          Up to {{ object.sq_ft_max }} sq ft
+        {% endif %}
+      {% endif %}
+    </p>
 
-{% if object.photos.all %}
-  <h3>Photos</h3>
-  <div class="row row-cols-2 row-cols-md-3 g-2">
-    {% for ph in object.photos.all %}
-      <div class="col"><img src="{{ ph.image.url }}" alt="{{ ph.caption }}" class="img-fluid rounded"></div>
-    {% endfor %}
+    {% if object.photos.all %}
+      <div class="mb-4">
+        <div class="row g-2">
+          {% for ph in object.photos.all %}
+            <div class="col-6 col-md-4">
+              <a href="{{ ph.image.url }}" target="_blank" rel="noopener">
+                <img src="{{ ph.image.url }}" alt="{{ ph.caption }}" class="img-fluid rounded">
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if object.description %}
+      <h2 class="h5">Plan Description</h2>
+      <div class="mb-4">
+        {{ object.description|linebreaks }}
+      </div>
+    {% endif %}
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <h3 class="h6 text-uppercase text-muted">Key Features</h3>
+        <ul class="mb-0">
+          <li>{{ object.beds }} Bedrooms</li>
+          <li>{{ object.baths }} Bathrooms</li>
+          {% if object.sq_ft_min or object.sq_ft_max %}
+            <li>
+              {% if object.sq_ft_min and object.sq_ft_max %}
+                {{ object.sq_ft_min }}–{{ object.sq_ft_max }} sq ft
+              {% elif object.sq_ft_min %}
+                {{ object.sq_ft_min }}+ sq ft
+              {% elif object.sq_ft_max %}
+                Up to {{ object.sq_ft_max }} sq ft
+              {% endif %}
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+      <div class="col-md-6 mb-3">
+        <h3 class="h6 text-uppercase text-muted">Available In</h3>
+        <ul class="mb-0">
+          {% for c in object.available_in.all %}
+            <li><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></li>
+          {% empty %}
+            <li>Ask us where this plan can be built.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
   </div>
-{% endif %}
 
-<h3 class="mt-4">Available in these communities</h3>
-<ul>
-  {% for c in object.available_in.all %}
-    <li><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></li>
-  {% empty %}<li>—</li>{% endfor %}
-</ul>
+  <!-- Sticky sidebar card -->
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm position-sticky" style="top: 5rem;">
+      <div class="card-body">
+        <h2 class="h5 mb-2">Interested in this plan?</h2>
+        <p class="small text-muted mb-3">
+          Request more information about pricing, options, and where this plan is available.
+        </p>
+        <ul class="list-unstyled small mb-3">
+          <li><strong>Bedrooms:</strong> {{ object.beds }}</li>
+          <li><strong>Bathrooms:</strong> {{ object.baths }}</li>
+          {% if object.sq_ft_min or object.sq_ft_max %}
+            <li>
+              <strong>Square footage:</strong>
+              {% if object.sq_ft_min and object.sq_ft_max %}
+                {{ object.sq_ft_min }}–{{ object.sq_ft_max }} sq ft
+              {% elif object.sq_ft_min %}
+                {{ object.sq_ft_min }}+ sq ft
+              {% elif object.sq_ft_max %}
+                Up to {{ object.sq_ft_max }} sq ft
+              {% endif %}
+            </li>
+          {% endif %}
+          <li>
+            <strong>Communities:</strong>
+            {{ object.available_in.count }}
+          </li>
+        </ul>
+        <a class="btn btn-primary w-100 mb-2"
+           href="/contact/?message=Interested in plan: {{ object.name|urlencode }}">
+          Request Info
+        </a>
+        <p class="small text-muted mb-0">
+          Share any customization ideas in your message and we’ll follow up.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

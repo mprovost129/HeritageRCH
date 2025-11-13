@@ -1,22 +1,41 @@
-<div class="card h-100">
-  {% with photo=obj.photos.all|first %}
-    {% if photo %}
-      <img src="{{ photo.image.url }}" class="card-img-top" alt="{{ photo.caption }}">
-    {% endif %}
-  {% endwith %}
-  <div class="card-body">
-    <h5 class="card-title mb-1"><a class="stretched-link" href="{{ obj.get_absolute_url }}">{{ obj.name }}</a></h5>
-    <div class="text-muted small mb-2">{{ obj.city }}, {{ obj.state }}</div>
-    {% if obj.status %}
-      {% if obj.status == 'active' %}
-        <span class="badge text-bg-success">Active</span>
-      {% elif obj.status == 'coming' %}
-        <span class="badge text-bg-warning">Coming Soon</span>
-      {% elif obj.status == 'closing' %}
-        <span class="badge text-bg-info">Closing Out</span>
-      {% elif obj.status == 'sold_out' %}
-        <span class="badge text-bg-secondary">Sold Out</span>
+{# expects: obj = Community #}
+<div class="card h-100 shadow-sm">
+  <div class="ratio ratio-4x3">
+    {% with photo=obj.photos.all.0 %}
+      {% if photo %}
+        <img src="{{ photo.image.url }}" alt="{{ photo.caption }}" class="img-fluid"
+             style="object-fit: cover; width: 100%; height: 100%;">
+      {% else %}
+        <div class="d-flex align-items-center justify-content-center bg-light text-muted small">
+          No community photo yet
+        </div>
       {% endif %}
+    {% endwith %}
+  </div>
+
+  <div class="card-body d-flex flex-column">
+    <div class="d-flex justify-content-between align-items-start mb-1">
+      <h3 class="h5 card-title mb-0">{{ obj.name }}</h3>
+      {% if obj.status %}
+        <span class="badge badge-heritage ms-2">
+          {{ obj.get_status_display }}
+        </span>
+      {% endif %}
+    </div>
+    <p class="text-muted mb-2">
+      {{ obj.city }}{% if obj.state %}, {{ obj.state }}{% endif %}
+    </p>
+    {% if obj.tagline %}
+      <p class="small mb-3">{{ obj.tagline }}</p>
+    {% else %}
+      <p class="small mb-3 text-muted">
+        New homes in {{ obj.city }}{% if obj.state %}, {{ obj.state }}{% endif %}.
+      </p>
     {% endif %}
+    <div class="mt-auto">
+      <a href="{{ obj.get_absolute_url }}" class="btn btn-outline-primary btn-sm w-100">
+        View Community
+      </a>
+    </div>
   </div>
 </div>

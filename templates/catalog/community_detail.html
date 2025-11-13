@@ -1,37 +1,125 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}{{ object.name }} · Community · Heritage RCH{% endblock %}
+
 {% block content %}
-<h1>{{ object.name }}</h1>
-<p>{{ object.tagline }}</p>
-<p>{{ object.city }}, {{ object.state }} — {{ object.get_status_display }}</p>
-<div>{{ object.description|linebreaks }}</div>
-<p class="mt-2">
-  <a class="btn btn-primary" href="/contact/?message={{ 'I\'m interested in community: ' }}{{ object.name }}">Request Info</a>
-</p>
+<div class="row g-4">
+  <!-- Main content -->
+  <div class="col-lg-8">
+    <h1 class="mb-1">{{ object.name }}</h1>
+    {% if object.tagline %}
+      <p class="lead mb-2">{{ object.tagline }}</p>
+    {% endif %}
+    <p class="text-muted mb-3">
+      {{ object.city }}, {{ object.state }}
+      {% if object.status %}
+        ·
+        {% if object.status == 'active' %}
+          <span class="badge text-bg-success">Active</span>
+        {% elif object.status == 'coming' %}
+          <span class="badge text-bg-warning">Coming Soon</span>
+        {% elif object.status == 'closing' %}
+          <span class="badge text-bg-info">Closing Out</span>
+        {% elif object.status == 'sold_out' %}
+          <span class="badge text-bg-secondary">Sold Out</span>
+        {% endif %}
+      {% endif %}
+    </p>
 
-{% if object.photos.all %}
-  <h3>Photos</h3>
-  <div class="row row-cols-2 row-cols-md-3 g-2">
-    {% for ph in object.photos.all %}
-      <div class="col"><img src="{{ ph.image.url }}" alt="{{ ph.caption }}" class="img-fluid rounded"></div>
-    {% endfor %}
+    {% if object.photos.all %}
+      <div class="mb-4">
+        <div class="row g-2">
+          {% for ph in object.photos.all %}
+            <div class="col-6 col-md-4">
+              <a href="{{ ph.image.url }}" target="_blank" rel="noopener">
+                <img src="{{ ph.image.url }}" alt="{{ ph.caption }}" class="img-fluid rounded">
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if object.description %}
+      <h2 class="h5">Overview</h2>
+      <div class="mb-4">
+        {{ object.description|linebreaks }}
+      </div>
+    {% endif %}
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <h3 class="h6 text-uppercase text-muted">Amenities</h3>
+        <ul class="mb-0">
+          {% for a in object.amenities.all %}
+            <li>{{ a.name }}</li>
+          {% empty %}
+            <li>No amenities listed yet.</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col-md-6 mb-3">
+        <h3 class="h6 text-uppercase text-muted">Plans in this community</h3>
+        <ul class="mb-0">
+          {% for p in object.available_plans.all %}
+            <li><a href="{{ p.get_absolute_url }}">{{ p.name }}</a></li>
+          {% empty %}
+            <li>Plans coming soon.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-4">
+      <h3 class="h6 text-uppercase text-muted">Available Homes</h3>
+      <ul class="mb-0">
+        {% for h in object.homes.all %}
+          <li>
+            <a href="{{ h.get_absolute_url }}">{{ h.full_address|default:h.slug }}</a>
+            — {{ h.get_status_display }}
+            {% if h.price %}
+              · ${{ h.price|floatformat:0 }}
+            {% endif %}
+          </li>
+        {% empty %}
+          <li>No homes listed in this community yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
-{% endif %}
 
-<h3 class="mt-4">Amenities</h3>
-<ul>
-  {% for a in object.amenities.all %}<li>{{ a.name }}</li>{% empty %}<li>—</li>{% endfor %}
-</ul>
-<h3 class="mt-4">Available Homes</h3>
-<ul>
-  {% for h in object.homes.all %}
-    <li><a href="{{ h.get_absolute_url }}">{{ h.full_address|default:h.slug }}</a> — {{ h.get_status_display }}</li>
-  {% empty %}<li>—</li>{% endfor %}
-</ul>
-<h3 class="mt-4">Plans available in this community</h3>
-<ul>
-  {% for p in object.available_plans.all %}
-    <li><a href="{{ p.get_absolute_url }}">{{ p.name }}</a></li>
-  {% empty %}<li>—</li>{% endfor %}
-</ul>
+  <!-- Sticky sidebar card -->
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm position-sticky" style="top: 5rem;">
+      <div class="card-body">
+        <h2 class="h5 mb-2">Interested in {{ object.name }}?</h2>
+        <p class="small text-muted mb-3">
+          Request more info about homes, lots, and available floor plans in this community.
+        </p>
+        <ul class="list-unstyled small mb-3">
+          <li><strong>Location:</strong> {{ object.city }}, {{ object.state }}</li>
+          <li>
+            <strong>Status:</strong>
+            {{ object.get_status_display }}
+          </li>
+          <li>
+            <strong>Homes listed:</strong>
+            {{ object.homes.count }}
+          </li>
+          <li>
+            <strong>Plans available:</strong>
+            {{ object.available_plans.count }}
+          </li>
+        </ul>
+        <a class="btn btn-primary w-100 mb-2"
+            href="/contact/?message=Interested in community: {{ object.name|urlencode }}">
+            Request Info
+        </a>
+        <p class="small text-muted mb-0">
+          A member of our team will reach out to discuss options in {{ object.name }}.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

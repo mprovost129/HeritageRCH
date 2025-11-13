@@ -1,25 +1,110 @@
 {% extends 'base.html' %}
-{% block title %}Home · Heritage RCH{% endblock %}
+{% load static %}
+{% block title %}{{ object.full_address|default:"Home" }} · Heritage RCH{% endblock %}
+
 {% block content %}
-<h1>{{ object.full_address|default:object.slug }}</h1>
-<p>{{ object.community.name }}</p>
-<p>{{ object.beds }} bd · {{ object.baths }} ba · {{ object.sq_ft }} sf — {{ object.get_status_display }}</p>
-<p>Price: {% if object.price %}${{ object.price|floatformat:0 }}{% else %}TBD{% endif %}</p>
-<div>{{ object.description|linebreaks }}</div>
-<p class="mt-2">
-  <a class="btn btn-primary" href="/contact/?message={{ 'I\'m interested in home at ' }}{{ object.full_address|default:object.slug }}">Request Info</a>
-</p>
+<div class="row g-4">
+  <!-- Main content -->
+  <div class="col-lg-8">
+    <h1 class="mb-1">
+      {{ object.full_address|default:object.slug }}
+    </h1>
+    <p class="text-muted mb-3">
+      {{ object.community.name }}
+      · {{ object.beds }} bd · {{ object.baths }} ba
+      {% if object.sq_ft %}
+        · {{ object.sq_ft }} sq ft
+      {% endif %}
+      · {{ object.get_status_display }}
+    </p>
 
-{% if object.photos.all %}
-  <h3>Photos</h3>
-  <div class="row row-cols-2 row-cols-md-3 g-2">
-    {% for ph in object.photos.all %}
-      <div class="col"><img src="{{ ph.image.url }}" alt="{{ ph.caption }}" class="img-fluid rounded"></div>
-    {% endfor %}
+    {% if object.photos.all %}
+      <div class="mb-4">
+        <div class="row g-2">
+          {% for ph in object.photos.all %}
+            <div class="col-6 col-md-4">
+              <a href="{{ ph.image.url }}" target="_blank" rel="noopener">
+                <img src="{{ ph.image.url }}" alt="{{ ph.caption }}" class="img-fluid rounded">
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if object.description %}
+      <h2 class="h5">Home Description</h2>
+      <div class="mb-4">
+        {{ object.description|linebreaks }}
+      </div>
+    {% endif %}
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <h3 class="h6 text-uppercase text-muted">Details</h3>
+        <ul class="mb-0">
+          <li><strong>Bedrooms:</strong> {{ object.beds }}</li>
+          <li><strong>Bathrooms:</strong> {{ object.baths }}</li>
+          {% if object.sq_ft %}
+            <li><strong>Square footage:</strong> {{ object.sq_ft }} sq ft</li>
+          {% endif %}
+          <li><strong>Status:</strong> {{ object.get_status_display }}</li>
+          {% if object.plan %}
+            <li>
+              <strong>Plan:</strong>
+              <a href="{{ object.plan.get_absolute_url }}">{{ object.plan.name }}</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+      <div class="col-md-6 mb-3">
+        <h3 class="h6 text-uppercase text-muted">Location</h3>
+        <ul class="mb-0">
+          {% if object.address_1 %}<li>{{ object.address_1 }}</li>{% endif %}
+          {% if object.address_2 %}<li>{{ object.address_2 }}</li>{% endif %}
+          <li>
+            {{ object.city }}{% if object.state %}, {{ object.state }}{% endif %}
+            {% if object.postal_code %} {{ object.postal_code }}{% endif %}
+          </li>
+          <li>
+            <a href="{{ object.community.get_absolute_url }}">View community details</a>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
-{% endif %}
 
-{% if object.plan %}
-  <p>Based on plan: <a href="{{ object.plan.get_absolute_url }}">{{ object.plan.name }}</a></p>
-{% endif %}
+  <!-- Sticky sidebar card -->
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm position-sticky" style="top: 5rem;">
+      <div class="card-body">
+        <h2 class="h5 mb-2">Interested in this home?</h2>
+        {% if object.price %}
+          <p class="fs-4 fw-semibold mb-1">
+            ${{ object.price|floatformat:0 }}
+          </p>
+        {% else %}
+          <p class="fs-6 text-muted mb-1">Pricing TBD</p>
+        {% endif %}
+        <p class="small text-muted mb-3">
+          {{ object.beds }} bd · {{ object.baths }} ba{% if object.sq_ft %} · {{ object.sq_ft }} sq ft{% endif %}
+        </p>
+        <ul class="list-unstyled small mb-3">
+          <li><strong>Status:</strong> {{ object.get_status_display }}</li>
+          <li><strong>Community:</strong> {{ object.community.name }}</li>
+          {% if object.plan %}
+            <li><strong>Plan:</strong> {{ object.plan.name }}</li>
+          {% endif %}
+        </ul>
+        <a class="btn btn-primary w-100 mb-2"
+            href="/contact/?message=Interested in home at {{ object.full_address|default:object.slug|urlencode }}">
+            Request Info
+        </a>
+        <p class="small text-muted mb-0">
+          Ask about timeline, options, and next steps for purchasing this home.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

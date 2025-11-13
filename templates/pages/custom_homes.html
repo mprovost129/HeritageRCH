@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Custom Homes · Heritage Realty & Custom Homes{% endblock %}
+{% block meta_description %}
+Discover our custom home and design–build process. From first ideas to final walkthrough, Heritage helps you plan, design, and build a home that fits your life.
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-8">
+    <h1 class="mb-3">Custom Homes & Design–Build</h1>
+    <p class="lead">
+      From first ideas to final walkthrough, Heritage can help you design and build a home that
+      fits your life, your lot, and your budget.
+    </p>
+
+    <h2 class="h5 mt-4">How the Process Works</h2>
+    <ol>
+      <li><strong>Initial Conversation.</strong> Talk through timing, budget, and what you’re looking for.</li>
+      <li><strong>Homesite & Community.</strong> Pick a lot in one of our communities or discuss building on your land.</li>
+      <li><strong>Plan & Options.</strong> Choose a floor plan or start from a custom design, then refine layout and finishes.</li>
+      <li><strong>Construction.</strong> We handle permitting, scheduling, and build management.</li>
+      <li><strong>Closing & Move-In.</strong> Final walkthrough, punch list, and keys.</li>
+    </ol>
+
+    <h2 class="h5 mt-4">Ready-to-Modify Plans</h2>
+    <p>
+      Many buyers start with an existing floor plan and customize it. Browse our
+      <a href="/plans/">floor plans</a> to see what’s possible, then reach out with any changes
+      you have in mind.
+    </p>
+
+    <h2 class="h5 mt-4">Start the Conversation</h2>
+    <p>
+      Share your ideas, timing, and desired location, and we’ll outline next steps for your custom home.
+      Use the contact form and mention “Custom Home” in your message.
+    </p>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm mb-3">
+      <div class="card-body">
+        <h2 class="h6 text-uppercase text-muted mb-2">Thinking Custom?</h2>
+        <p class="small mb-3">
+          Tell us where you’d like to live, your ideal size and style, and whether you already own land.
+        </p>
+        <a class="btn btn-primary w-100"
+           href="/contact/?message=I am interested in building a custom home.">
+          Start a Custom Home Inquiry
+        </a>
+      </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <h2 class="h6 text-uppercase text-muted mb-2">Also Browse</h2>
+        <ul class="list-unstyled small mb-0">
+          <li><a href="/communities/">Communities</a></li>
+          <li><a href="/plans/">Floor Plans</a></li>
+          <li><a href="/homes/">Available Homes</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'includes/_cta_strip.html' %}
+
+{% endblock %}

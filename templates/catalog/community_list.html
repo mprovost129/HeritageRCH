@@ -1,54 +1,26 @@
 {% extends 'base.html' %}
-{% load static %}
-{% block title %}Communities · Heritage RCH{% endblock %}
+{% block title %}Communities · Heritage Realty & Custom Homes{% endblock %}
+{% block meta_description %}
+Browse Heritage communities, including active and coming-soon neighborhoods with new construction homes.
+{% endblock %}
+
 {% block content %}
-<h1 class="mb-3">Communities</h1>
-<form method="get" class="row g-2 align-items-end mb-3">
-  <div class="col-md-4">
-    <label class="form-label">Search</label>
-    <input class="form-control" type="text" name="q" placeholder="Name or description" value="{{ request.GET.q }}"/>
-  </div>
-  <div class="col-md-3">
-    <label class="form-label">City</label>
-    <input class="form-control" type="text" name="city" placeholder="City" value="{{ request.GET.city }}"/>
-  </div>
-  <div class="col-md-3">
-    <label class="form-label">Status</label>
-    <select name="status" class="form-select">
-      <option value="">Any status</option>
-      {% for value,label in status_choices %}
-        <option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  <div class="col-md-2">
-    <button type="submit" class="btn btn-primary w-100">Filter</button>
-  </div>
-</form>
+<section class="mb-4">
+  <h1 class="mb-1">Communities</h1>
+  <p class="text-muted mb-0">
+    Explore our active and coming-soon communities. Select a community to view available homes and plans.
+  </p>
+</section>
 
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-  {% for obj in object_list %}
-    <div class="col">{% include 'includes/_card_community.html' with obj=obj %}</div>
-  {% empty %}
-    <div class="col"><div class="alert alert-light border">No communities yet.</div></div>
-  {% endfor %}
-</div>
-
-{% if is_paginated %}
-  <nav class="mt-3" aria-label="Communities pagination">
-    <ul class="pagination">
-      {% if page_obj.has_previous %}
-        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
-      {% else %}
-        <li class="page-item disabled"><span class="page-link">Previous</span></li>
-      {% endif %}
-      <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
-      {% if page_obj.has_next %}
-        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
-      {% else %}
-        <li class="page-item disabled"><span class="page-link">Next</span></li>
-      {% endif %}
-    </ul>
-  </nav>
+{% if object_list %}
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+    {% for obj in object_list %}
+      <div class="col">
+        {% include 'includes/_card_community.html' with obj=obj %}
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p>No communities are published yet. Check back soon.</p>
 {% endif %}
 {% endblock %}
