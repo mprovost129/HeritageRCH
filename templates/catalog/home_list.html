@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}Available Homes · Heritage Realty & Custom Homes{% endblock %}
-{% block meta_description %}
-See move-in ready and under-construction homes available through Heritage Realty & Custom Homes.
-{% endblock %}
 
 {% block content %}
 <section class="mb-4">
   <h1 class="mb-1">Available Homes</h1>
   <p class="text-muted mb-0">
-    Move-in ready and under-construction homes. Select a home for photos, details, and next steps.
+    {% if site_settings and site_settings.homes_intro %}
+      {{ site_settings.homes_intro }}
+    {% else %}
+      Move-in ready and under-construction homes. Select a home for photos, details, and next steps.
+    {% endif %}
   </p>
 </section>
 

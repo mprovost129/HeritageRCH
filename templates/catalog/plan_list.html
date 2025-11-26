@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}Floor Plans · Heritage Realty & Custom Homes{% endblock %}
-{% block meta_description %}
-Explore our collection of new home floor plans, many of which can be customized to your lot and lifestyle.
-{% endblock %}
 
 {% block content %}
 <section class="mb-4">
   <h1 class="mb-1">Floor Plans</h1>
   <p class="text-muted mb-0">
-    Browse our collection of floor plans. Many plans can be customized to fit your lot, lifestyle, and budget.
+    {% if site_settings and site_settings.plans_intro %}
+      {{ site_settings.plans_intro }}
+    {% else %}
+      Browse our collection of floor plans. Many plans can be customized to fit your lot, lifestyle, and budget.
+    {% endif %}
   </p>
 </section>
 

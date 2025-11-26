@@ -1,4 +1,3 @@
-from contextlib import suppress
 from django.views.generic import TemplateView, FormView
 from django.contrib import messages
 from django.urls import reverse_lazy
@@ -42,11 +41,56 @@ class HomeView(TemplateView):
 
 
 class AboutView(TemplateView):
+    """
+    'Our Story' page.
+    """
     template_name = "pages/about.html"
 
 
 class CustomHomesView(TemplateView):
     template_name = "pages/custom_homes.html"
+
+
+class ModelHomesView(TemplateView):
+    """
+    Listing / explanation page for model homes.
+    """
+    template_name = "pages/model_homes.html"
+
+
+class TeamView(TemplateView):
+    """
+    'Meet Our Team' page.
+    """
+    template_name = "pages/team.html"
+
+
+class WeBuyLandView(TemplateView):
+    """
+    Land acquisition / 'We Buy Land' page.
+    """
+    template_name = "pages/we_buy_land.html"
+
+
+class MediaGalleryView(TemplateView):
+    """
+    Portfolio - Media Gallery.
+    """
+    template_name = "pages/gallery.html"
+
+
+class CompletedProjectsView(TemplateView):
+    """
+    Portfolio - Completed Projects.
+    """
+    template_name = "pages/completed_projects.html"
+
+
+class UpcomingProjectsView(TemplateView):
+    """
+    Portfolio - Upcoming / Future Projects.
+    """
+    template_name = "pages/upcoming_projects.html"
 
 
 class ContactView(FormView):
@@ -56,11 +100,12 @@ class ContactView(FormView):
 
     def get_initial(self):
         initial = super().get_initial()
-        if msg := self.request.GET.get("message"):
+        msg = self.request.GET.get("message")
+        if msg:
             initial["message"] = msg
         return initial
 
-    def form_valid(self, form):  # sourcery skip: use-contextlib-suppress
+    def form_valid(self, form):
         # Save lead in DB
         lead = Lead.objects.create(
             name=form.cleaned_data["name"],
@@ -79,10 +124,10 @@ class ContactView(FormView):
             settings_obj = None
 
         if settings_obj and settings_obj.lead_recipients:
-            # Split on commas and newlines, strip whitespace, drop empties
             raw = settings_obj.lead_recipients.replace(";", ",")
             for part in raw.replace("\r", "").split(","):
-                if email := part.strip():
+                email = part.strip()
+                if email:
                     recipients.append(email)
 
         if recipients:

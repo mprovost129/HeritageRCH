@@ -15,6 +15,20 @@ Contact Heritage Realty & Custom Homes to learn more about our communities, floo
       <div class="card-body">
         <h2 class="h6 text-uppercase text-muted mb-3">Get in Touch</h2>
 
+        {% if site_settings and site_settings.address_line1 %}
+          <p class="mb-2">
+            <strong>Office:</strong><br>
+            {{ site_settings.address_line1 }}<br>
+            {% if site_settings.address_line2 %}
+              {{ site_settings.address_line2 }}<br>
+            {% endif %}
+            {% if site_settings.city or site_settings.state or site_settings.postal_code %}
+              {{ site_settings.city }}{% if site_settings.state %}, {{ site_settings.state }}{% endif %}
+              {% if site_settings.postal_code %} {{ site_settings.postal_code }}{% endif %}
+            {% endif %}
+          </p>
+        {% endif %}
+
         {% if site_settings and site_settings.primary_phone %}
           <p class="mb-2">
             <strong>Phone:</strong><br>
@@ -29,7 +43,7 @@ Contact Heritage Realty & Custom Homes to learn more about our communities, floo
         {% endif %}
 
         {% if site_settings and site_settings.primary_email %}
-          <p class="mb-2">
+          <p class="mb-3">
             <strong>Email:</strong><br>
             <a href="mailto:{{ site_settings.primary_email }}">
               {{ site_settings.primary_email }}

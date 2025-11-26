@@ -7,37 +7,34 @@ New construction, available homes, and custom home options with Heritage Realty 
 {% endblock %}
 
 {% block content %}
-<section class="hero-home mb-5"
-         style="background-image: url('{% static 'img/home-hero.jpg' %}');">
-  <div class="hero-home__overlay"></div>
-  <div class="hero-home__content">
-    <h1 class="display-5 mb-3">
-      {% if site_settings and site_settings.hero_headline %}
-        {{ site_settings.hero_headline }}
-      {% else %}
-        Your Next Home Starts Here
-      {% endif %}
-    </h1>
-    <p class="lead mb-4">
-      {% if site_settings and site_settings.hero_subheadline %}
-        {{ site_settings.hero_subheadline }}
-      {% else %}
-        New communities, move-in ready homes, and custom home options — all with the guidance of Heritage Realty &amp; Custom Homes.
-      {% endif %}
-    </p>
-    <div class="d-flex flex-column flex-md-row justify-content-center gap-2">
-      <a href="{% url 'catalog:community_list' %}" class="btn btn-primary btn-lg">
-        Communities
-      </a>
-      <a href="{% url 'catalog:home_list' %}" class="btn btn-outline-light btn-lg">
-        Available Homes
-      </a>
-      <a href="{% url 'catalog:plan_list' %}" class="btn btn-outline-light btn-lg">
-        Floor Plans
-      </a>
+
+  <div class="hero-full">
+    {% if site_settings and site_settings.hero_background %}
+      <div class="hero-bg"
+           style="background-image: url('{{ site_settings.hero_background.url }}');">
+      </div>
+    {% else %}
+      <div class="hero-bg"
+           style="background-image: url('{% static 'img/home-hero.jpg' %}');">
+      </div>
+    {% endif %}
+
+    <div class="hero-content text-center text-white">
+      <h1 class="fw-bold display-4 mb-3">
+        {{ site_settings.hero_headline|default:"Building communities one home at a time!" }}
+      </h1>
+
+      <p class="lead mb-4">
+        <strong>{{ site_settings.hero_subheadline|default:"Your trusted partner for new homes, communities, and custom builds." }}</strong>
+      </p>
+
+      <div class="hero-buttons d-flex justify-content-center gap-3">
+        <a class="btn btn-lg btn-primary" href="/communities/">Communities</a>
+        <a class="btn btn-lg btn-outline-light" href="/homes/">Available Homes</a>
+        <a class="btn btn-lg btn-outline-light" href="/plans/">Floor Plans</a>
+      </div>
     </div>
   </div>
-</section>
 
 {# Featured sections below hero #}
 {% if featured_communities %}

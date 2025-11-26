@@ -18,7 +18,19 @@
   <meta property="og:description"
         content="{% block og_description %}{% block og_description_fallback %}{% endblock %}{% endblock %}">
   <meta property="og:url" content="{{ request.build_absolute_uri|default:'' }}">
-  <meta property="og:image" content="{% static 'img/heritage-logo.svg' %}">
+
+  {# Allow child templates to override the image URL #}
+  {% block og_image_url %}{% static 'img/heritage-social-default.jpg' %}{% endblock %}
+  <meta property="og:image" content="{% block og_image %}{% endblock %}">
+
+  {# Optional Twitter card tags #}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title"
+        content="{% block twitter_title %}Heritage Realty & Custom Homes{% endblock %}">
+  <meta name="twitter:description"
+        content="{% block twitter_description %}{% endblock %}">
+  <meta name="twitter:image"
+        content="{% block twitter_image %}{% endblock %}">
 
   <link rel="canonical" href="{{ request.build_absolute_uri|default:'' }}">
 
@@ -28,6 +40,26 @@
   {% block extra_head %}{% endblock %}
 </head>
 <body>
+
+  {% if announcement %}
+    <div class="bg-dark text-white py-2 small">
+      <div class="container d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
+        <div>
+          <strong>{{ announcement.title }}</strong>
+          {% if announcement.message %}
+            — {{ announcement.message }}
+          {% endif %}
+        </div>
+        {% if announcement.button_label and announcement.button_url %}
+          <div>
+            <a href="{{ announcement.button_url }}" class="btn btn-sm btn-light">
+              {{ announcement.button_label }}
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
 
   {% include 'includes/_header.html' %}
 

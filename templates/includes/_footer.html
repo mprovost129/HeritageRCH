@@ -1,10 +1,54 @@
 {% load static %}
-<footer class="mt-5 py-4" style="background-color: #f3f3f3;">
-  <div class="container text-center">
-    <img src="{% static 'img/heritage-logo.svg' %}" alt="Heritage Realty & Custom Homes Logo"
-         style="height: 40px; opacity: 0.85;" class="mb-2">
-    <p class="small text-muted mb-0">
-      © {{ now|date:"Y" }} Heritage Realty & Custom Homes — All rights reserved.
-    </p>
+
+<footer class="mt-5 py-4">
+  <div class="container text-center text-md-start">
+    <div class="row align-items-center g-3">
+      
+      <div class="col-md-4 text-center text-md-start">
+        <img src="{% static 'img/heritage-logo.svg' %}" 
+             alt="Heritage Realty & Custom Homes Logo"
+             style="height: 40px; opacity: 0.85;" class="mb-2">
+
+        <p class="small text-muted mb-0">
+          © {{ now|date:"Y" }} {{ site_settings.site_name|default:"Heritage Realty & Custom Homes" }}. 
+          All rights reserved.
+        </p>
+      </div>
+
+      <div class="col-md-4 small text-muted text-center text-md-start">
+        {% if site_settings and site_settings.address_line1 %}
+          <div>
+            {{ site_settings.address_line1 }}<br>
+            {% if site_settings.address_line2 %}
+              {{ site_settings.address_line2 }}<br>
+            {% endif %}
+            {% if site_settings.city or site_settings.state or site_settings.postal_code %}
+              {{ site_settings.city }}{% if site_settings.state %}, {{ site_settings.state }}{% endif %}
+              {% if site_settings.postal_code %} {{ site_settings.postal_code }}{% endif %}
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="col-md-4 small text-muted text-center text-md-end">
+        {% if site_settings and site_settings.primary_phone %}
+          <div>
+            <strong>Phone:</strong>
+            {% if site_settings.primary_phone_link %}
+              <a href="tel:{{ site_settings.primary_phone_link }}">{{ site_settings.primary_phone }}</a>
+            {% else %}
+              {{ site_settings.primary_phone }}
+            {% endif %}
+          </div>
+        {% endif %}
+        {% if site_settings and site_settings.primary_email %}
+          <div>
+            <strong>Email:</strong>
+            <a href="mailto:{{ site_settings.primary_email }}">{{ site_settings.primary_email }}</a>
+          </div>
+        {% endif %}
+      </div>
+
+    </div>
   </div>
 </footer>

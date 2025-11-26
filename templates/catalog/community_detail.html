@@ -2,6 +2,16 @@
 {% load static %}
 {% block title %}{{ object.name }} · Community · Heritage RCH{% endblock %}
 
+{% block og_image_url %}
+  {% with photo=object.photos.all.0 %}
+    {% if photo %}
+      {{ photo.image.url }}
+    {% else %}
+      {% static 'img/heritage-social-default.jpg' %}
+    {% endif %}
+  {% endwith %}
+{% endblock %}
+
 {% block content %}
 
 <section class="detail-hero">

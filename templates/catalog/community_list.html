@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}Communities · Heritage Realty & Custom Homes{% endblock %}
-{% block meta_description %}
-Browse Heritage communities, including active and coming-soon neighborhoods with new construction homes.
-{% endblock %}
 
 {% block content %}
 <section class="mb-4">
   <h1 class="mb-1">Communities</h1>
   <p class="text-muted mb-0">
-    Explore our active and coming-soon communities. Select a community to view available homes and plans.
+    {% if site_settings and site_settings.communities_intro %}
+      {{ site_settings.communities_intro }}
+    {% else %}
+      Explore our active and coming-soon communities. Select a community to view available homes and plans.
+    {% endif %}
   </p>
 </section>
 

@@ -1,74 +1,107 @@
 {% load static %}
-{% with request.resolver_match.view_name as view_name %}
+
 <header class="border-bottom">
-  <nav class="navbar navbar-expand-lg bg-heritage">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'pages:home' %}">
-        <img src="{% static 'img/heritage-logo.svg' %}" alt="Heritage Realty & Custom Homes Logo"
-             style="height: 50px; width: auto;">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-heritage">
+    <div class="container-fluid px-3 px-md-4">
+      <!-- Logo -->
+      <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+        <img src="{% static 'img/heritage-logo.svg' %}"
+             alt="Heritage Realty & Custom Homes"
+             style="height: 44px; width: auto;">
       </a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
-              aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+      <!-- Toggler -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#mainNav" aria-controls="mainNav"
+              aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse" id="mainNav">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link text-white{% if view_name == 'catalog:community_list' or view_name == 'catalog:community_detail' %} active{% endif %}"
-               href="{% url 'catalog:community_list' %}">
-              Communities
+        <!-- Left: Nav links + dropdowns -->
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+
+          <!-- FIND YOUR HOME -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="findHomeDropdown"
+               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Find Your Home
             </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white{% if view_name == 'catalog:plan_list' or view_name == 'catalog:plan_detail' %} active{% endif %}"
-               href="{% url 'catalog:plan_list' %}">
-              Floor Plans
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white{% if view_name == 'catalog:home_list' or view_name == 'catalog:home_detail' %} active{% endif %}"
-               href="{% url 'catalog:home_list' %}">
-              Available Homes
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white{% if view_name == 'pages:custom_homes' %} active{% endif %}"
-               href="{% url 'pages:custom_homes' %}">
-              Custom Homes
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white{% if view_name == 'pages:about' %} active{% endif %}"
-               href="{% url 'pages:about' %}">
-              About
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-white{% if view_name == 'pages:contact' %} active{% endif %}"
-               href="{% url 'pages:contact' %}">
-              Contact
-            </a>
+            <ul class="dropdown-menu" aria-labelledby="findHomeDropdown">
+              <li><a class="dropdown-item" href="/communities/">Communities</a></li>
+              <li><a class="dropdown-item" href="/model-homes/">Model Homes</a></li>
+              <li><a class="dropdown-item" href="/plans/">Floor Plans</a></li>
+            </ul>
           </li>
 
-          {# Optional: phone in the header, if set #}
+          <!-- ABOUT US -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="aboutDropdown"
+               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              About Us
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="aboutDropdown">
+              <li><a class="dropdown-item" href="/about/">Our Story</a></li>
+              <li><a class="dropdown-item" href="/team/">Meet Our Team</a></li>
+            </ul>
+          </li>
+
+          <!-- LAND ACQUISITION -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="landDropdown"
+               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Land Acquisition
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="landDropdown">
+              <li><a class="dropdown-item" href="/we-buy-land/">We Buy Land</a></li>
+            </ul>
+          </li>
+
+          <!-- PORTFOLIO -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="portfolioDropdown"
+               role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Portfolio
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="portfolioDropdown">
+              <li><a class="dropdown-item" href="/gallery/">Media Gallery</a></li>
+              <li><a class="dropdown-item" href="/completed-projects/">Completed Projects</a></li>
+              <li><a class="dropdown-item" href="/upcoming-projects/">Upcoming Projects</a></li>
+            </ul>
+          </li>
+
+          <!-- CONTACT (simple link) -->
+          <li class="nav-item">
+            <a class="nav-link" href="/contact/">Contact Us</a>
+          </li>
+
+          <!-- Mobile-only Call CTA inside menu -->
           {% if site_settings and site_settings.primary_phone %}
-            <li class="nav-item ms-lg-3">
-              {% if site_settings.primary_phone_link %}
-                <a class="nav-link text-white" href="tel:{{ site_settings.primary_phone_link }}">
-                  {{ site_settings.primary_phone }}
-                </a>
-              {% else %}
-                <span class="nav-link text-white">
-                  {{ site_settings.primary_phone }}
-                </span>
-              {% endif %}
-            </li>
+          <li class="nav-item d-lg-none mt-2">
+            <a class="btn btn-outline-light w-100"
+               href="tel:{{ site_settings.primary_phone_link|default:site_settings.primary_phone }}">
+              {{ site_settings.cta_phone_label|default:"Ask a Pro" }}:
+              {{ site_settings.primary_phone }}
+            </a>
+          </li>
           {% endif %}
         </ul>
+
+        <!-- Desktop Call CTA on the far right -->
+        {% if site_settings and site_settings.primary_phone %}
+        <div class="d-none d-lg-flex ms-4">
+          <a class="btn btn-cta-phone d-flex flex-column justify-content-center text-start"
+             href="tel:{{ site_settings.primary_phone_link|default:site_settings.primary_phone }}">
+            <span class="small text-uppercase fw-semibold">
+              {{ site_settings.cta_phone_label|default:"Ask a Pro" }}
+            </span>
+            <span class="fw-bold">
+              {{ site_settings.primary_phone }}
+            </span>
+          </a>
+        </div>
+        {% endif %}
       </div>
     </div>
   </nav>
 </header>
-{% endwith %}
