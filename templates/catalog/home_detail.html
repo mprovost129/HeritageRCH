@@ -3,6 +3,21 @@
 {% block title %}{{ object.full_address|default:"Home" }} · Heritage RCH{% endblock %}
 
 {% block content %}
+
+<section class="detail-hero">
+  <div class="ratio ratio-21x9">
+    {% with photo=object.photos.all.0 %}
+      {% if photo %}
+        <img src="{{ photo.image.url }}" alt="{{ photo.caption }}" class="img-fluid">
+      {% else %}
+        <div class="detail-hero-placeholder">
+          Home photos coming soon.
+        </div>
+      {% endif %}
+    {% endwith %}
+  </div>
+</section>
+
 <div class="row g-4">
   <!-- Main content -->
   <div class="col-lg-8">
@@ -17,20 +32,6 @@
       {% endif %}
       · {{ object.get_status_display }}
     </p>
-
-    {% if object.photos.all %}
-      <div class="mb-4">
-        <div class="row g-2">
-          {% for ph in object.photos.all %}
-            <div class="col-6 col-md-4">
-              <a href="{{ ph.image.url }}" target="_blank" rel="noopener">
-                <img src="{{ ph.image.url }}" alt="{{ ph.caption }}" class="img-fluid rounded">
-              </a>
-            </div>
-          {% endfor %}
-        </div>
-      </div>
-    {% endif %}
 
     {% if object.description %}
       <h2 class="h5">Home Description</h2>
@@ -76,7 +77,7 @@
 
   <!-- Sticky sidebar card -->
   <div class="col-lg-4">
-    <div class="card border-0 shadow-sm position-sticky" style="top: 5rem;">
+    <div class="card border-0 shadow-sm sticky-card">
       <div class="card-body">
         <h2 class="h5 mb-2">Interested in this home?</h2>
         {% if object.price %}
@@ -97,8 +98,8 @@
           {% endif %}
         </ul>
         <a class="btn btn-primary w-100 mb-2"
-            href="/contact/?message=Interested in home at {{ object.full_address|default:object.slug|urlencode }}">
-            Request Info
+           href="/contact/?message=Interested in home at {{ object.full_address|default:object.slug|urlencode }}">
+          Request Info
         </a>
         <p class="small text-muted mb-0">
           Ask about timeline, options, and next steps for purchasing this home.

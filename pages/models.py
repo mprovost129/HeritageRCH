@@ -5,7 +5,7 @@ from django.db import models
 class SiteSettings(models.Model):
     """
     Singleton-style model for global site content:
-    phone, email, hero text, CTA text, etc.
+    phone, email, hero text, CTA text, and lead recipients.
     """
 
     site_name = models.CharField(
@@ -17,17 +17,27 @@ class SiteSettings(models.Model):
     primary_phone = models.CharField(
         max_length=32,
         blank=True,
-        help_text="Main phone number (for header / CTA). Example: 555-123-4567",
+        help_text="Main phone number (for header / CTA). Example: 508-555-1234",
     )
     primary_phone_link = models.CharField(
         max_length=32,
         blank=True,
-        help_text="Phone in tel: format. Example: 15551234567",
+        help_text="Phone in tel: format. Example: 15085551234",
     )
 
+    # Public contact email (can be shown on Contact page / footer)
     primary_email = models.EmailField(
         blank=True,
         help_text="Main contact email shown publicly (if desired).",
+    )
+
+    # Lead notification recipients (used for ALL website contact emails)
+    lead_recipients = models.TextField(
+        blank=True,
+        help_text=(
+            "One or more email addresses to receive website leads. "
+            "Separate multiple addresses with commas or new lines."
+        ),
     )
 
     # Home hero content

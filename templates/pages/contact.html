@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block title %}Contact Us · Heritage Realty & Custom Homes{% endblock %}
 {% block meta_description %}
 Contact Heritage Realty & Custom Homes to learn more about our communities, floor plans, available homes, and custom home options.
@@ -6,30 +7,87 @@ Contact Heritage Realty & Custom Homes to learn more about our communities, floo
 
 {% block content %}
 <h1 class="mb-3">Contact Us</h1>
-<form method="post" class="row g-3" novalidate>
-  {% csrf_token %}
-  <div class="col-md-6">
-    <label for="id_name" class="form-label">Name</label>
-    {{ form.name }}
-    {% if form.name.errors %}<div class="text-danger small">{{ form.name.errors }}</div>{% endif %}
+
+<div class="row g-4">
+  {# Left column: contact info from SiteSettings #}
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <h2 class="h6 text-uppercase text-muted mb-3">Get in Touch</h2>
+
+        {% if site_settings and site_settings.primary_phone %}
+          <p class="mb-2">
+            <strong>Phone:</strong><br>
+            {% if site_settings.primary_phone_link %}
+              <a href="tel:{{ site_settings.primary_phone_link }}">
+                {{ site_settings.primary_phone }}
+              </a>
+            {% else %}
+              {{ site_settings.primary_phone }}
+            {% endif %}
+          </p>
+        {% endif %}
+
+        {% if site_settings and site_settings.primary_email %}
+          <p class="mb-2">
+            <strong>Email:</strong><br>
+            <a href="mailto:{{ site_settings.primary_email }}">
+              {{ site_settings.primary_email }}
+            </a>
+          </p>
+        {% endif %}
+
+        <p class="small text-muted mb-0">
+          Have a question about a community, floor plan, available home, or building a custom home?
+          Call, email, or send us a message using the form.
+        </p>
+      </div>
+    </div>
   </div>
-  <div class="col-md-6">
-    <label for="id_email" class="form-label">Email</label>
-    {{ form.email }}
-    {% if form.email.errors %}<div class="text-danger small">{{ form.email.errors }}</div>{% endif %}
+
+  {# Right column: contact form #}
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body">
+        <h2 class="h6 text-uppercase text-muted mb-3">Send a Message</h2>
+        <form method="post" class="row g-3" novalidate>
+          {% csrf_token %}
+          <div class="col-md-6">
+            <label for="id_name" class="form-label">Name</label>
+            {{ form.name }}
+            {% if form.name.errors %}
+              <div class="text-danger small">{{ form.name.errors }}</div>
+            {% endif %}
+          </div>
+          <div class="col-md-6">
+            <label for="id_email" class="form-label">Email</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+              <div class="text-danger small">{{ form.email.errors }}</div>
+            {% endif %}
+          </div>
+          <div class="col-md-6">
+            <label for="id_phone" class="form-label">Phone (optional)</label>
+            {{ form.phone }}
+            {% if form.phone.errors %}
+              <div class="text-danger small">{{ form.phone.errors }}</div>
+            {% endif %}
+          </div>
+          <div class="col-12">
+            <label for="id_message" class="form-label">Message</label>
+            {{ form.message }}
+            {% if form.message.errors %}
+              <div class="text-danger small">{{ form.message.errors }}</div>
+            {% endif %}
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary">
+              Send Message
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
-  <div class="col-md-6">
-    <label for="id_phone" class="form-label">Phone (optional)</label>
-    {{ form.phone }}
-    {% if form.phone.errors %}<div class="text-danger small">{{ form.phone.errors }}</div>{% endif %}
-  </div>
-  <div class="col-12">
-    <label for="id_message" class="form-label">Message</label>
-    {{ form.message }}
-    {% if form.message.errors %}<div class="text-danger small">{{ form.message.errors }}</div>{% endif %}
-  </div>
-  <div class="col-12">
-    <button type="submit" class="btn btn-primary">Send</button>
-  </div>
-</form>
+</div>
 {% endblock %}
