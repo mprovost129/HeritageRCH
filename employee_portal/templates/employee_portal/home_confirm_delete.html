@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Delete Home{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4">Delete Home</h1>
+  <p>Are you sure you want to delete <strong>{{ object.full_address }}</strong>?</p>
+  <form method="post">{% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, delete</button>
+    <a href="{% url 'employee_portal:home_list' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Manage Floor Plans{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4">Floor Plans</h1>
+  <a href="{% url 'employee_portal:plan_add' %}" class="btn btn-primary mb-3">Add Floor Plan</a>
+  <table class="table table-striped">
+    <thead><tr><th>Name</th><th>Beds</th><th>Baths</th><th></th></tr></thead>
+    <tbody>
+      {% for obj in plans %}
+      <tr>
+        <td>{{ obj.name }}</td>
+        <td>{{ obj.beds }}</td>
+        <td>{{ obj.baths }}</td>
+        <td>
+          <a href="{% url 'employee_portal:plan_edit' obj.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+          <a href="{% url 'employee_portal:plan_delete' obj.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4">No floor plans found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

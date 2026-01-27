@@ -8,39 +8,91 @@ New construction, available homes, and custom home options with Heritage Realty 
 
 {% block content %}
 
+
   <div class="hero-full">
     {% if site_settings and site_settings.hero_background %}
-      <div class="hero-bg"
-           style="background-image: url('{{ site_settings.hero_background.url }}');">
-      </div>
+      <div class="hero-bg" style="background-image: url('{{ site_settings.hero_background.url }}');"></div>
     {% else %}
-      <div class="hero-bg"
-           style="background-image: url('{% static 'img/home-hero.jpg' %}');">
-      </div>
+      <div class="hero-bg" style="background-image: url('{% static 'img/home-hero.jpg' %}');"></div>
     {% endif %}
 
     <div class="hero-content text-center text-white">
-      <h1 class="fw-bold display-4 mb-3">
-        {{ site_settings.hero_headline|default:"Building communities one home at a time!" }}
+      <h1 class="fw-bold display-3 mb-3">
+        LET'S FIND YOUR DREAM HOME
       </h1>
-
       <p class="lead mb-4">
-        <strong>{{ site_settings.hero_subheadline|default:"Your trusted partner for new homes, communities, and custom builds." }}</strong>
+        <strong>Explore new communities, available homes, and custom floor plans with Heritage Realty & Custom Homes.</strong>
       </p>
-
-      <div class="hero-buttons d-flex justify-content-center gap-3">
-        <a class="btn btn-lg btn-primary" href="/communities/">Communities</a>
-        <a class="btn btn-lg btn-outline-light" href="/homes/">Available Homes</a>
-        <a class="btn btn-lg btn-outline-light" href="/plans/">Floor Plans</a>
+      <div class="hero-buttons d-flex justify-content-center gap-3 flex-wrap">
+        <a class="btn btn-lg btn-primary px-4" href="/communities/">New Home Communities</a>
+        <a class="btn btn-lg btn-outline-light px-4" href="/homes/">Available Homes</a>
+        <a class="btn btn-lg btn-outline-light px-4" href="/plans/">Floor Plans</a>
       </div>
     </div>
   </div>
 
+  <!-- Call Us Today CTA Strip -->
+  <div class="bg-heritage text-white py-4 text-center mb-4">
+    <div class="container">
+      <h2 class="h4 mb-2">READY TO GET STARTED? Let's Find Your Dream Home</h2>
+      <div class="mb-2">
+        <strong>CALL US TODAY!</strong> <a class="text-white fw-bold" href="tel:{{ site_settings.primary_phone_link|default:'555-555-5555' }}">{{ site_settings.primary_phone|default:'(555) 555-5555' }}</a>
+      </div>
+      <a href="/contact/" class="btn btn-outline-light btn-lg mt-2">Send Message</a>
+    </div>
+  </div>
+
 {# Featured sections below hero #}
+  <!-- Testimonials Section -->
+  <section class="testimonials-section bg-light border-top border-bottom">
+    <div class="container py-5">
+      <h2 class="h4 text-center mb-4">What Our Homeowners Say</h2>
+      <div class="row justify-content-center g-4">
+        <div class="col-md-4">
+          <div class="card p-4 h-100">
+            <blockquote class="blockquote mb-0">
+              <p>“The Heritage team made our dream home a reality. The process was smooth and the quality is outstanding!”</p>
+              <footer class="blockquote-footer mt-2">Sarah &amp; Mike, Homeowners</footer>
+            </blockquote>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card p-4 h-100">
+            <blockquote class="blockquote mb-0">
+              <p>“We love our new community. The attention to detail and customer service were top notch.”</p>
+              <footer class="blockquote-footer mt-2">The Johnson Family</footer>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Map/Contact CTA Section -->
+  <section class="cta-section bg-heritage text-white text-center">
+    <div class="container py-5">
+      <h2 class="h4 mb-3">Visit Our Office or Call for a Tour</h2>
+      <div class="mb-3">
+        <strong>Heritage Realty &amp; Custom Homes</strong><br>
+        {% if site_settings and site_settings.address_line1 %}
+          {{ site_settings.address_line1 }}<br>
+          {% if site_settings.address_line2 %}{{ site_settings.address_line2 }}<br>{% endif %}
+          {{ site_settings.city }}, {{ site_settings.state }} {{ site_settings.postal_code }}<br>
+        {% endif %}
+        <a class="text-white fw-bold" href="tel:{{ site_settings.primary_phone_link|default:'555-555-5555' }}">{{ site_settings.primary_phone|default:'(555) 555-5555' }}</a>
+      </div>
+      <div class="mb-4">
+        <a href="/contact/" class="btn btn-outline-light btn-lg">Contact Us</a>
+      </div>
+      <div class="ratio ratio-16x9 mx-auto" style="max-width: 600px;">
+        <iframe src="https://www.google.com/maps?q=Heritage+Realty+Custom+Homes&output=embed" style="border:0; width:100%; height:100%;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
 {% if featured_communities %}
   <section class="mb-5">
-    <h2 class="h4 mb-3">Featured Communities</h2>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+    <h2 class="h4 mb-3 text-center">Featured Communities</h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
       {% for obj in featured_communities %}
         <div class="col">
           {% include 'includes/_card_community.html' with obj=obj %}
@@ -52,8 +104,8 @@ New construction, available homes, and custom home options with Heritage Realty 
 
 {% if featured_plans %}
   <section class="mb-5">
-    <h2 class="h4 mb-3">Popular Floor Plans</h2>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+    <h2 class="h4 mb-3 text-center">Popular Floor Plans</h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
       {% for obj in featured_plans %}
         <div class="col">
           {% include 'includes/_card_plan.html' with obj=obj %}
@@ -77,5 +129,20 @@ New construction, available homes, and custom home options with Heritage Realty 
 {% endif %}
 
 {% include 'includes/_cta_strip.html' %}
+
+  <!-- Get Fast Answers Strip -->
+  <div class="bg-light border-top py-4 mt-5">
+    <div class="container d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
+      <div class="d-flex align-items-center gap-2">
+        <span class="fs-4 text-heritage-green"><i class="bi bi-telephone-fill"></i></span>
+        <span class="fw-bold">Get Fast Answers!</span>
+        <a class="ms-2 text-heritage-green fw-bold" href="tel:{{ site_settings.primary_phone_link|default:'555-555-5555' }}">{{ site_settings.primary_phone|default:'(555) 555-5555' }}</a>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <span class="fs-4 text-heritage-green"><i class="bi bi-envelope-fill"></i></span>
+        <a class="btn btn-primary" href="/contact/">Email</a>
+      </div>
+    </div>
+  </div>
 
 {% endblock %}

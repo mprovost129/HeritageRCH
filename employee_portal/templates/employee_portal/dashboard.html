@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Employee Portal Dashboard{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4">Employee Portal</h1>
+  <ul class="list-group list-group-flush mb-4">
+    <li class="list-group-item"><a href="{% url 'employee_portal:site_settings' %}">Edit Site Settings</a></li>
+    <li class="list-group-item"><a href="{% url 'employee_portal:community_list' %}">Manage Communities</a></li>
+    <li class="list-group-item"><a href="{% url 'employee_portal:plan_list' %}">Manage Floor Plans</a></li>
+    <li class="list-group-item"><a href="{% url 'employee_portal:home_list' %}">Manage Available Homes</a></li>
+  </ul>
+</div>
+{% endblock %}

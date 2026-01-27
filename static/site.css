@@ -37,9 +37,69 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Headings slightly tighter letter-spacing */
+
+/* Headings: bolder, more modern */
 h1, h2, h3, h4, h5 {
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
+  font-weight: 700;
+  margin-bottom: 1.1em;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.7em;
+}
+h2 {
+  font-size: 2rem;
+}
+h3 {
+  font-size: 1.4rem;
+}
+
+section, .section {
+  margin-bottom: 3rem;
+}
+
+/* Card improvements */
+.card {
+  border-radius: var(--heritage-border-radius);
+  border: none;
+  box-shadow: 0 2px 12px rgba(60, 60, 60, 0.07);
+  background: #fff;
+}
+.card-title {
+  font-weight: 700;
+}
+
+/* Button improvements */
+.btn {
+  border-radius: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  padding: 0.6em 2em;
+  font-size: 1.1rem;
+  transition: box-shadow 0.2s, background 0.2s;
+}
+.btn-primary {
+  box-shadow: 0 2px 8px rgba(5, 104, 56, 0.08);
+}
+.btn-outline-primary {
+  border-width: 2px;
+}
+.btn:focus, .btn:active {
+  outline: 2px solid var(--heritage-green-dark);
+  outline-offset: 2px;
+}
+
+/* Section spacing for featured, testimonials, etc. */
+.featured-section, .testimonials-section, .cta-section {
+  margin-bottom: 3.5rem;
+  padding: 2.5rem 0;
+}
+
+/* Add more white space to rows */
+.row.g-3, .row.g-4 {
+  margin-bottom: 2.5rem;
 }
 
 /* Buttons

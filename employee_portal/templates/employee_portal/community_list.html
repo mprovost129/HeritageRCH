@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Manage Communities{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4">Communities</h1>
+  <a href="{% url 'employee_portal:community_add' %}" class="btn btn-primary mb-3">Add Community</a>
+  <table class="table table-striped">
+    <thead><tr><th>Name</th><th>City</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      {% for obj in communities %}
+      <tr>
+        <td>{{ obj.name }}</td>
+        <td>{{ obj.city }}</td>
+        <td>{{ obj.get_status_display }}</td>
+        <td>
+          <a href="{% url 'employee_portal:community_edit' obj.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+          <a href="{% url 'employee_portal:community_delete' obj.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4">No communities found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
