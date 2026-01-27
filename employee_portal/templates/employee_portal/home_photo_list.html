@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Manage Home Photos{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4">Photos for {{ home.full_address|default:home.slug }}</h1>
+  <a href="{% url 'employee_portal:home_photo_add' home.pk %}" class="btn btn-primary mb-3">Add Photo</a>
+  <a href="{% url 'employee_portal:home_edit' home.pk %}" class="btn btn-secondary mb-3">Back to Home</a>
+  <table class="table table-striped">
+    <thead><tr><th>Preview</th><th>Caption</th><th>Sort Order</th><th></th></tr></thead>
+    <tbody>
+      {% for photo in photos %}
+      <tr>
+        <td>{% if photo.image %}<img src="{{ photo.image.url }}" style="height:60px;"/>{% endif %}</td>
+        <td>{{ photo.caption }}</td>
+        <td>{{ photo.sort_order }}</td>
+        <td>
+          <a href="{% url 'employee_portal:home_photo_edit' home.pk photo.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+          <a href="{% url 'employee_portal:home_photo_delete' home.pk photo.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4">No photos found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

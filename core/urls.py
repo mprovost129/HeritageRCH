@@ -18,8 +18,17 @@ sitemaps = {
     "static": StaticViewSitemap,
 }
 
+
+from django.contrib.auth import views as auth_views
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("employee-portal/login/", auth_views.LoginView.as_view(template_name="employee_portal/login.html"), name="employee_portal_login"),
+    path("employee-portal/logout/", auth_views.LogoutView.as_view(next_page="employee_portal:dashboard"), name="employee_portal_logout"),
+    path("employee-portal/password-reset/", auth_views.PasswordResetView.as_view(template_name="employee_portal/password_reset_form.html"), name="employee_portal_password_reset"),
+    path("employee-portal/password-reset/done/", auth_views.PasswordResetDoneView.as_view(template_name="employee_portal/password_reset_done.html"), name="employee_portal_password_reset_done"),
+    path("employee-portal/reset/<uidb64>/<token>/", auth_views.PasswordResetConfirmView.as_view(template_name="employee_portal/password_reset_confirm.html"), name="employee_portal_password_reset_confirm"),
+    path("employee-portal/reset/done/", auth_views.PasswordResetCompleteView.as_view(template_name="employee_portal/password_reset_complete.html"), name="employee_portal_password_reset_complete"),
     path("employee-portal/", include(("employee_portal.urls", "employee_portal"), namespace="employee_portal")),
     path("", include(("pages.urls", "pages"), namespace="pages")),
     path("", include(("catalog.urls", "catalog"), namespace="catalog")),

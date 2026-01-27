@@ -1,18 +1,19 @@
 from django.db import models
 
 
+
 class SiteSettings(models.Model):
-        # Social media links
-        facebook_url = models.URLField(blank=True, help_text="Facebook page URL")
-        instagram_url = models.URLField(blank=True, help_text="Instagram profile URL")
-        twitter_url = models.URLField(blank=True, help_text="Twitter profile URL")
-        linkedin_url = models.URLField(blank=True, help_text="LinkedIn page URL")
-        tiktok_url = models.URLField(blank=True, help_text="TikTok profile URL")
     """
     Singleton-style model for global site content:
     phone, email, hero text, CTA text, lead recipients, office address,
     and marketing blurbs for key pages.
     """
+    # Social media links
+    facebook_url = models.URLField(blank=True, help_text="Facebook page URL")
+    instagram_url = models.URLField(blank=True, help_text="Instagram profile URL")
+    twitter_url = models.URLField(blank=True, help_text="Twitter profile URL")
+    linkedin_url = models.URLField(blank=True, help_text="LinkedIn page URL")
+    tiktok_url = models.URLField(blank=True, help_text="TikTok profile URL")
 
     site_name = models.CharField(
         max_length=200,
@@ -135,6 +136,7 @@ class SiteSettings(models.Model):
         Convenience method: always return the single settings row, or None.
         """
         return cls.objects.first()
+
 
 
 class Announcement(models.Model):

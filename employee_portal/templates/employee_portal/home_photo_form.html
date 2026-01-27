@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Edit Home Photo{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4">{{ view.object.pk|yesno:'Edit,Add' }} Photo for {{ home.full_address|default:home.slug }}</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a href="{% url 'employee_portal:home_photo_list' home.pk %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

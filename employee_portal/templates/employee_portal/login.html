@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Employee Portal Login{% endblock %}
+{% block content %}
+<div class="container py-5" style="max-width: 400px;">
+  <h1 class="mb-4 text-center">Employee Portal Login</h1>
+  <form method="post" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary w-100">Log In</button>
+  </form>
+  <div class="text-center mt-3">
+    <a href="/">&larr; Back to Website</a>
+  </div>
+</div>
+{% endblock %}

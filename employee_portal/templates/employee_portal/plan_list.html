@@ -15,6 +15,7 @@
         <td>
           <a href="{% url 'employee_portal:plan_edit' obj.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
           <a href="{% url 'employee_portal:plan_delete' obj.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+          <a href="{% url 'employee_portal:plan_photo_list' obj.pk %}" class="btn btn-sm btn-outline-info">Photos</a>
         </td>
       </tr>
       {% empty %}
