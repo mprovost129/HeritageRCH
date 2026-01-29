@@ -92,7 +92,7 @@ class AvailableHomeAdmin(FeaturedAdminMixin, admin.ModelAdmin):
     )
     list_filter = ("status", "community", "beds", "baths", "is_featured")
     search_fields = ("full_address", "community__name", "plan__name")
-    autocomplete_fields = ("community", "plan")
+    autocomplete_fields = ("community",)
     ordering = ("featured_rank", "-created")
     inlines = [PhotoInline]
 
