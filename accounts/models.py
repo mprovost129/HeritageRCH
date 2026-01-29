@@ -7,6 +7,9 @@ from django.utils import timezone
 
 # --- CustomUserManager must be defined before ClientManager/EmployeeManager ---
 
+
+# --- CustomUserManager must be defined before ClientManager/EmployeeManager ---
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, password=None, **extra_fields):
         if not email:
@@ -25,6 +28,42 @@ class CustomUserManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
         return self.create_user(email, first_name, last_name, password, **extra_fields)
+
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    ROLE_CHOICES = (
+        ('client', 'Client'),
+        ('staff', 'Staff/Employee'),
+    )
+
+    email = models.EmailField(unique=True)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    # Profile fields
+    picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    phone_number_1 = models.CharField(max_length=32, blank=True)
+    phone_number_2 = models.CharField(max_length=32, blank=True)
+    address_1 = models.CharField(max_length=255, blank=True)
+    address_2 = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=64, blank=True)
+    state = models.CharField(max_length=32, blank=True)
+    zip_code = models.CharField(max_length=16, blank=True)
+    company_role = models.CharField(max_length=64, blank=True, help_text="Job title or company role")
+    bio = models.TextField(blank=True)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='client')
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        app_label = 'accounts'
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name']
+
+    objects = CustomUserManager()
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} <{self.email}>"
 
 class ClientManager(CustomUserManager):
     def get_queryset(self):
