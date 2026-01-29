@@ -6,13 +6,16 @@ Browse photos and media from Heritage Realty & Custom Homes communities, model h
 {% endblock %}
 
 {% block content %}
-<h1 class="mb-3">Media Gallery</h1>
-<p class="lead">
-  A visual look at Heritage Realty & Custom Homes communities and homes.
-</p>
+<h1 class="mb-3">Active Projects Gallery</h1>
+<p class="lead">Browse our active communities. Click a project to view its full gallery.</p>
 
-<p>
-  Later, you can turn this into a gallery of images and videos grouped by community, model, or project.
-  For now, this is a placeholder so the navigation works without errors.
-</p>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+  {% for obj in communities %}
+    <div class="col">
+      {% include 'includes/_card_community.html' with obj=obj %}
+    </div>
+  {% empty %}
+    <div class="col text-muted">No active communities found.</div>
+  {% endfor %}
+</div>
 {% endblock %}

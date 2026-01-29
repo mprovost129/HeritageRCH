@@ -84,12 +84,24 @@ class MediaGalleryView(TemplateView):
     """
     template_name = "pages/gallery.html"
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        # Active communities only
+        ctx["communities"] = Community.objects.filter(status="active").order_by("name")
+        return ctx
+
 
 class CompletedProjectsView(TemplateView):
     """
     Portfolio - Completed Projects.
     """
     template_name = "pages/completed_projects.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        # Completed = sold out
+        ctx["communities"] = Community.objects.filter(status="sold_out").order_by("name")
+        return ctx
 
 
 class UpcomingProjectsView(TemplateView):

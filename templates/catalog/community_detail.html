@@ -14,7 +14,8 @@
 
 {% block content %}
 
-<section class="detail-hero">
+
+<section class="detail-hero mb-4">
   <div class="ratio ratio-21x9">
     {% with photo=object.photos.all.0 %}
       {% if photo %}
@@ -25,6 +26,26 @@
         </div>
       {% endif %}
     {% endwith %}
+  </div>
+</section>
+
+<section class="mb-5">
+  <h2 class="h5 mb-3">Gallery</h2>
+  <div class="row g-3">
+    {% for photo in object.photos.all %}
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="card h-100 shadow-sm">
+          <img src="{{ photo.image.url }}" alt="{{ photo.caption }}" class="card-img-top img-fluid" style="object-fit:cover; max-height:200px;">
+          {% if photo.caption %}
+            <div class="card-body p-2">
+              <div class="small text-muted">{{ photo.caption }}</div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% empty %}
+      <div class="col text-muted">No photos for this community yet.</div>
+    {% endfor %}
   </div>
 </section>
 

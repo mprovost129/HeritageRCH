@@ -6,13 +6,16 @@ Explore completed Heritage Realty & Custom Homes projects and see examples of ou
 {% endblock %}
 
 {% block content %}
-<h1 class="mb-3">Completed Projects</h1>
-<p class="lead">
-  A look at communities and homes we’ve successfully completed.
-</p>
+<h1 class="mb-3">Completed Projects Gallery</h1>
+<p class="lead">See our completed communities. Click a project to view its full gallery.</p>
 
-<p>
-  This page can showcase featured completed communities, custom homes, and past projects with photos,
-  descriptions, and testimonials.
-</p>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+  {% for obj in communities %}
+    <div class="col">
+      {% include 'includes/_card_community.html' with obj=obj %}
+    </div>
+  {% empty %}
+    <div class="col text-muted">No completed communities found.</div>
+  {% endfor %}
+</div>
 {% endblock %}
