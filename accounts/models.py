@@ -78,6 +78,7 @@ class Client(CustomUser):
     objects = ClientManager()
     class Meta:
         proxy = True
+        app_label = 'accounts'
         verbose_name = 'Client'
         verbose_name_plural = 'Clients'
 
@@ -85,6 +86,7 @@ class Employee(CustomUser):
     objects = EmployeeManager()
     class Meta:
         proxy = True
+        app_label = 'accounts'
         verbose_name = 'Employee'
         verbose_name_plural = 'Employees'
 
