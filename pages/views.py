@@ -1,4 +1,5 @@
 from django.views.generic import TemplateView, FormView
+from accounts.models import CustomUser
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
@@ -45,6 +46,11 @@ class AboutView(TemplateView):
     'Our Story' page.
     """
     template_name = "pages/about.html"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["employees"] = CustomUser.objects.filter(role="staff", is_active=True).order_by("last_name", "first_name")
+        return ctx
 
 
 class CustomHomesView(TemplateView):

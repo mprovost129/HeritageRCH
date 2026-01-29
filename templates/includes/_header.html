@@ -5,21 +5,31 @@
     <div class="container-fluid px-3 px-md-4">
       <!-- Top bar for social and accessibility links -->
       <div class="d-flex justify-content-end align-items-center py-1 small" style="min-height: 32px;">
-        {% if site_settings.facebook_url %}
-          <a href="{{ site_settings.facebook_url }}" class="me-2" target="_blank" rel="noopener" aria-label="Facebook"><img src="{% static 'img/icon-facebook.svg' %}" alt="Facebook" style="height: 18px;"></a>
-        {% endif %}
-        {% if site_settings.instagram_url %}
-          <a href="{{ site_settings.instagram_url }}" class="me-2" target="_blank" rel="noopener" aria-label="Instagram"><img src="{% static 'img/icon-instagram.svg' %}" alt="Instagram" style="height: 18px;"></a>
-        {% endif %}
-        {% if site_settings.twitter_url %}
-          <a href="{{ site_settings.twitter_url }}" class="me-2" target="_blank" rel="noopener" aria-label="Twitter"><img src="{% static 'img/icon-twitter.svg' %}" alt="Twitter" style="height: 18px;"></a>
-        {% endif %}
-        {% if site_settings.linkedin_url %}
-          <a href="{{ site_settings.linkedin_url }}" class="me-2" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="{% static 'img/icon-linkedin.svg' %}" alt="LinkedIn" style="height: 18px;"></a>
-        {% endif %}
-        {% if site_settings.tiktok_url %}
-          <a href="{{ site_settings.tiktok_url }}" class="me-2" target="_blank" rel="noopener" aria-label="TikTok"><img src="{% static 'img/icon-tiktok.svg' %}" alt="TikTok" style="height: 18px;"></a>
-        {% endif %}
+        <span class="me-2 d-inline-block" style="width: 24px; text-align: center;">
+          {% if site_settings.facebook_url %}
+            <a href="{{ site_settings.facebook_url }}" target="_blank" rel="noopener" aria-label="Facebook"><img src="{% static 'img/icon-facebook.svg' %}" alt="Facebook" style="height: 18px;"></a>
+          {% endif %}
+        </span>
+        <span class="me-2 d-inline-block" style="width: 24px; text-align: center;">
+          {% if site_settings.instagram_url %}
+            <a href="{{ site_settings.instagram_url }}" target="_blank" rel="noopener" aria-label="Instagram"><img src="{% static 'img/icon-instagram.svg' %}" alt="Instagram" style="height: 18px;"></a>
+          {% endif %}
+        </span>
+        <span class="me-2 d-inline-block" style="width: 24px; text-align: center;">
+          {% if site_settings.twitter_url %}
+            <a href="{{ site_settings.twitter_url }}" target="_blank" rel="noopener" aria-label="Twitter"><img src="{% static 'img/icon-twitter.svg' %}" alt="Twitter" style="height: 18px;"></a>
+          {% endif %}
+        </span>
+        <span class="me-2 d-inline-block" style="width: 24px; text-align: center;">
+          {% if site_settings.linkedin_url %}
+            <a href="{{ site_settings.linkedin_url }}" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="{% static 'img/icon-linkedin.svg' %}" alt="LinkedIn" style="height: 18px;"></a>
+          {% endif %}
+        </span>
+        <span class="me-2 d-inline-block" style="width: 24px; text-align: center;">
+          {% if site_settings.tiktok_url %}
+            <a href="{{ site_settings.tiktok_url }}" target="_blank" rel="noopener" aria-label="TikTok"><img src="{% static 'img/icon-tiktok.svg' %}" alt="TikTok" style="height: 18px;"></a>
+          {% endif %}
+        </span>
         <a href="/privacy-policy/" class="ms-2">Privacy</a>
         <a href="/terms/" class="ms-2">Terms</a>
         <a href="/accessibility/" class="ms-2">Accessibility</a>
@@ -37,7 +47,7 @@
         <!-- Left: Nav links + dropdowns -->
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
 
-          <!-- FIND YOUR HOME -->
+          <!-- FIND YOUR HOME (no plans) -->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="findHomeDropdown"
                role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -46,8 +56,12 @@
             <ul class="dropdown-menu" aria-labelledby="findHomeDropdown">
               <li><a class="dropdown-item" href="/communities/">Communities</a></li>
               <li><a class="dropdown-item" href="/model-homes/">Model Homes</a></li>
-              <li><a class="dropdown-item" href="/plans/">Floor Plans</a></li>
             </ul>
+          </li>
+
+          <!-- OUR PARTNERS -->
+          <li class="nav-item">
+            <a class="nav-link" href="/our-partners/">Our Partners</a>
           </li>
 
           <!-- ABOUT US -->

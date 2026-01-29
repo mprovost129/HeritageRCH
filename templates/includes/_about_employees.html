@@ -1,0 +1,25 @@
+<div class="container my-5">
+  <h2 class="h4 mb-4 text-center">Meet Our Team</h2>
+  <div class="row justify-content-center">
+    {% for emp in employees %}
+      <div class="col-12 col-md-6 col-lg-4 mb-4 d-flex align-items-stretch">
+        <div class="card w-100 shadow-sm">
+          {% if emp.picture %}
+            <img src="{{ emp.picture.url }}" class="card-img-top" alt="{{ emp.first_name }} {{ emp.last_name }}" style="object-fit:cover; max-height:260px;">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title mb-1">{{ emp.first_name }} {{ emp.last_name }}</h5>
+            {% if emp.company_role %}
+              <div class="text-muted small mb-2">{{ emp.company_role }}</div>
+            {% endif %}
+            {% if emp.bio %}
+              <p class="card-text small">{{ emp.bio }}</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12 text-center text-muted">No team members found.</div>
+    {% endfor %}
+  </div>
+</div>

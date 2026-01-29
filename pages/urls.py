@@ -1,4 +1,6 @@
+
 from django.urls import path
+from django.views.generic import TemplateView
 
 from .views import (
     HomeView,
@@ -29,4 +31,5 @@ urlpatterns = [
     path("upcoming-projects/", UpcomingProjectsView.as_view(), name="upcoming_projects"),
 
     path("contact/", ContactView.as_view(), name="contact"),
+    path("our-partners/", TemplateView.as_view(template_name="pages/our_partners.html"), name="our_partners"),
 ]

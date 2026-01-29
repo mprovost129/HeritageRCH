@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Our Partners{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4">Our Partners</h1>
+  <p>Below is a list of our trusted subcontractors and material suppliers. Click a logo or company name to visit their website.</p>
+  <div class="row" id="partner-list">
+    <!-- Example partner block. Copy/paste for each partner. -->
+    <div class="col-6 col-md-4 col-lg-3 mb-4 text-center">
+      <a href="https://www.example.com" target="_blank" rel="noopener">
+        <img src="/static/img/partner-example-logo.png" alt="Example Company" style="max-width:120px; max-height:80px; display:block; margin:0 auto 0.5rem;">
+        <div class="fw-semibold">Example Company</div>
+      </a>
+    </div>
+    <!-- Add more partners below using the same structure -->
+  </div>
+</div>
+{% endblock %}
