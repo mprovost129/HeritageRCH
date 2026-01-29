@@ -3,7 +3,6 @@ from django.contrib.contenttypes.admin import GenericTabularInline
 
 from .models import (
     Community,
-    FloorPlan,
     AvailableHome,
     Amenity,
     Photo,
@@ -70,31 +69,7 @@ class CommunityAdmin(FeaturedAdminMixin, admin.ModelAdmin):
     inlines = [PhotoInline]
 
 
-# ---------------------------------------------------------------------------
-# FloorPlan admin
-# ---------------------------------------------------------------------------
 
-@admin.register(FloorPlan)
-class FloorPlanAdmin(FeaturedAdminMixin, admin.ModelAdmin):
-    list_display = (
-        "name",
-        "beds",
-        "baths",
-        "sq_ft_min",
-        "sq_ft_max",
-        "is_featured",
-        "featured_rank",
-    )
-    list_filter = ("beds", "baths", "is_featured")
-    search_fields = ("name",)
-    # Only keep this if FloorPlan actually has a slug field.
-    prepopulated_fields = {"slug": ("name",)}
-    # 'available_in' apparently is NOT a ManyToManyField in your models
-    # so we can't use filter_horizontal here.
-    # If you later make it ManyToMany, we can re-enable:
-    # filter_horizontal = ("available_in",)
-    ordering = ("featured_rank", "name")
-    inlines = [PhotoInline]
 
 
 # ---------------------------------------------------------------------------
