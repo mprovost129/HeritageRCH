@@ -1,3 +1,25 @@
+class ClientManager(CustomUserManager):
+    def get_queryset(self):
+        return super().get_queryset().filter(role='client')
+
+class EmployeeManager(CustomUserManager):
+    def get_queryset(self):
+        return super().get_queryset().filter(role='staff')
+
+# Proxy models for admin split
+class Client(CustomUser):
+    objects = ClientManager()
+    class Meta:
+        proxy = True
+        verbose_name = 'Client'
+        verbose_name_plural = 'Clients'
+
+class Employee(CustomUser):
+    objects = EmployeeManager()
+    class Meta:
+        proxy = True
+        verbose_name = 'Employee'
+        verbose_name_plural = 'Employees'
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db import models
