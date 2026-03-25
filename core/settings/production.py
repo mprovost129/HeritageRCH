@@ -33,13 +33,31 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 USE_S3 = os.getenv("USE_S3", "False").lower() == "true"
 if USE_S3:
     INSTALLED_APPS.append("storages")
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
-    AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")
-    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME")
-    AWS_QUERYSTRING_AUTH = False
+
+    # Accept common env var names used by Render/S3-compatible providers.
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID") or os.getenv("S3_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY") or os.getenv("S3_SECRET_ACCESS_KEY")
+    AWS_S3_MEDIA_BUCKET = (
+        os.getenv("AWS_S3_MEDIA_BUCKET")
+        or os.getenv("AWS_BUCKET_NAME")
+        or os.getenv("S3_BUCKET_NAME")
+    )
+    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME") or os.getenv("AWS_REGION")
+    AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL") or os.getenv("S3_ENDPOINT_URL")
+    AWS_S3_CUSTOM_DOMAIN = os.getenv("AWS_S3_CUSTOM_DOMAIN")
+    AWS_DEFAULT_ACL = None
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_QUERYSTRING_AUTH = os.getenv("AWS_QUERYSTRING_AUTH", "false").lower() == "true"
+
+    # Django 5+ preferred storage config.
+    STORAGES = {
+        "default": {"BACKEND": "storages.backends.s3.S3Storage"},
+        "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+    }
+
+    # Optional explicit media URL when using a CDN/custom domain.
+    if AWS_S3_CUSTOM_DOMAIN:
+        MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
 else:
     # Fallback to local disk if not using S3
     MEDIA_URL = os.getenv("MEDIA_URL", "/media/")
