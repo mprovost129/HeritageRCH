@@ -12,40 +12,93 @@
   {% endwith %}
 {% endblock %}
 
+{% block extra_js %}
+<script>
+  (function () {
+    const modal = document.getElementById("communityGalleryModal");
+    const carouselEl = document.getElementById("communityGalleryCarousel");
+    if (!modal || !carouselEl || !window.bootstrap) return;
+    const carousel = bootstrap.Carousel.getOrCreateInstance(carouselEl, { interval: false });
+    modal.addEventListener("show.bs.modal", function (event) {
+      const trigger = event.relatedTarget;
+      if (!trigger) return;
+      const index = parseInt(trigger.getAttribute("data-bs-slide-to"), 10);
+      if (!Number.isNaN(index)) {
+        carousel.to(index);
+      }
+    });
+  })();
+</script>
+{% endblock %}
+
 {% block content %}
-
-
-<section class="detail-hero detail-hero--natural mb-4">
-  {% with photo=object.photos.all.0 %}
-    {% if photo %}
-      <img src="{{ photo.image_url }}" alt="{{ photo.caption }}" class="img-fluid">
-    {% else %}
-      <div class="detail-hero-placeholder">
-        Community photos coming soon.
-      </div>
-    {% endif %}
-  {% endwith %}
-</section>
-
 <section class="mb-5">
   <h2 class="h5 mb-3">Gallery</h2>
   <div class="row g-3">
     {% for photo in object.photos.all %}
       <div class="col-6 col-md-4 col-lg-3">
-        <div class="card h-100 shadow-sm">
-          <img src="{{ photo.image_url }}" alt="{{ photo.caption }}" class="card-img-top img-fluid" style="object-fit:cover; max-height:200px;">
+        <button
+          type="button"
+          class="card h-100 shadow-sm w-100 text-start p-0 border-0 bg-white community-gallery-card"
+          data-bs-toggle="modal"
+          data-bs-target="#communityGalleryModal"
+          data-bs-slide-to="{{ forloop.counter0 }}"
+          aria-label="Open photo {{ forloop.counter }}"
+        >
+          <div class="community-gallery-thumb-wrap">
+            <img src="{{ photo.image_url }}" alt="{{ photo.caption }}" class="img-fluid community-gallery-thumb">
+          </div>
           {% if photo.caption %}
             <div class="card-body p-2">
               <div class="small text-muted">{{ photo.caption }}</div>
             </div>
           {% endif %}
-        </div>
+        </button>
       </div>
     {% empty %}
       <div class="col text-muted">No photos for this community yet.</div>
     {% endfor %}
   </div>
 </section>
+
+{% if object.photos.all %}
+<div class="modal fade" id="communityGalleryModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="h6 mb-0">Community Gallery</h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0">
+        <div id="communityGalleryCarousel" class="carousel slide" data-bs-interval="false">
+          <div class="carousel-inner">
+            {% for photo in object.photos.all %}
+              <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                <div class="community-gallery-modal-frame">
+                  <img src="{{ photo.image_url }}" alt="{{ photo.caption }}" class="d-block w-100 community-gallery-modal-image">
+                </div>
+                {% if photo.caption %}
+                  <div class="carousel-caption d-block">
+                    <p class="mb-0">{{ photo.caption }}</p>
+                  </div>
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#communityGalleryCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#communityGalleryCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
 
 <div class="row g-4">
   <!-- Main content -->
