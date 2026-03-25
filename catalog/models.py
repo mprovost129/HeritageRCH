@@ -6,6 +6,9 @@ from django.urls import reverse
 from django.utils.text import slugify
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
+import logging
+
+logger = logging.getLogger(__name__)
 
 class TimeStamped(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -29,6 +32,16 @@ class Photo(TimeStamped):
         ordering = ("sort_order", "id")
     def __str__(self):
         return self.caption or f"Photo #{self.pk}"
+
+    @property
+    def image_url(self):
+        if not self.image:
+            return ""
+        try:
+            return self.image.url
+        except Exception:
+            logger.exception("Failed to build image URL for photo id=%s", self.pk)
+            return ""
 
 class CommunityStatus(models.TextChoices):
     ACTIVE = "active", "Active"

@@ -10,7 +10,7 @@
     <tbody>
       {% for photo in photos %}
       <tr>
-        <td>{% if photo.image %}<img src="{{ photo.image.url }}" style="height:60px;"/>{% endif %}</td>
+        <td>{% if photo.image %}<img src="{{ photo.image_url }}" style="height:60px;"/>{% endif %}</td>
         <td>{{ photo.caption }}</td>
         <td>{{ photo.sort_order }}</td>
         <td>
@@ -25,3 +25,4 @@
   </table>
 </div>
 {% endblock %}
+
