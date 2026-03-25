@@ -43,7 +43,9 @@ urlpatterns = [
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
 ]
 
-if settings.DEBUG:
+# Serve user-uploaded media in local dev and in basic non-S3 deployments.
+# For long-term production, object storage (S3/R2/etc.) is preferred.
+if settings.DEBUG or (not getattr(settings, "USE_S3", False)):
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # Admin branding

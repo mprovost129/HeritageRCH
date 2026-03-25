@@ -3,6 +3,7 @@
 # ──────────────────────────────────────────────────────────────────────────────
 from .base import *  # noqa
 import os
+from pathlib import Path
 import dj_database_url
 
 DEBUG = False
@@ -41,5 +42,5 @@ if USE_S3:
     AWS_QUERYSTRING_AUTH = False
 else:
     # Fallback to local disk if not using S3
-    MEDIA_URL = "/media/"
-    MEDIA_ROOT = BASE_DIR / "media"
+    MEDIA_URL = os.getenv("MEDIA_URL", "/media/")
+    MEDIA_ROOT = Path(os.getenv("MEDIA_ROOT", str(BASE_DIR / "media")))
