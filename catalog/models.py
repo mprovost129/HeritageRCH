@@ -7,6 +7,7 @@ from django.utils.text import slugify
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 import logging
+import uuid
 
 logger = logging.getLogger(__name__)
 
@@ -58,6 +59,8 @@ class Community(TimeStamped):
     status = models.CharField(max_length=20, choices=CommunityStatus.choices, default=CommunityStatus.ACTIVE)
     description = models.TextField(blank=True)
     info_sections = models.JSONField(default=list, blank=True)
+    share_enabled = models.BooleanField(default=False)
+    share_token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, db_index=True)
     amenities = models.ManyToManyField(Amenity, blank=True, related_name="communities")
     photos = GenericRelation(Photo, related_query_name="community")
     # FEATURE FLAGS
@@ -79,6 +82,9 @@ class Community(TimeStamped):
 
     def get_absolute_url(self):
         return reverse("catalog:community_detail", args=[self.slug])
+
+    def get_share_url(self):
+        return reverse("catalog:community_share", args=[self.slug, str(self.share_token)])
 
 class FloorPlan(TimeStamped):
     slug = models.SlugField(max_length=160, unique=True)

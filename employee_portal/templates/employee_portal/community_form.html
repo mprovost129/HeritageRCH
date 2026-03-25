@@ -87,6 +87,27 @@
           {{ form.available_plans }}
           {% if form.available_plans.errors %}<div class="text-danger small mt-1">{{ form.available_plans.errors }}</div>{% endif %}
         </div>
+
+        <div class="portal-form-shell p-4 mt-4">
+          <div class="portal-section-title">Client Share Page</div>
+          <div class="mb-3 form-check">
+            {{ form.share_enabled }}
+            <label class="form-check-label" for="{{ form.share_enabled.id_for_label }}">Enable private client share page</label>
+            {% if form.share_enabled.errors %}<div class="text-danger small mt-1">{{ form.share_enabled.errors }}</div>{% endif %}
+          </div>
+          {% if view.object.pk %}
+            <label class="form-label">Share URL</label>
+            <input type="text"
+                   class="form-control"
+                   readonly
+                   value="{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:community_share' slug=view.object.slug token=view.object.share_token %}">
+            <div class="form-text">
+              When enabled, this URL shows only the community gallery page (no main site navigation).
+            </div>
+          {% else %}
+            <div class="small text-muted">Save this community first to generate a share URL.</div>
+          {% endif %}
+        </div>
       </div>
     </div>
 
