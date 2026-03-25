@@ -95,6 +95,15 @@
             <label class="form-check-label" for="{{ form.share_enabled.id_for_label }}">Enable private client share page</label>
             {% if form.share_enabled.errors %}<div class="text-danger small mt-1">{{ form.share_enabled.errors }}</div>{% endif %}
           </div>
+          <div class="mb-3">
+            <label class="form-label" for="{{ form.share_banner_image.id_for_label }}">Banner Image (Marketing Header)</label>
+            {{ form.share_banner_image }}
+            <div class="form-text">Used on the client share page as a 120px-tall full-width banner.</div>
+            {% if form.share_banner_image.errors %}<div class="text-danger small mt-1">{{ form.share_banner_image.errors }}</div>{% endif %}
+            {% if view.object.pk and view.object.share_banner_image %}
+              <img src="{{ view.object.share_banner_image.url }}" alt="Share banner preview" class="img-fluid rounded border mt-2" style="max-height:80px;">
+            {% endif %}
+          </div>
           {% if view.object.pk %}
             <label class="form-label">Share URL</label>
             <input type="text"

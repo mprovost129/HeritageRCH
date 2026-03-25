@@ -10,6 +10,11 @@
   <link rel="stylesheet" href="{% static 'site.css' %}">
 </head>
 <body>
+  {% if object.share_banner_image %}
+    <div class="community-share-banner-wrap">
+      <img src="{{ object.share_banner_image.url }}" alt="{{ object.name }} banner" class="community-share-banner-image">
+    </div>
+  {% endif %}
   <main class="container py-4">
     <section class="mb-4">
       <h1 class="h3 mb-1">{{ object.name }}</h1>
@@ -46,6 +51,33 @@
         {% endfor %}
       </div>
     </section>
+
+    {% if object.info_sections %}
+      <section class="mb-4">
+        <h2 class="h5 mb-3">Project Information</h2>
+        {% for section in object.info_sections %}
+          <div class="card shadow-sm mb-3">
+            <div class="card-body">
+              {% if section.header %}
+                <h3 class="h6 text-uppercase text-muted mb-3">{{ section.header }}</h3>
+              {% endif %}
+              {% if section.items %}
+                <div class="row g-2">
+                  {% for item in section.items %}
+                    <div class="col-md-6">
+                      <div class="border rounded p-2 h-100">
+                        {% if item.key %}<div class="small text-muted">{{ item.key }}</div>{% endif %}
+                        {% if item.value %}<div class="fw-semibold">{{ item.value }}</div>{% endif %}
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </section>
+    {% endif %}
   </main>
 
   {% if object.photos.all %}

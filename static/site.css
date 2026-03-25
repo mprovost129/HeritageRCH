@@ -456,3 +456,19 @@ footer img {
   max-height: 100%;
   object-fit: contain;
 }
+
+.community-share-banner-wrap {
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.community-share-banner-image {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}

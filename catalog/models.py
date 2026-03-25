@@ -59,6 +59,7 @@ class Community(TimeStamped):
     status = models.CharField(max_length=20, choices=CommunityStatus.choices, default=CommunityStatus.ACTIVE)
     description = models.TextField(blank=True)
     info_sections = models.JSONField(default=list, blank=True)
+    share_banner_image = models.ImageField(upload_to="communities/share_banners/", blank=True, null=True)
     share_enabled = models.BooleanField(default=False)
     share_token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, db_index=True)
     amenities = models.ManyToManyField(Amenity, blank=True, related_name="communities")
