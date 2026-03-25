@@ -12,6 +12,14 @@ DATABASES = {
     "default": dj_database_url.config(conn_max_age=600, ssl_require=False),
 }
 
+# Isolate this site inside a dedicated PostgreSQL schema when sharing one database.
+DB_SCHEMA = os.getenv("DB_SCHEMA", "heritage_rch").strip()
+db_options = DATABASES["default"].setdefault("OPTIONS", {})
+existing_options = db_options.get("options", "").strip()
+schema_option = f"-c search_path={DB_SCHEMA},public"
+if schema_option not in existing_options:
+    db_options["options"] = f"{existing_options} {schema_option}".strip()
+
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 CSRF_TRUSTED_ORIGINS = [
     *(os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",") if os.getenv("CSRF_TRUSTED_ORIGINS") else []),

@@ -19,8 +19,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",
     # Apps
+    "accounts",
     "catalog",
     "pages",
+    "employee_portal",
 ]
 
 MIDDLEWARE = [
@@ -70,6 +72,14 @@ USE_I18N = True
 USE_TZ = True
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Use the project custom user model in all environments.
+AUTH_USER_MODEL = "accounts.CustomUser"
+
+# Auth flow defaults
+LOGIN_URL = "/employee-portal/login/"
+LOGIN_REDIRECT_URL = "/employee-portal/"
+LOGOUT_REDIRECT_URL = "/"
 
 # Placeholder database; each env file overrides as needed
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3"}}

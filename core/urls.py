@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.views.generic import TemplateView
+from django.views.generic import RedirectView, TemplateView
 from django.contrib.sitemaps.views import sitemap
 
 from catalog.sitemaps import CommunitySitemap, FloorPlanSitemap, HomeSitemap
@@ -23,6 +23,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("accounts/profile/", RedirectView.as_view(url="/employee-portal/", permanent=False)),
     path("employee-portal/login/", auth_views.LoginView.as_view(template_name="employee_portal/login.html"), name="employee_portal_login"),
     path("employee-portal/logout/", auth_views.LogoutView.as_view(next_page="employee_portal:dashboard"), name="employee_portal_logout"),
     path("employee-portal/password-reset/", auth_views.PasswordResetView.as_view(template_name="employee_portal/password_reset_form.html"), name="employee_portal_password_reset"),
