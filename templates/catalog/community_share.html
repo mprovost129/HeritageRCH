@@ -11,7 +11,7 @@
 </head>
 <body>
   {% if object.share_banner_image %}
-    <div class="community-share-banner-wrap">
+    <div class="community-share-banner-wrap" style="display: flex; justify-content: center; align-items: center; margin-bottom: 1rem;">
       <img src="{{ object.share_banner_image.url }}" alt="{{ object.name }} banner" class="community-share-banner-image">
     </div>
   {% endif %}
