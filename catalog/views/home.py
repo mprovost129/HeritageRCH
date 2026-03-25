@@ -3,6 +3,7 @@
 # -----------------------------------------------------------------------------
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
+from django.http import Http404
 from ..models import AvailableHome, HomeStatus
 
 class HomeListView(ListView):
@@ -41,3 +42,16 @@ class HomeDetailView(DetailView):
     model = AvailableHome
     template_name = "catalog/home_detail.html"
     slug_field = "slug"
+
+
+class HomeShareView(DetailView):
+    model = AvailableHome
+    template_name = "catalog/home_share.html"
+    slug_field = "slug"
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset=queryset)
+        token = str(self.kwargs.get("token", ""))
+        if not obj.share_enabled or str(obj.share_token) != token:
+            raise Http404("Share link not available.")
+        return obj

@@ -458,7 +458,7 @@ footer img {
 }
 
 .community-share-banner-wrap {
-  width: 100%;
+  width: auto;
   height: 120px;
   overflow: hidden;
   background: #fff;
@@ -466,7 +466,7 @@ footer img {
 }
 
 .community-share-banner-image {
-  width: 100%;
+  width: auto;
   height: 120px;
   object-fit: cover;
   object-position: center;

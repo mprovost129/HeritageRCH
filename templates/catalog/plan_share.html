@@ -1,0 +1,134 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ object.name }} | Client Gallery</title>
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'site.css' %}">
+</head>
+<body>
+  {% if object.share_banner_image %}
+    <div class="community-share-banner-wrap">
+      <img src="{{ object.share_banner_image.url }}" alt="{{ object.name }} banner" class="community-share-banner-image">
+    </div>
+  {% endif %}
+  <main class="container py-4">
+    <section class="mb-4">
+      <h1 class="h3 mb-1">{{ object.name }}</h1>
+      <p class="text-muted mb-0">
+        {{ object.beds }} bd · {{ object.baths }} ba
+        {% if object.sq_ft_min or object.sq_ft_max %}
+          ·
+          {% if object.sq_ft_min and object.sq_ft_max %}
+            {{ object.sq_ft_min }}-{{ object.sq_ft_max }} sq ft
+          {% elif object.sq_ft_min %}
+            {{ object.sq_ft_min }}+ sq ft
+          {% elif object.sq_ft_max %}
+            Up to {{ object.sq_ft_max }} sq ft
+          {% endif %}
+        {% endif %}
+      </p>
+    </section>
+
+    <section class="mb-5">
+      <h2 class="h5 mb-3">Plan Gallery</h2>
+      <div class="row g-3">
+        {% for photo in object.photos.all %}
+          <div class="col-6 col-md-4 col-lg-3">
+            <button
+              type="button"
+              class="card h-100 shadow-sm w-100 text-start p-0 border-0 bg-white community-gallery-card"
+              data-bs-toggle="modal"
+              data-bs-target="#galleryModal"
+              data-bs-slide-to="{{ forloop.counter0 }}"
+              aria-label="Open photo {{ forloop.counter }}"
+            >
+              <div class="community-gallery-thumb-wrap">
+                <img src="{{ photo.image_url }}" alt="{{ photo.caption }}" class="img-fluid community-gallery-thumb">
+              </div>
+              {% if photo.caption %}
+                <div class="card-body p-2"><div class="small text-muted">{{ photo.caption }}</div></div>
+              {% endif %}
+            </button>
+          </div>
+        {% empty %}
+          <div class="col text-muted">No photos available yet.</div>
+        {% endfor %}
+      </div>
+    </section>
+
+    {% if object.info_sections %}
+      <section class="mb-4">
+        <h2 class="h5 mb-3">Plan Information</h2>
+        {% for section in object.info_sections %}
+          <div class="card shadow-sm mb-3">
+            <div class="card-body">
+              {% if section.header %}<h3 class="h6 text-uppercase text-muted mb-3">{{ section.header }}</h3>{% endif %}
+              {% if section.items %}
+                <div class="row g-2">
+                  {% for item in section.items %}
+                    <div class="col-md-6">
+                      <div class="border rounded p-2 h-100">
+                        {% if item.key %}<div class="small text-muted">{{ item.key }}</div>{% endif %}
+                        {% if item.value %}<div class="fw-semibold">{{ item.value }}</div>{% endif %}
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </section>
+    {% endif %}
+  </main>
+
+  {% if object.photos.all %}
+  <div class="modal fade" id="galleryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="h6 mb-0">{{ object.name }} Gallery</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-0">
+          <div id="galleryCarousel" class="carousel slide" data-bs-interval="false">
+            <div class="carousel-inner">
+              {% for photo in object.photos.all %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                  <div class="community-gallery-modal-frame">
+                    <img src="{{ photo.image_url }}" alt="{{ photo.caption }}" class="d-block w-100 community-gallery-modal-image">
+                  </div>
+                  {% if photo.caption %}<div class="carousel-caption d-block"><p class="mb-0">{{ photo.caption }}</p></div>{% endif %}
+                </div>
+              {% endfor %}
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#galleryCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span></button>
+            <button class="carousel-control-next" type="button" data-bs-target="#galleryCarousel" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <script src="{% static 'vendor/bootstrap/bootstrap.bundle.min.js' %}"></script>
+  <script>
+    (function () {
+      const modal = document.getElementById("galleryModal");
+      const carouselEl = document.getElementById("galleryCarousel");
+      if (!modal || !carouselEl || !window.bootstrap) return;
+      const carousel = bootstrap.Carousel.getOrCreateInstance(carouselEl, { interval: false });
+      modal.addEventListener("show.bs.modal", function (event) {
+        const trigger = event.relatedTarget;
+        if (!trigger) return;
+        const index = parseInt(trigger.getAttribute("data-bs-slide-to"), 10);
+        if (!Number.isNaN(index)) carousel.to(index);
+      });
+    })();
+  </script>
+</body>
+</html>

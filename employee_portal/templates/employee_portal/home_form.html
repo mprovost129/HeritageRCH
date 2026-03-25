@@ -4,7 +4,7 @@
 <div class="container portal-form-page py-5">
   <div class="portal-form-header mb-4">
     <h1 class="h3 mb-1">{{ view.object.pk|yesno:'Edit,Add' }} Home</h1>
-    <p class="text-muted mb-0">Manage home details, address, pricing, and availability.</p>
+    <p class="text-muted mb-0">Manage home details, media, share settings, and structured info sections.</p>
   </div>
 
   <div class="portal-form-shell p-4">
@@ -13,24 +13,54 @@
       {% if form.non_field_errors %}
         <div class="alert alert-danger">{{ form.non_field_errors }}</div>
       {% endif %}
+
       {% for field in form %}
-        {% if field.is_hidden %}
-          {{ field }}
-        {% elif field.field.widget.input_type == "checkbox" %}
-          <div class="form-check mb-3">
+        {% if field.name != 'info_sections' %}
+          {% if field.is_hidden %}
             {{ field }}
-            <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors }}</div>{% endif %}
-          </div>
-        {% else %}
-          <div class="mb-3">
-            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field }}
-            {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
-            {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors }}</div>{% endif %}
-          </div>
+          {% elif field.field.widget.input_type == "checkbox" %}
+            <div class="form-check mb-3">
+              {{ field }}
+              <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+              {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors }}</div>{% endif %}
+            </div>
+          {% else %}
+            <div class="mb-3">
+              <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field }}
+              {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+              {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors }}</div>{% endif %}
+            </div>
+          {% endif %}
         {% endif %}
       {% endfor %}
+
+      {{ form.info_sections }}
+      <div class="portal-form-shell p-4 mb-4 mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="h5 mb-0">Home Info Sections</h2>
+          <button type="button" id="add-section-btn" class="btn btn-sm btn-outline-primary">Add Section</button>
+        </div>
+        <p class="text-muted small mb-3">Add section headers and key/value details for the share page.</p>
+        <div id="info-sections-container" class="d-grid gap-3"></div>
+      </div>
+      {% if form.info_sections.errors %}
+        <div class="text-danger small mb-3">{{ form.info_sections.errors }}</div>
+      {% endif %}
+
+      <div class="portal-form-shell p-4 mb-4">
+        <div class="portal-section-title">Client Share Page</div>
+        <div class="mb-3 form-check">
+          {{ form.share_enabled }}
+          <label class="form-check-label" for="{{ form.share_enabled.id_for_label }}">Enable private client share page</label>
+        </div>
+        {% if object.pk %}
+          <label class="form-label">Share URL</label>
+          <input type="text" class="form-control" readonly value="{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:home_share' slug=object.slug token=object.share_token %}">
+          <div class="form-text">No navigation page for client-facing use.</div>
+        {% endif %}
+      </div>
 
       <div class="d-flex flex-wrap gap-2 mt-2">
         <button type="submit" class="btn btn-primary">Save Home</button>
@@ -42,4 +72,88 @@
     </form>
   </div>
 </div>
+
+<template id="section-template">
+  <div class="border rounded p-3 section-card">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <div class="fw-semibold">Section</div>
+      <button type="button" class="btn btn-sm btn-outline-danger remove-section-btn">Remove Section</button>
+    </div>
+    <label class="form-label">Header</label>
+    <input type="text" class="form-control section-header-input mb-3" placeholder="Section header">
+    <div class="items-container d-grid gap-2"></div>
+    <button type="button" class="btn btn-sm btn-outline-secondary add-item-btn mt-2">Add Key/Value</button>
+  </div>
+</template>
+
+<template id="item-template">
+  <div class="row g-2 align-items-end section-item-row">
+    <div class="col-md-5">
+      <label class="form-label mb-1">Key</label>
+      <input type="text" class="form-control section-key-input" placeholder="Label">
+    </div>
+    <div class="col-md-5">
+      <label class="form-label mb-1">Value</label>
+      <input type="text" class="form-control section-value-input" placeholder="Value">
+    </div>
+    <div class="col-md-2">
+      <button type="button" class="btn btn-outline-danger w-100 remove-item-btn">Remove</button>
+    </div>
+  </div>
+</template>
+
+<script>
+  (function() {
+    const hiddenInput = document.getElementById("id_info_sections");
+    const container = document.getElementById("info-sections-container");
+    const addSectionBtn = document.getElementById("add-section-btn");
+    const sectionTemplate = document.getElementById("section-template");
+    const itemTemplate = document.getElementById("item-template");
+    if (!hiddenInput || !container || !addSectionBtn) return;
+
+    function addItem(sectionNode, itemData) {
+      const itemNode = itemTemplate.content.firstElementChild.cloneNode(true);
+      itemNode.querySelector(".section-key-input").value = itemData && itemData.key ? itemData.key : "";
+      itemNode.querySelector(".section-value-input").value = itemData && itemData.value ? itemData.value : "";
+      itemNode.querySelector(".remove-item-btn").addEventListener("click", function() { itemNode.remove(); syncSections(); });
+      itemNode.querySelector(".section-key-input").addEventListener("input", syncSections);
+      itemNode.querySelector(".section-value-input").addEventListener("input", syncSections);
+      sectionNode.querySelector(".items-container").appendChild(itemNode);
+    }
+
+    function addSection(sectionData) {
+      const sectionNode = sectionTemplate.content.firstElementChild.cloneNode(true);
+      sectionNode.querySelector(".section-header-input").value = sectionData && sectionData.header ? sectionData.header : "";
+      sectionNode.querySelector(".remove-section-btn").addEventListener("click", function() { sectionNode.remove(); syncSections(); });
+      sectionNode.querySelector(".add-item-btn").addEventListener("click", function() { addItem(sectionNode); syncSections(); });
+      sectionNode.querySelector(".section-header-input").addEventListener("input", syncSections);
+      const sectionItems = sectionData && Array.isArray(sectionData.items) ? sectionData.items : [];
+      if (sectionItems.length) { sectionItems.forEach(function(item) { addItem(sectionNode, item); }); } else { addItem(sectionNode); }
+      container.appendChild(sectionNode);
+    }
+
+    function syncSections() {
+      const sections = [];
+      container.querySelectorAll(".section-card").forEach(function(sectionNode) {
+        const header = sectionNode.querySelector(".section-header-input").value.trim();
+        const items = [];
+        sectionNode.querySelectorAll(".section-item-row").forEach(function(itemNode) {
+          const key = itemNode.querySelector(".section-key-input").value.trim();
+          const value = itemNode.querySelector(".section-value-input").value.trim();
+          if (key || value) items.push({ key: key, value: value });
+        });
+        if (header || items.length) sections.push({ header: header, items: items });
+      });
+      hiddenInput.value = JSON.stringify(sections);
+    }
+
+    let initialData = [];
+    if (hiddenInput.value) {
+      try { const parsed = JSON.parse(hiddenInput.value); if (Array.isArray(parsed)) initialData = parsed; } catch (error) { initialData = []; }
+    }
+    if (initialData.length) { initialData.forEach(addSection); } else { addSection(); }
+    syncSections();
+    addSectionBtn.addEventListener("click", function() { addSection(); syncSections(); });
+  })();
+</script>
 {% endblock %}

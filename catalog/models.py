@@ -95,6 +95,10 @@ class FloorPlan(TimeStamped):
     sq_ft_min = models.PositiveIntegerField(null=True, blank=True)
     sq_ft_max = models.PositiveIntegerField(null=True, blank=True)
     description = models.TextField(blank=True)
+    info_sections = models.JSONField(default=list, blank=True)
+    share_enabled = models.BooleanField(default=False)
+    share_token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, db_index=True)
+    share_banner_image = models.ImageField(upload_to="plans/share_banners/", blank=True, null=True)
     photos = GenericRelation(Photo, related_query_name="plan")
     # FEATURE FLAGS
     is_featured = models.BooleanField(default=False, db_index=True)
@@ -113,6 +117,9 @@ class FloorPlan(TimeStamped):
 
     def get_absolute_url(self):
         return reverse("catalog:plan_detail", args=[self.slug])
+
+    def get_share_url(self):
+        return reverse("catalog:plan_share", args=[self.slug, str(self.share_token)])
 
 class HomeStatus(models.TextChoices):
     COMING = "coming", "Coming Soon"
@@ -136,6 +143,10 @@ class AvailableHome(TimeStamped):
     price = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)
     status = models.CharField(max_length=20, choices=HomeStatus.choices, default=HomeStatus.COMING)
     description = models.TextField(blank=True)
+    info_sections = models.JSONField(default=list, blank=True)
+    share_enabled = models.BooleanField(default=False)
+    share_token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, db_index=True)
+    share_banner_image = models.ImageField(upload_to="homes/share_banners/", blank=True, null=True)
     photos = GenericRelation(Photo, related_query_name="home")
     # FEATURE FLAGS
     is_featured = models.BooleanField(default=False, db_index=True)
@@ -163,6 +174,9 @@ class AvailableHome(TimeStamped):
 
     def get_absolute_url(self):
         return reverse("catalog:home_detail", args=[self.slug])
+
+    def get_share_url(self):
+        return reverse("catalog:home_share", args=[self.slug, str(self.share_token)])
 
 class LeadSource(models.TextChoices):
     GLOBAL = "site", "Website"
