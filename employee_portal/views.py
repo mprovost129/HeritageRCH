@@ -1,4 +1,5 @@
 # Django imports
+import logging
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy, reverse
@@ -6,6 +7,37 @@ from django.shortcuts import get_object_or_404, redirect
 # App/model imports
 from catalog.models import AvailableHome, FloorPlan, Photo
 from employee_portal.photo_forms import PhotoForm
+
+logger = logging.getLogger(__name__)
+
+
+class PhotoFormErrorMixin:
+    def _safe_create_photo(self, form, owner):
+        try:
+            photo = form.save(commit=False)
+            photo.content_object = owner
+            photo.save()
+            return True
+        except Exception:
+            logger.exception("Photo create failed for owner=%s", owner)
+            form.add_error(
+                None,
+                "Upload failed. Please verify S3 bucket permissions and storage settings.",
+            )
+            return False
+
+    def _safe_update_photo(self, form):
+        try:
+            form.save()
+            return True
+        except Exception:
+            logger.exception("Photo update failed for photo id=%s", getattr(form.instance, "pk", None))
+            form.add_error(
+                None,
+                "Update failed. Please verify S3 bucket permissions and storage settings.",
+            )
+            return False
+
 # Home Photo Management
 class HomePhotoListView(LoginRequiredMixin, ListView):
     model = Photo
@@ -18,7 +50,7 @@ class HomePhotoListView(LoginRequiredMixin, ListView):
         ctx = super().get_context_data(**kwargs)
         ctx["home"] = self.home
         return ctx
-class HomePhotoCreateView(LoginRequiredMixin, CreateView):
+class HomePhotoCreateView(PhotoFormErrorMixin, LoginRequiredMixin, CreateView):
     model = Photo
     form_class = PhotoForm
     template_name = "employee_portal/home_photo_form.html"
@@ -26,15 +58,14 @@ class HomePhotoCreateView(LoginRequiredMixin, CreateView):
         self.home = get_object_or_404(AvailableHome, pk=kwargs["home_id"])
         return super().dispatch(request, *args, **kwargs)
     def form_valid(self, form):
-        photo = form.save(commit=False)
-        photo.content_object = self.home
-        photo.save()
+        if not self._safe_create_photo(form, self.home):
+            return self.form_invalid(form)
         return redirect("employee_portal:home_photo_list", home_id=self.home.pk)
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["home"] = self.home
         return ctx
-class HomePhotoUpdateView(LoginRequiredMixin, UpdateView):
+class HomePhotoUpdateView(PhotoFormErrorMixin, LoginRequiredMixin, UpdateView):
     model = Photo
     form_class = PhotoForm
     template_name = "employee_portal/home_photo_form.html"
@@ -43,6 +74,10 @@ class HomePhotoUpdateView(LoginRequiredMixin, UpdateView):
         return super().dispatch(request, *args, **kwargs)
     def get_success_url(self):
         return reverse_lazy("employee_portal:home_photo_list", kwargs={"home_id": self.home.pk})
+    def form_valid(self, form):
+        if not self._safe_update_photo(form):
+            return self.form_invalid(form)
+        return redirect("employee_portal:home_photo_list", home_id=self.home.pk)
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["home"] = self.home
@@ -72,7 +107,7 @@ class PlanPhotoListView(LoginRequiredMixin, ListView):
         ctx = super().get_context_data(**kwargs)
         ctx["plan"] = self.plan
         return ctx
-class PlanPhotoCreateView(LoginRequiredMixin, CreateView):
+class PlanPhotoCreateView(PhotoFormErrorMixin, LoginRequiredMixin, CreateView):
     model = Photo
     form_class = PhotoForm
     template_name = "employee_portal/plan_photo_form.html"
@@ -80,15 +115,14 @@ class PlanPhotoCreateView(LoginRequiredMixin, CreateView):
         self.plan = get_object_or_404(FloorPlan, pk=kwargs["plan_id"])
         return super().dispatch(request, *args, **kwargs)
     def form_valid(self, form):
-        photo = form.save(commit=False)
-        photo.content_object = self.plan
-        photo.save()
+        if not self._safe_create_photo(form, self.plan):
+            return self.form_invalid(form)
         return redirect("employee_portal:plan_photo_list", plan_id=self.plan.pk)
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["plan"] = self.plan
         return ctx
-class PlanPhotoUpdateView(LoginRequiredMixin, UpdateView):
+class PlanPhotoUpdateView(PhotoFormErrorMixin, LoginRequiredMixin, UpdateView):
     model = Photo
     form_class = PhotoForm
     template_name = "employee_portal/plan_photo_form.html"
@@ -97,6 +131,10 @@ class PlanPhotoUpdateView(LoginRequiredMixin, UpdateView):
         return super().dispatch(request, *args, **kwargs)
     def get_success_url(self):
         return reverse_lazy("employee_portal:plan_photo_list", kwargs={"plan_id": self.plan.pk})
+    def form_valid(self, form):
+        if not self._safe_update_photo(form):
+            return self.form_invalid(form)
+        return redirect("employee_portal:plan_photo_list", plan_id=self.plan.pk)
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["plan"] = self.plan
@@ -131,7 +169,7 @@ class CommunityPhotoListView(LoginRequiredMixin, ListView):
         ctx["community"] = self.community
         return ctx
 
-class CommunityPhotoCreateView(LoginRequiredMixin, CreateView):
+class CommunityPhotoCreateView(PhotoFormErrorMixin, LoginRequiredMixin, CreateView):
     model = Photo
     form_class = PhotoForm
     template_name = "employee_portal/community_photo_form.html"
@@ -141,9 +179,8 @@ class CommunityPhotoCreateView(LoginRequiredMixin, CreateView):
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        photo = form.save(commit=False)
-        photo.content_object = self.community
-        photo.save()
+        if not self._safe_create_photo(form, self.community):
+            return self.form_invalid(form)
         return redirect("employee_portal:community_photo_list", community_id=self.community.pk)
 
     def get_context_data(self, **kwargs):
@@ -151,7 +188,7 @@ class CommunityPhotoCreateView(LoginRequiredMixin, CreateView):
         ctx["community"] = self.community
         return ctx
 
-class CommunityPhotoUpdateView(LoginRequiredMixin, UpdateView):
+class CommunityPhotoUpdateView(PhotoFormErrorMixin, LoginRequiredMixin, UpdateView):
     model = Photo
     form_class = PhotoForm
     template_name = "employee_portal/community_photo_form.html"
@@ -162,6 +199,10 @@ class CommunityPhotoUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy("employee_portal:community_photo_list", kwargs={"community_id": self.community.pk})
+    def form_valid(self, form):
+        if not self._safe_update_photo(form):
+            return self.form_invalid(form)
+        return redirect("employee_portal:community_photo_list", community_id=self.community.pk)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
