@@ -20,8 +20,7 @@
   <meta property="og:url" content="{{ request.build_absolute_uri|default:'' }}">
 
   {# Allow child templates to override the image URL #}
-  {% block og_image_url %}{% static 'img/heritage-social-default.jpg' %}{% endblock %}
-  <meta property="og:image" content="{% block og_image %}{% endblock %}">
+  <meta property="og:image" content="{% block og_image_url %}{% static 'img/heritage-social-default.jpg' %}{% endblock %}">
 
   {# Optional Twitter card tags #}
   <meta name="twitter:card" content="summary_large_image">
@@ -30,7 +29,7 @@
   <meta name="twitter:description"
         content="{% block twitter_description %}{% endblock %}">
   <meta name="twitter:image"
-        content="{% block twitter_image %}{% endblock %}">
+        content="{% block twitter_image %}{% static 'img/heritage-social-default.jpg' %}{% endblock %}">
 
   <link rel="canonical" href="{{ request.build_absolute_uri|default:'' }}">
 

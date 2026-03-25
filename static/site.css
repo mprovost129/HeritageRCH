@@ -250,6 +250,11 @@ section, .section {
   object-fit: cover;
 }
 
+.detail-hero--natural img {
+  height: auto;
+  object-fit: contain;
+}
+
 .detail-hero-placeholder {
   display: flex;
   align-items: center;

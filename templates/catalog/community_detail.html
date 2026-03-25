@@ -15,18 +15,16 @@
 {% block content %}
 
 
-<section class="detail-hero mb-4">
-  <div class="ratio ratio-21x9">
-    {% with photo=object.photos.all.0 %}
-      {% if photo %}
-        <img src="{{ photo.image_url }}" alt="{{ photo.caption }}" class="img-fluid">
-      {% else %}
-        <div class="detail-hero-placeholder">
-          Community photos coming soon.
-        </div>
-      {% endif %}
-    {% endwith %}
-  </div>
+<section class="detail-hero detail-hero--natural mb-4">
+  {% with photo=object.photos.all.0 %}
+    {% if photo %}
+      <img src="{{ photo.image_url }}" alt="{{ photo.caption }}" class="img-fluid">
+    {% else %}
+      <div class="detail-hero-placeholder">
+        Community photos coming soon.
+      </div>
+    {% endif %}
+  {% endwith %}
 </section>
 
 <section class="mb-5">
