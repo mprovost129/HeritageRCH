@@ -356,3 +356,63 @@ footer img {
   background-color: #f0f0f0;
   color: var(--heritage-green);
 }
+
+/* Employee portal forms
+   -------------------------------------------------------------------------- */
+.portal-form-page {
+  max-width: 980px;
+}
+
+.portal-form-shell {
+  border: 1px solid #e6ece8;
+  border-radius: 1rem;
+  box-shadow: 0 2px 14px rgba(5, 104, 56, 0.05);
+  background: #fff;
+}
+
+.portal-form-header {
+  background: linear-gradient(135deg, #f7fbf8, #eef7f1);
+  border: 1px solid #dbece1;
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+}
+
+.portal-form-shell .form-label {
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.portal-form-shell .form-control,
+.portal-form-shell .form-select {
+  border-radius: 0.6rem;
+  border-color: #d9e5de;
+}
+
+.portal-form-shell .form-check {
+  padding-left: 1.9rem;
+}
+
+.portal-form-shell .form-check .form-check-input {
+  margin-left: -1.9rem;
+}
+
+.portal-section-title {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #5a6a62;
+  margin-bottom: 0.9rem;
+}
+
+.section-card {
+  background: #fcfdfc;
+  border: 1px solid #e6ece8;
+  border-radius: 0.85rem;
+}
+
+.section-item-row {
+  background: #fff;
+  border: 1px solid #eef2ef;
+  border-radius: 0.7rem;
+  padding: 0.6rem;
+}

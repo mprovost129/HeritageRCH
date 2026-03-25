@@ -1,15 +1,27 @@
 {% extends 'base.html' %}
 {% block title %}Employee Portal Login{% endblock %}
 {% block content %}
-<div class="container py-5" style="max-width: 400px;">
-  <h1 class="mb-4 text-center">Employee Portal Login</h1>
-  <form method="post" action="">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary w-100">Log In</button>
-  </form>
-  <div class="text-center mt-3">
-    <a href="/">&larr; Back to Website</a>
+<div class="container portal-form-page py-5" style="max-width: 520px;">
+  <div class="portal-form-header mb-4 text-center">
+    <h1 class="h3 mb-1">Employee Portal Login</h1>
+    <p class="text-muted mb-0">Sign in to manage communities, homes, and plans.</p>
+  </div>
+  <div class="portal-form-shell p-4">
+    <form method="post" action="" data-portal-form>
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="mb-3 text-start">
+          <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors }}</div>{% endif %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary w-100">Log In</button>
+    </form>
+    <div class="text-center mt-3 d-flex flex-column gap-1">
+      <a href="{% url 'employee_portal_password_reset' %}">Forgot password?</a>
+      <a href="/">&larr; Back to Website</a>
+    </div>
   </div>
 </div>
 {% endblock %}

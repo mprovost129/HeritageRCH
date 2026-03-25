@@ -1,13 +1,244 @@
 {% extends 'base.html' %}
 {% block title %}Edit Community{% endblock %}
 {% block content %}
-<div class="container py-5">
-  <h1 class="mb-4">{{ view.object.pk|yesno:'Edit,Add' }} Community</h1>
-  <form method="post" enctype="multipart/form-data">
+<div class="container portal-form-page py-5">
+  <div class="portal-form-header mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+      <div>
+        <h1 class="h3 mb-1">{{ view.object.pk|yesno:'Edit,Add' }} Community</h1>
+        <p class="text-muted mb-0">Set up project details, upload photo cards, and build key/value info sections.</p>
+      </div>
+      <a href="{% url 'employee_portal:community_list' %}" class="btn btn-outline-secondary btn-sm">Back to Communities</a>
+    </div>
+  </div>
+
+  <form method="post" enctype="multipart/form-data" data-portal-form>
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a href="{% url 'employee_portal:community_list' %}" class="btn btn-secondary">Cancel</a>
+    {% if form.non_field_errors %}
+      <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+    {% endif %}
+
+    <div class="row g-4 mb-4">
+      <div class="col-lg-8">
+        <div class="portal-form-shell p-4 h-100">
+          <div class="portal-section-title">Basic Information</div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label" for="{{ form.name.id_for_label }}">Community Name</label>
+              {{ form.name }}
+              {% if form.name.errors %}<div class="text-danger small mt-1">{{ form.name.errors }}</div>{% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="{{ form.slug.id_for_label }}">Slug</label>
+              {{ form.slug }}
+              <div class="form-text">Used in the URL. Example: `oak-ridge-duplexes`</div>
+              {% if form.slug.errors %}<div class="text-danger small mt-1">{{ form.slug.errors }}</div>{% endif %}
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="{{ form.tagline.id_for_label }}">Tagline</label>
+              {{ form.tagline }}
+              {% if form.tagline.errors %}<div class="text-danger small mt-1">{{ form.tagline.errors }}</div>{% endif %}
+            </div>
+            <div class="col-md-5">
+              <label class="form-label" for="{{ form.city.id_for_label }}">City</label>
+              {{ form.city }}
+              {% if form.city.errors %}<div class="text-danger small mt-1">{{ form.city.errors }}</div>{% endif %}
+            </div>
+            <div class="col-md-3">
+              <label class="form-label" for="{{ form.state.id_for_label }}">State</label>
+              {{ form.state }}
+              {% if form.state.errors %}<div class="text-danger small mt-1">{{ form.state.errors }}</div>{% endif %}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="{{ form.status.id_for_label }}">Status</label>
+              {{ form.status }}
+              {% if form.status.errors %}<div class="text-danger small mt-1">{{ form.status.errors }}</div>{% endif %}
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="{{ form.description.id_for_label }}">Overview Description</label>
+              {{ form.description }}
+              {% if form.description.errors %}<div class="text-danger small mt-1">{{ form.description.errors }}</div>{% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="portal-form-shell p-4 mb-4">
+          <div class="portal-section-title">Featured Settings</div>
+          <div class="mb-3 form-check">
+            {{ form.is_featured }}
+            <label class="form-check-label" for="{{ form.is_featured.id_for_label }}">Show on homepage featured areas</label>
+            {% if form.is_featured.errors %}<div class="text-danger small mt-1">{{ form.is_featured.errors }}</div>{% endif %}
+          </div>
+          <label class="form-label" for="{{ form.featured_rank.id_for_label }}">Featured Rank</label>
+          {{ form.featured_rank }}
+          <div class="form-text">Lower numbers appear first.</div>
+          {% if form.featured_rank.errors %}<div class="text-danger small mt-1">{{ form.featured_rank.errors }}</div>{% endif %}
+        </div>
+
+        <div class="portal-form-shell p-4">
+          <div class="portal-section-title">Relationships</div>
+          <label class="form-label" for="{{ form.amenities.id_for_label }}">Amenities</label>
+          {{ form.amenities }}
+          {% if form.amenities.errors %}<div class="text-danger small mt-1">{{ form.amenities.errors }}</div>{% endif %}
+          <hr>
+          <label class="form-label" for="{{ form.available_plans.id_for_label }}">Available Plans</label>
+          {{ form.available_plans }}
+          {% if form.available_plans.errors %}<div class="text-danger small mt-1">{{ form.available_plans.errors }}</div>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    {{ form.info_sections }}
+    <div class="portal-form-shell p-4 mb-4">
+        <h2 class="h5 mb-2">Community Photos</h2>
+        {% if view.object.pk %}
+          <p class="text-muted small mb-3">
+            Upload photos and add captions that will appear as cards on the community page.
+          </p>
+          <a href="{% url 'employee_portal:community_photo_add' view.object.pk %}" class="btn btn-sm btn-primary">Add Photo + Caption</a>
+          <a href="{% url 'employee_portal:community_photo_list' view.object.pk %}" class="btn btn-sm btn-outline-primary">Manage Photos</a>
+        {% else %}
+          <p class="text-muted small mb-0">
+            Save this community first, then you will be taken to upload photos and captions.
+          </p>
+        {% endif %}
+    </div>
+
+    <div class="portal-form-shell p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="h5 mb-0">Community Info Sections</h2>
+          <button type="button" id="add-section-btn" class="btn btn-sm btn-outline-primary">Add Section</button>
+        </div>
+        <p class="text-muted small mb-3">
+          Add a section header, then add key/value rows (example: "School District" / "Wake County").
+        </p>
+        <div id="community-sections-container" class="d-grid gap-3"></div>
+    </div>
+
+    {% if form.info_sections.errors %}
+      <div class="text-danger small mb-3">{{ form.info_sections.errors }}</div>
+    {% endif %}
+
+    <div class="d-flex flex-wrap gap-2">
+      <button type="submit" class="btn btn-primary">Save Community</button>
+      <a href="{% url 'employee_portal:community_list' %}" class="btn btn-secondary">Cancel</a>
+    </div>
   </form>
 </div>
+<template id="section-template">
+  <div class="border rounded p-3 section-card">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <div class="fw-semibold">Section</div>
+      <button type="button" class="btn btn-sm btn-outline-danger remove-section-btn">Remove Section</button>
+    </div>
+    <label class="form-label">Header</label>
+    <input type="text" class="form-control section-header-input mb-3" placeholder="Section header">
+    <div class="items-container d-grid gap-2"></div>
+    <button type="button" class="btn btn-sm btn-outline-secondary add-item-btn mt-2">Add Key/Value</button>
+  </div>
+</template>
+
+<template id="item-template">
+  <div class="row g-2 align-items-end section-item-row">
+    <div class="col-md-5">
+      <label class="form-label mb-1">Key</label>
+      <input type="text" class="form-control section-key-input" placeholder="Label">
+    </div>
+    <div class="col-md-5">
+      <label class="form-label mb-1">Value</label>
+      <input type="text" class="form-control section-value-input" placeholder="Value">
+    </div>
+    <div class="col-md-2">
+      <button type="button" class="btn btn-outline-danger w-100 remove-item-btn">Remove</button>
+    </div>
+  </div>
+</template>
+<script>
+  (function() {
+    const hiddenInput = document.getElementById("id_info_sections");
+    const container = document.getElementById("community-sections-container");
+    const addSectionBtn = document.getElementById("add-section-btn");
+    const sectionTemplate = document.getElementById("section-template");
+    const itemTemplate = document.getElementById("item-template");
+
+    function addItem(sectionNode, itemData) {
+      const itemNode = itemTemplate.content.firstElementChild.cloneNode(true);
+      itemNode.querySelector(".section-key-input").value = itemData && itemData.key ? itemData.key : "";
+      itemNode.querySelector(".section-value-input").value = itemData && itemData.value ? itemData.value : "";
+      itemNode.querySelector(".remove-item-btn").addEventListener("click", function() {
+        itemNode.remove();
+        syncSections();
+      });
+      itemNode.querySelector(".section-key-input").addEventListener("input", syncSections);
+      itemNode.querySelector(".section-value-input").addEventListener("input", syncSections);
+      sectionNode.querySelector(".items-container").appendChild(itemNode);
+    }
+
+    function addSection(sectionData) {
+      const sectionNode = sectionTemplate.content.firstElementChild.cloneNode(true);
+      sectionNode.querySelector(".section-header-input").value = sectionData && sectionData.header ? sectionData.header : "";
+      sectionNode.querySelector(".remove-section-btn").addEventListener("click", function() {
+        sectionNode.remove();
+        syncSections();
+      });
+      sectionNode.querySelector(".add-item-btn").addEventListener("click", function() {
+        addItem(sectionNode);
+        syncSections();
+      });
+      sectionNode.querySelector(".section-header-input").addEventListener("input", syncSections);
+
+      const sectionItems = sectionData && Array.isArray(sectionData.items) ? sectionData.items : [];
+      if (sectionItems.length) {
+        sectionItems.forEach(function(item) { addItem(sectionNode, item); });
+      } else {
+        addItem(sectionNode);
+      }
+      container.appendChild(sectionNode);
+    }
+
+    function syncSections() {
+      const sections = [];
+      container.querySelectorAll(".section-card").forEach(function(sectionNode) {
+        const header = sectionNode.querySelector(".section-header-input").value.trim();
+        const items = [];
+        sectionNode.querySelectorAll(".section-item-row").forEach(function(itemNode) {
+          const key = itemNode.querySelector(".section-key-input").value.trim();
+          const value = itemNode.querySelector(".section-value-input").value.trim();
+          if (key || value) {
+            items.push({ key: key, value: value });
+          }
+        });
+        if (header || items.length) {
+          sections.push({ header: header, items: items });
+        }
+      });
+      hiddenInput.value = JSON.stringify(sections);
+    }
+
+    let initialData = [];
+    if (hiddenInput.value) {
+      try {
+        const parsed = JSON.parse(hiddenInput.value);
+        if (Array.isArray(parsed)) {
+          initialData = parsed;
+        }
+      } catch (error) {
+        initialData = [];
+      }
+    }
+
+    if (initialData.length) {
+      initialData.forEach(addSection);
+    } else {
+      addSection();
+    }
+    syncSections();
+    addSectionBtn.addEventListener("click", function() {
+      addSection();
+      syncSections();
+    });
+  })();
+</script>
 {% endblock %}

@@ -44,6 +44,7 @@ class Community(TimeStamped):
     state = models.CharField(max_length=2, blank=True)
     status = models.CharField(max_length=20, choices=CommunityStatus.choices, default=CommunityStatus.ACTIVE)
     description = models.TextField(blank=True)
+    info_sections = models.JSONField(default=list, blank=True)
     amenities = models.ManyToManyField(Amenity, blank=True, related_name="communities")
     photos = GenericRelation(Photo, related_query_name="community")
     # FEATURE FLAGS

@@ -13,6 +13,22 @@ class UserForm(forms.ModelForm):
             'is_staff', 'is_superuser', 'is_active', 'password'
         ]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            widget = field.widget
+            existing_classes = widget.attrs.get("class", "").strip()
+            if isinstance(widget, forms.CheckboxInput):
+                css_class = "form-check-input"
+            elif isinstance(widget, forms.Select):
+                css_class = "form-select"
+            elif isinstance(widget, forms.Textarea):
+                css_class = "form-control"
+                widget.attrs.setdefault("rows", 4)
+            else:
+                css_class = "form-control"
+            widget.attrs["class"] = f"{existing_classes} {css_class}".strip()
+
     def save(self, commit=True):
         user = super().save(commit=False)
         pwd = self.cleaned_data.get('password')

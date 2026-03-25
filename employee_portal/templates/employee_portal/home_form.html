@@ -1,16 +1,45 @@
 {% extends 'base.html' %}
 {% block title %}Edit Home{% endblock %}
 {% block content %}
-<div class="container py-5">
-  <h1 class="mb-4">{{ view.object.pk|yesno:'Edit,Add' }} Home</h1>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a href="{% url 'employee_portal:home_list' %}" class="btn btn-secondary">Cancel</a>
-    {% if object.pk %}
-    <a href="{% url 'employee_portal:home_photo_list' object.pk %}" class="btn btn-link">Manage Photos</a>
-    {% endif %}
-  </form>
+<div class="container portal-form-page py-5">
+  <div class="portal-form-header mb-4">
+    <h1 class="h3 mb-1">{{ view.object.pk|yesno:'Edit,Add' }} Home</h1>
+    <p class="text-muted mb-0">Manage home details, address, pricing, and availability.</p>
+  </div>
+
+  <div class="portal-form-shell p-4">
+    <form method="post" enctype="multipart/form-data" data-portal-form>
+      {% csrf_token %}
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger">{{ form.non_field_errors }}</div>
+      {% endif %}
+      {% for field in form %}
+        {% if field.is_hidden %}
+          {{ field }}
+        {% elif field.field.widget.input_type == "checkbox" %}
+          <div class="form-check mb-3">
+            {{ field }}
+            <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors }}</div>{% endif %}
+          </div>
+        {% else %}
+          <div class="mb-3">
+            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+            {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors }}</div>{% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      <div class="d-flex flex-wrap gap-2 mt-2">
+        <button type="submit" class="btn btn-primary">Save Home</button>
+        <a href="{% url 'employee_portal:home_list' %}" class="btn btn-secondary">Cancel</a>
+        {% if object.pk %}
+          <a href="{% url 'employee_portal:home_photo_list' object.pk %}" class="btn btn-outline-primary">Manage Photos</a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}

@@ -1,24 +1,26 @@
 {% extends "base.html" %}
+{% block title %}Employee Portal Login{% endblock %}
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header text-center">
-                    <h4>Employee Portal Login</h4>
-                </div>
-                <div class="card-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit" class="btn btn-primary w-100">Login</button>
-                    </form>
-                    <div class="mt-3 text-center">
-                        <a href="{% url 'employee_portal_password_reset' %}">Forgot password?</a>
-                    </div>
-                </div>
-            </div>
+<div class="container portal-form-page py-5" style="max-width: 520px;">
+  <div class="portal-form-header mb-4 text-center">
+    <h1 class="h3 mb-1">Employee Portal Login</h1>
+    <p class="text-muted mb-0">Sign in to manage communities, homes, and plans.</p>
+  </div>
+  <div class="portal-form-shell p-4">
+    <form method="post" data-portal-form>
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="mb-3 text-start">
+          <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors }}</div>{% endif %}
         </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+    <div class="mt-3 text-center">
+      <a href="{% url 'employee_portal_password_reset' %}">Forgot password?</a>
     </div>
+  </div>
 </div>
 {% endblock %}

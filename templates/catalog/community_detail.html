@@ -79,6 +79,32 @@
       </div>
     {% endif %}
 
+    {% if object.info_sections %}
+      <section class="mb-4">
+        {% for section in object.info_sections %}
+          <div class="card border-0 shadow-sm mb-3">
+            <div class="card-body">
+              {% if section.header %}
+                <h3 class="h6 text-uppercase text-muted mb-3">{{ section.header }}</h3>
+              {% endif %}
+              {% if section.items %}
+                <div class="row g-2">
+                  {% for item in section.items %}
+                    <div class="col-md-6">
+                      <div class="border rounded p-2 h-100">
+                        {% if item.key %}<div class="small text-muted">{{ item.key }}</div>{% endif %}
+                        {% if item.value %}<div class="fw-semibold">{{ item.value }}</div>{% endif %}
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </section>
+    {% endif %}
+
     <div class="row">
       <div class="col-md-6 mb-3">
         <h3 class="h6 text-uppercase text-muted">Amenities</h3>

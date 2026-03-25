@@ -1,7 +1,7 @@
 # Django imports
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404, redirect
 # App/model imports
 from catalog.models import AvailableHome, FloorPlan, Photo
@@ -255,7 +255,9 @@ class CommunityCreateView(LoginRequiredMixin, CreateView):
     model = Community
     form_class = CommunityForm
     template_name = "employee_portal/community_form.html"
-    success_url = reverse_lazy("employee_portal:community_list")
+
+    def get_success_url(self):
+        return reverse("employee_portal:community_photo_list", kwargs={"community_id": self.object.pk})
 
 class CommunityUpdateView(LoginRequiredMixin, UpdateView):
     model = Community
