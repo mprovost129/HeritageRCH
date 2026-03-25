@@ -37,6 +37,7 @@ CSRF_TRUSTED_ORIGINS = [
 # Static assets (WhiteNoise pattern)
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+WHITENOISE_MANIFEST_STRICT = False
 
 
 INSTALLED_APPS.append("storages")
