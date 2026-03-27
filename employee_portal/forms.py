@@ -38,6 +38,7 @@ def normalize_info_sections(raw_value, label):
         if not isinstance(section, dict):
             continue
         header = str(section.get("header", "")).strip()
+        subheader = str(section.get("subheader", "")).strip()
         items = section.get("items", [])
         if not isinstance(items, list):
             items = []
@@ -51,8 +52,8 @@ def normalize_info_sections(raw_value, label):
             if key or value:
                 normalized_items.append({"key": key, "value": value})
 
-        if header or normalized_items:
-            normalized_sections.append({"header": header, "items": normalized_items})
+        if header or subheader or normalized_items:
+            normalized_sections.append({"header": header, "subheader": subheader, "items": normalized_items})
     return normalized_sections
 
 

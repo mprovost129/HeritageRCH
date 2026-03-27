@@ -38,12 +38,9 @@
 
       {{ form.info_sections }}
       <div class="portal-form-shell p-4 mb-4 mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h2 class="h5 mb-0">Home Info Sections</h2>
-          <button type="button" id="add-section-btn" class="btn btn-sm btn-outline-primary">Add Section</button>
-        </div>
-        <p class="text-muted small mb-3">Add section headers and key/value details for the share page.</p>
-        <div id="info-sections-container" class="d-grid gap-3"></div>
+        <h2 class="h5 mb-2">Facts &amp; Features</h2>
+        <p class="text-muted small mb-3">Section headers are fixed for now. Update any values below and they will show on the client share page.</p>
+        <div id="facts-features-container" class="d-grid gap-3"></div>
       </div>
       {% if form.info_sections.errors %}
         <div class="text-danger small mb-3">{{ form.info_sections.errors }}</div>
@@ -73,31 +70,25 @@
   </div>
 </div>
 
-<template id="section-template">
+<template id="facts-section-template">
   <div class="border rounded p-3 section-card">
-    <div class="d-flex justify-content-between align-items-center mb-2">
-      <div class="fw-semibold">Section</div>
-      <button type="button" class="btn btn-sm btn-outline-danger remove-section-btn">Remove Section</button>
-    </div>
-    <label class="form-label">Header</label>
-    <input type="text" class="form-control section-header-input mb-3" placeholder="Section header">
-    <div class="items-container d-grid gap-2"></div>
-    <button type="button" class="btn btn-sm btn-outline-secondary add-item-btn mt-2">Add Key/Value</button>
+    <h3 class="h6 text-uppercase text-muted mb-2 section-header-text"></h3>
+    <div class="d-grid gap-3 section-subsections"></div>
   </div>
 </template>
 
-<template id="item-template">
-  <div class="row g-2 align-items-end section-item-row">
-    <div class="col-md-5">
-      <label class="form-label mb-1">Key</label>
-      <input type="text" class="form-control section-key-input" placeholder="Label">
-    </div>
-    <div class="col-md-5">
-      <label class="form-label mb-1">Value</label>
+<template id="facts-subsection-template">
+  <div class="border rounded p-3 bg-light-subtle subsection-card">
+    <h4 class="h6 mb-3 subsection-header-text"></h4>
+    <div class="row g-2 subsection-items"></div>
+  </div>
+</template>
+
+<template id="facts-item-template">
+  <div class="col-md-6 section-item-row">
+    <div class="border rounded p-2 h-100 bg-white">
+      <label class="form-label mb-1 section-key-label"></label>
       <input type="text" class="form-control section-value-input" placeholder="Value">
-    </div>
-    <div class="col-md-2">
-      <button type="button" class="btn btn-outline-danger w-100 remove-item-btn">Remove</button>
     </div>
   </div>
 </template>
@@ -105,55 +96,231 @@
 <script>
   (function() {
     const hiddenInput = document.getElementById("id_info_sections");
-    const container = document.getElementById("info-sections-container");
-    const addSectionBtn = document.getElementById("add-section-btn");
-    const sectionTemplate = document.getElementById("section-template");
-    const itemTemplate = document.getElementById("item-template");
-    if (!hiddenInput || !container || !addSectionBtn) return;
+    const container = document.getElementById("facts-features-container");
+    const sectionTemplate = document.getElementById("facts-section-template");
+    const subsectionTemplate = document.getElementById("facts-subsection-template");
+    const itemTemplate = document.getElementById("facts-item-template");
+    if (!hiddenInput || !container) return;
 
-    function addItem(sectionNode, itemData) {
-      const itemNode = itemTemplate.content.firstElementChild.cloneNode(true);
-      itemNode.querySelector(".section-key-input").value = itemData && itemData.key ? itemData.key : "";
-      itemNode.querySelector(".section-value-input").value = itemData && itemData.value ? itemData.value : "";
-      itemNode.querySelector(".remove-item-btn").addEventListener("click", function() { itemNode.remove(); syncSections(); });
-      itemNode.querySelector(".section-key-input").addEventListener("input", syncSections);
-      itemNode.querySelector(".section-value-input").addEventListener("input", syncSections);
-      sectionNode.querySelector(".items-container").appendChild(itemNode);
-    }
-
-    function addSection(sectionData) {
-      const sectionNode = sectionTemplate.content.firstElementChild.cloneNode(true);
-      sectionNode.querySelector(".section-header-input").value = sectionData && sectionData.header ? sectionData.header : "";
-      sectionNode.querySelector(".remove-section-btn").addEventListener("click", function() { sectionNode.remove(); syncSections(); });
-      sectionNode.querySelector(".add-item-btn").addEventListener("click", function() { addItem(sectionNode); syncSections(); });
-      sectionNode.querySelector(".section-header-input").addEventListener("input", syncSections);
-      const sectionItems = sectionData && Array.isArray(sectionData.items) ? sectionData.items : [];
-      if (sectionItems.length) { sectionItems.forEach(function(item) { addItem(sectionNode, item); }); } else { addItem(sectionNode); }
-      container.appendChild(sectionNode);
-    }
-
-    function syncSections() {
-      const sections = [];
-      container.querySelectorAll(".section-card").forEach(function(sectionNode) {
-        const header = sectionNode.querySelector(".section-header-input").value.trim();
-        const items = [];
-        sectionNode.querySelectorAll(".section-item-row").forEach(function(itemNode) {
-          const key = itemNode.querySelector(".section-key-input").value.trim();
-          const value = itemNode.querySelector(".section-value-input").value.trim();
-          if (key || value) items.push({ key: key, value: value });
-        });
-        if (header || items.length) sections.push({ header: header, items: items });
-      });
-      hiddenInput.value = JSON.stringify(sections);
-    }
+    const schema = [
+      {
+        header: "Interior",
+        subsections: [
+          { subheader: "Bedrooms & bathrooms", items: [
+            { key: "Bedrooms", defaultValue: "3" },
+            { key: "Bathrooms", defaultValue: "3" },
+            { key: "Full bathrooms", defaultValue: "2" },
+            { key: "1/2 bathrooms", defaultValue: "1" }
+          ]},
+          { subheader: "Primary bedroom", items: [
+            { key: "Level", defaultValue: "Second" },
+            { key: "Area", defaultValue: "240" },
+            { key: "Dimensions", defaultValue: "15 x 16" }
+          ]},
+          { subheader: "Bedroom 2", items: [
+            { key: "Level", defaultValue: "Second" },
+            { key: "Area", defaultValue: "110" },
+            { key: "Dimensions", defaultValue: "10 x 11" }
+          ]},
+          { subheader: "Bedroom 3", items: [
+            { key: "Level", defaultValue: "Second" },
+            { key: "Area", defaultValue: "182" },
+            { key: "Dimensions", defaultValue: "13 x 14" }
+          ]},
+          { subheader: "Primary bathroom", items: [
+            { key: "Features", defaultValue: "Yes" }
+          ]},
+          { subheader: "Dining room", items: [
+            { key: "Level", defaultValue: "First" },
+            { key: "Area", defaultValue: "88" },
+            { key: "Dimensions", defaultValue: "11 x 8" }
+          ]},
+          { subheader: "Kitchen", items: [
+            { key: "Level", defaultValue: "First" },
+            { key: "Area", defaultValue: "121" },
+            { key: "Dimensions", defaultValue: "11 x 11" }
+          ]},
+          { subheader: "Living room", items: [
+            { key: "Level", defaultValue: "First" },
+            { key: "Area", defaultValue: "192" },
+            { key: "Dimensions", defaultValue: "12 x 16" }
+          ]},
+          { subheader: "Heating", items: [
+            { key: "Type", defaultValue: "Forced Air, Natural Gas" }
+          ]},
+          { subheader: "Cooling", items: [
+            { key: "Type", defaultValue: "Central Air" }
+          ]},
+          { subheader: "Appliances", items: [
+            { key: "Included", defaultValue: "Range, Oven, Dishwasher, Refrigerator" }
+          ]},
+          { subheader: "Laundry", items: [
+            { key: "Location and hookups", defaultValue: "Second Floor, In Unit, Gas Dryer Hookup, Electric Dryer Hookup, Washer Hookup" }
+          ]},
+          { subheader: "Features", items: [
+            { key: "Flooring", defaultValue: "Tile, Carpet, Hardwood" },
+            { key: "Has basement", defaultValue: "Yes" },
+            { key: "Has fireplace", defaultValue: "No" }
+          ]},
+          { subheader: "Interior area", items: [
+            { key: "Total structure area", defaultValue: "1,900" },
+            { key: "Total interior livable area", defaultValue: "1,900 sqft" },
+            { key: "Finished area above ground", defaultValue: "1,900" }
+          ]}
+        ]
+      },
+      {
+        header: "Property",
+        subsections: [
+          { subheader: "Parking", items: [
+            { key: "Total spaces", defaultValue: "2" },
+            { key: "Parking features", defaultValue: "Attached, Deeded, Guest, Paved" },
+            { key: "Attached garage spaces", defaultValue: "1" },
+            { key: "Uncovered spaces", defaultValue: "1" }
+          ]},
+          { subheader: "Features", items: [
+            { key: "Entry location", defaultValue: "Unit Placement(Ground)" },
+            { key: "Patio & porch", defaultValue: "Deck" },
+            { key: "Exterior features", defaultValue: "Deck, Decorative Lighting, Rain Gutters, Professional Landscaping" }
+          ]},
+          { subheader: "Details", items: [
+            { key: "Zoning", defaultValue: "R60" }
+          ]}
+        ]
+      },
+      {
+        header: "Construction",
+        subsections: [
+          { subheader: "Type & style", items: [
+            { key: "Home type", defaultValue: "Townhouse" },
+            { key: "Property subtype", defaultValue: "Condominium, Townhouse" }
+          ]},
+          { subheader: "Materials", items: [
+            { key: "Frame", defaultValue: "Frame" },
+            { key: "Roof", defaultValue: "Shingle" }
+          ]},
+          { subheader: "Condition", items: [
+            { key: "New construction", defaultValue: "Yes" },
+            { key: "Year built", defaultValue: "2026" }
+          ]}
+        ]
+      },
+      {
+        header: "Utilities & green energy",
+        subsections: [
+          { subheader: "Utilities", items: [
+            { key: "Electric", defaultValue: "Circuit Breakers" },
+            { key: "Sewer", defaultValue: "Inspection Required for Sale, Private Sewer" },
+            { key: "Water", defaultValue: "Public" },
+            { key: "Utilities for property", defaultValue: "for Gas Range, for Electric Range, for Gas Oven, for Electric Oven, for Gas Dryer, for Electric Dryer, Washer Hookup" }
+          ]}
+        ]
+      },
+      {
+        header: "Community & HOA",
+        subsections: [
+          { subheader: "Community", items: [
+            { key: "Features", defaultValue: "Public Transportation, Shopping, Highway Access, House of Worship, Public School, University" }
+          ]},
+          { subheader: "HOA", items: [
+            { key: "Services included", defaultValue: "Sewer, Road Maintenance, Maintenance Grounds, Snow Removal" },
+            { key: "HOA fee", defaultValue: "$250 monthly" }
+          ]}
+        ]
+      },
+      {
+        header: "Location",
+        subsections: [
+          { subheader: "Region", items: [
+            { key: "Region", defaultValue: "Norton" }
+          ]}
+        ]
+      },
+      {
+        header: "Financial & listing details",
+        subsections: [
+          { subheader: "Pricing & taxes", items: [
+            { key: "Price per square foot", defaultValue: "$342/sqft" },
+            { key: "Tax assessed value", defaultValue: "$201,800" },
+            { key: "Annual tax amount", defaultValue: "$2,617" },
+            { key: "Date on market", defaultValue: "3/24/2026" }
+          ]}
+        ]
+      }
+    ];
 
     let initialData = [];
     if (hiddenInput.value) {
       try { const parsed = JSON.parse(hiddenInput.value); if (Array.isArray(parsed)) initialData = parsed; } catch (error) { initialData = []; }
     }
-    if (initialData.length) { initialData.forEach(addSection); } else { addSection(); }
+
+    const existingValues = new Map();
+    initialData.forEach(function(section) {
+      if (!section || !Array.isArray(section.items)) return;
+      const header = (section.header || "").trim();
+      const subheader = (section.subheader || "").trim();
+      section.items.forEach(function(item) {
+        if (!item) return;
+        const key = (item.key || "").trim();
+        const value = (item.value || "").trim();
+        if (!key) return;
+        existingValues.set([header, subheader, key].join("|"), value);
+      });
+    });
+
+    schema.forEach(function(sectionData) {
+      const sectionNode = sectionTemplate.content.firstElementChild.cloneNode(true);
+      sectionNode.querySelector(".section-header-text").textContent = sectionData.header;
+      const subsectionContainer = sectionNode.querySelector(".section-subsections");
+
+      sectionData.subsections.forEach(function(subsectionData) {
+        const subsectionNode = subsectionTemplate.content.firstElementChild.cloneNode(true);
+        subsectionNode.querySelector(".subsection-header-text").textContent = subsectionData.subheader;
+        const itemsWrap = subsectionNode.querySelector(".subsection-items");
+
+        subsectionData.items.forEach(function(itemData) {
+          const itemNode = itemTemplate.content.firstElementChild.cloneNode(true);
+          itemNode.dataset.header = sectionData.header;
+          itemNode.dataset.subheader = subsectionData.subheader;
+          itemNode.dataset.key = itemData.key;
+          itemNode.querySelector(".section-key-label").textContent = itemData.key;
+
+          const valueInput = itemNode.querySelector(".section-value-input");
+          const mapKey = [sectionData.header, subsectionData.subheader, itemData.key].join("|");
+          valueInput.value = existingValues.has(mapKey) ? existingValues.get(mapKey) : (itemData.defaultValue || "");
+          valueInput.addEventListener("input", syncSections);
+
+          itemsWrap.appendChild(itemNode);
+        });
+
+        subsectionContainer.appendChild(subsectionNode);
+      });
+
+      container.appendChild(sectionNode);
+    });
+
+    function syncSections() {
+      const sections = [];
+      container.querySelectorAll(".section-card").forEach(function(sectionNode) {
+        const header = (sectionNode.querySelector(".section-header-text").textContent || "").trim();
+        const subsectionNodes = sectionNode.querySelectorAll(".subsection-card");
+        subsectionNodes.forEach(function(subsectionNode) {
+          const subheader = (subsectionNode.querySelector(".subsection-header-text").textContent || "").trim();
+          const items = [];
+          subsectionNode.querySelectorAll(".section-item-row").forEach(function(itemNode) {
+            const key = (itemNode.dataset.key || "").trim();
+            const value = itemNode.querySelector(".section-value-input").value.trim();
+            if (key || value) items.push({ key: key, value: value });
+          });
+          if (header || subheader || items.length) {
+            sections.push({ header: header, subheader: subheader, items: items });
+          }
+        });
+      });
+      hiddenInput.value = JSON.stringify(sections);
+    }
+
     syncSections();
-    addSectionBtn.addEventListener("click", function() { addSection(); syncSections(); });
   })();
 </script>
 {% endblock %}

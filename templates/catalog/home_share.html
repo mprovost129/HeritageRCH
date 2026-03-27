@@ -59,6 +59,7 @@
           <div class="card shadow-sm mb-3">
             <div class="card-body">
               {% if section.header %}<h3 class="h6 text-uppercase text-muted mb-3">{{ section.header }}</h3>{% endif %}
+              {% if section.subheader %}<h4 class="h6 mb-3">{{ section.subheader }}</h4>{% endif %}
               {% if section.items %}
                 <div class="row g-2">
                   {% for item in section.items %}
