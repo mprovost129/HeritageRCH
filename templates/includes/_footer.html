@@ -82,7 +82,13 @@
           <a href="/privacy-policy/" class="me-2">Privacy Policy</a>
           <a href="/terms/" class="me-2">Terms & Conditions</a>
           <a href="/accessibility/">Accessibility Assistance</a>
-          <a href="/employee-portal/login/" class="ms-2 fw-bold">Employee Portal</a>
+          {% if user.is_authenticated and '/employee-portal/' in request.path %}
+            <a href="{% url 'employee_portal:dashboard' %}" class="ms-2 fw-bold">Portal Dashboard</a>
+            <a href="{% url 'employee_portal:site_settings' %}" class="ms-2 fw-bold">Settings</a>
+            <a href="{% url 'employee_portal_logout' %}" class="ms-2 fw-bold">Log Out</a>
+          {% else %}
+            <a href="/employee-portal/login/" class="ms-2 fw-bold">Employee Portal</a>
+          {% endif %}
         </div>
       </div>
 
