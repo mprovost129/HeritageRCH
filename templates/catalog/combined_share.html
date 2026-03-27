@@ -36,14 +36,21 @@
     .hero-copy { max-width: 920px; color: #4b5563; line-height: 1.45; }
 
     .split-layout { margin-top: 1rem; }
-    .media-col .media-section { border-top: 1px solid color-mix(in srgb, var(--heritage-green) 18%, #e6e6e6); padding-top: 0.9rem; margin-top: 0.9rem; }
+    .panel-card {
+      border: 1px solid color-mix(in srgb, var(--heritage-green) 22%, #d9dde2);
+      border-radius: 0.75rem;
+      background: #fff;
+      box-shadow: 0 4px 14px rgba(3, 67, 37, 0.08);
+      padding: 0.9rem;
+    }
+    .media-col .media-section { margin-bottom: 0.85rem; }
     .media-title { margin-bottom: 0.2rem; }
     .media-subtitle { margin-bottom: 0.55rem; color: #6c757d; font-size: 0.92rem; }
     .photo-grid { margin-top: 0.2rem; }
     .photo-cell { border: 1px solid color-mix(in srgb, var(--heritage-green) 22%, #eee); border-radius: 0.4rem; overflow: hidden; }
     .photo-caption { font-size: 0.78rem; color: #6c757d; margin-top: 0.2rem; }
 
-    .info-col .info-panel { border: 1px solid color-mix(in srgb, var(--heritage-green) 20%, #d9dde2); border-radius: 0.65rem; padding: 0.85rem; background: #fff; }
+    .info-col .info-panel { border: 1px solid color-mix(in srgb, var(--heritage-green) 20%, #d9dde2); border-radius: 0.65rem; padding: 0.85rem; background: #fff; box-shadow: 0 3px 12px rgba(3, 67, 37, 0.06); }
     .info-col .info-panel + .info-panel { margin-top: 0.75rem; }
     .info-title { margin-bottom: 0.45rem; color: var(--heritage-green-dark); }
     .jump-select {
@@ -103,7 +110,7 @@
     <div class="row g-4 align-items-start split-layout">
       <div class="col-lg-7 media-col">
         {% for section in ordered_sections %}
-          <section class="media-section">
+          <section class="media-section panel-card">
             <h2 class="h4 media-title">{{ section.title }} Photos</h2>
 
             {% if section.key == "home" %}
