@@ -212,16 +212,16 @@
   {% endif %}
 
   <main class="container py-4 share-wrap">
-    <section class="text-center mb-2">
-      <h1 class="h2 mb-2" style="color: var(--heritage-green-dark);">{{ object.title }}</h1>
-      {% if object.description %}
-        <div class="mb-0 mx-auto hero-copy" id="hero-desc">{{ object.description|linebreaksbr }}</div>
-        <button type="button" class="hero-toggle" id="hero-toggle" aria-expanded="false">Read More</button>
-      {% endif %}
-    </section>
-
     <div class="row g-4 align-items-start split-layout">
       <div class="col-lg-7 media-col">
+        <section class="panel-card">
+          <h1 class="h2 mb-2" style="color: var(--heritage-green-dark);">{{ object.title }}</h1>
+          {% if object.description %}
+            <div class="mb-0 hero-copy" id="hero-desc">{{ object.description|linebreaksbr }}</div>
+            <button type="button" class="hero-toggle" id="hero-toggle" aria-expanded="false">Read More</button>
+          {% endif %}
+        </section>
+
         {% for section in ordered_sections %}
           <section class="media-section panel-card">
             <h2 class="h4 media-title">{{ section.title }} Photos</h2>
