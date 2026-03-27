@@ -534,6 +534,10 @@ footer img {
   margin-top: 1rem;
 }
 
+.combined-share-page .mobile-column-tabs {
+  display: none;
+}
+
 .combined-share-page .panel-card {
   border: 1px solid color-mix(in srgb, var(--heritage-green) 22%, #d9dde2);
   border-radius: 0.75rem;
@@ -824,6 +828,42 @@ footer img {
 }
 
 @media (max-width: 992px) {
+  .combined-share-page .mobile-column-tabs {
+    position: sticky;
+    top: 0.5rem;
+    z-index: 1030;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
+    margin-bottom: 0.75rem;
+    padding: 0.3rem;
+    border: 1px solid color-mix(in srgb, var(--heritage-green) 22%, #d9dde2);
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: 0 4px 14px rgba(3, 67, 37, 0.12);
+  }
+
+  .combined-share-page .mobile-column-tab {
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--heritage-green-dark);
+    min-height: 44px;
+    padding: 0.35rem 0.8rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .combined-share-page .mobile-column-tab.is-active {
+    background: var(--heritage-green);
+    color: #fff;
+    box-shadow: 0 6px 14px rgba(3, 67, 37, 0.22);
+  }
+
+  .combined-share-page .mobile-hidden-col {
+    display: none;
+  }
+
   .combined-share-page .info-col .info-panel {
     margin-top: 0.8rem;
   }

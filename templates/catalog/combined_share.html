@@ -18,6 +18,11 @@
   {% endif %}
 
   <main class="container py-4 share-wrap">
+    <nav class="mobile-column-tabs" aria-label="Content sections">
+      <button type="button" class="mobile-column-tab is-active" id="tab-media" data-tab-target="media" aria-selected="true">Photos</button>
+      <button type="button" class="mobile-column-tab" id="tab-info" data-tab-target="info" aria-selected="false">Info</button>
+    </nav>
+
     <div class="row g-4 align-items-start split-layout">
       <div class="col-lg-7 media-col">
         <section class="panel-card">
@@ -167,12 +172,17 @@
     (function () {
       const jumpSelect = document.getElementById("jump-select");
       const mobileJumpBtn = document.getElementById("mobile-jump-btn");
+      const tabMediaBtn = document.getElementById("tab-media");
+      const tabInfoBtn = document.getElementById("tab-info");
+      const mediaCol = document.querySelector(".media-col");
+      const infoCol = document.querySelector(".info-col");
       const heroDesc = document.getElementById("hero-desc");
       const heroToggle = document.getElementById("hero-toggle");
       const lightbox = document.getElementById("photo-lightbox");
       const lightboxImg = document.getElementById("lightbox-img");
       const lightboxCaption = document.getElementById("lightbox-caption");
       const lightboxClose = document.getElementById("lightbox-close");
+      let setActiveMobileTabFn = null;
 
       if (jumpSelect) {
         jumpSelect.addEventListener("change", function () {
@@ -185,10 +195,46 @@
 
       if (mobileJumpBtn && jumpSelect) {
         mobileJumpBtn.addEventListener("click", function () {
+          if (setActiveMobileTabFn) {
+            setActiveMobileTabFn("info");
+          }
           const jumpNav = document.getElementById("jump-nav");
           if (jumpNav) jumpNav.scrollIntoView({ behavior: "smooth", block: "start" });
           setTimeout(function () { jumpSelect.focus(); }, 240);
         });
+      }
+
+      if (tabMediaBtn && tabInfoBtn && mediaCol && infoCol) {
+        let activeMobileTab = "media";
+
+        function setActiveMobileTab(target) {
+          activeMobileTab = target === "info" ? "info" : "media";
+          const isMobile = window.matchMedia("(max-width: 992px)").matches;
+          if (!isMobile) {
+            mediaCol.classList.remove("mobile-hidden-col");
+            infoCol.classList.remove("mobile-hidden-col");
+            tabMediaBtn.classList.remove("is-active");
+            tabInfoBtn.classList.remove("is-active");
+            tabMediaBtn.setAttribute("aria-selected", "false");
+            tabInfoBtn.setAttribute("aria-selected", "false");
+            return;
+          }
+
+          const showInfo = activeMobileTab === "info";
+          mediaCol.classList.toggle("mobile-hidden-col", showInfo);
+          infoCol.classList.toggle("mobile-hidden-col", !showInfo);
+          tabMediaBtn.classList.toggle("is-active", !showInfo);
+          tabInfoBtn.classList.toggle("is-active", showInfo);
+          tabMediaBtn.setAttribute("aria-selected", showInfo ? "false" : "true");
+          tabInfoBtn.setAttribute("aria-selected", showInfo ? "true" : "false");
+        }
+
+        tabMediaBtn.addEventListener("click", function () { setActiveMobileTab("media"); });
+        tabInfoBtn.addEventListener("click", function () { setActiveMobileTab("info"); });
+        setActiveMobileTabFn = setActiveMobileTab;
+
+        setActiveMobileTab("media");
+        window.addEventListener("resize", function () { setActiveMobileTab(activeMobileTab); });
       }
 
       if (heroDesc && heroToggle) {
