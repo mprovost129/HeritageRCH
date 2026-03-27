@@ -112,22 +112,6 @@
           {% endif %}
         {% endfor %}
 
-        <section class="info-panel" id="section-details">
-          <h2 class="h5 info-title">Section Details</h2>
-          {% for section in ordered_sections %}
-            <div class="section-summary">
-              <div class="summary-label">{{ section.title }}</div>
-              {% if section.key == "home" %}
-                <div class="summary-value">{{ section.object.full_address|default:section.object.slug }}</div>
-              {% elif section.key == "plan" %}
-                <div class="summary-value">{{ section.object.name }}</div>
-              {% elif section.key == "community" %}
-                <div class="summary-value">{{ section.object.name }}</div>
-              {% endif %}
-            </div>
-          {% endfor %}
-        </section>
-
         {% for section in ordered_sections %}
           {% if section.key == "home" and section.object.info_sections %}
             <section class="info-panel facts-wrap" id="facts-features">
