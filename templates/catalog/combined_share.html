@@ -15,6 +15,8 @@
     .compact-meta { margin: 0; font-size: 0.95rem; color: #6c757d; }
     .compact-header { margin-top: 0.75rem; margin-bottom: 0.25rem; font-size: 0.75rem; letter-spacing: 0.08em; color: #6c757d; text-transform: uppercase; }
     .compact-subheader { margin-bottom: 0.25rem; font-size: 0.98rem; font-weight: 600; }
+    .compact-subsection { border-top: 1px solid #d9dde2; padding-top: 0.45rem; margin-top: 0.45rem; }
+    .compact-subsection:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
     .compact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.2rem 1rem; margin-bottom: 0.5rem; }
     .compact-item { display: flex; gap: 0.35rem; line-height: 1.35; }
     .compact-item-key { color: #6c757d; font-size: 0.84rem; min-width: 130px; }
@@ -78,20 +80,22 @@
 
         {% if section.object.info_sections %}
           {% for info in section.object.info_sections %}
-            {% ifchanged info.header %}
-              {% if info.header %}<h3 class="compact-header">{{ info.header }}</h3>{% endif %}
-            {% endifchanged %}
-            {% if info.subheader %}<h4 class="compact-subheader">{{ info.subheader }}</h4>{% endif %}
-            {% if info.items %}
-              <div class="compact-grid">
-                {% for item in info.items %}
-                  <div class="compact-item">
-                    {% if item.key %}<div class="compact-item-key">{{ item.key }}</div>{% endif %}
-                    {% if item.value %}<div class="compact-item-value">{{ item.value }}</div>{% endif %}
-                  </div>
-                {% endfor %}
-              </div>
-            {% endif %}
+            <div class="compact-subsection">
+              {% ifchanged info.header %}
+                {% if info.header %}<h3 class="compact-header">{{ info.header }}</h3>{% endif %}
+              {% endifchanged %}
+              {% if info.subheader %}<h4 class="compact-subheader">{{ info.subheader }}</h4>{% endif %}
+              {% if info.items %}
+                <div class="compact-grid">
+                  {% for item in info.items %}
+                    <div class="compact-item">
+                      {% if item.key %}<div class="compact-item-key">{{ item.key }}</div>{% endif %}
+                      {% if item.value %}<div class="compact-item-value">{{ item.value }}</div>{% endif %}
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
           {% endfor %}
         {% endif %}
 
