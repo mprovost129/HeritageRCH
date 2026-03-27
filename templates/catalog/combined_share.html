@@ -92,6 +92,21 @@
       color: var(--heritage-green-dark);
       background: color-mix(in srgb, var(--heritage-green) 6%, #fff);
       min-height: 44px;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      padding-right: 2.2rem;
+    }
+    .jump-select-wrap { position: relative; }
+    .jump-select-icon {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      color: var(--heritage-green-dark);
+      font-size: 0.9rem;
+      line-height: 1;
     }
 
     .glance { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.45rem; }
@@ -263,21 +278,24 @@
       <div class="col-lg-5 info-col">
         <section class="info-panel" id="jump-nav">
           <h2 class="h6 info-title mb-2">Jump To</h2>
-          <select class="form-select jump-select" id="jump-select" aria-label="Jump to section">
-            <option value="">Select a section</option>
-            <option value="#at-a-glance">At A Glance</option>
-            <option value="#section-details">Section Details</option>
-            <option value="#facts-features">Facts &amp; Features</option>
-            {% for section in ordered_sections %}
-              {% if section.key == "home" and section.object.info_sections %}
-                {% for info in section.object.info_sections %}
-                  {% if info.subheader %}
-                    <option value="#facts-sub-{{ forloop.counter }}">{{ info.subheader }}</option>
-                  {% endif %}
-                {% endfor %}
-              {% endif %}
-            {% endfor %}
-          </select>
+          <div class="jump-select-wrap">
+            <select class="form-select jump-select" id="jump-select" aria-label="Jump to section">
+              <option value="">Select a section</option>
+              <option value="#at-a-glance">At A Glance</option>
+              <option value="#section-details">Section Details</option>
+              <option value="#facts-features">Facts &amp; Features</option>
+              {% for section in ordered_sections %}
+                {% if section.key == "home" and section.object.info_sections %}
+                  {% for info in section.object.info_sections %}
+                    {% if info.subheader %}
+                      <option value="#facts-sub-{{ forloop.counter }}">{{ info.subheader }}</option>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+              {% endfor %}
+            </select>
+            <span class="jump-select-icon" aria-hidden="true">▾</span>
+          </div>
         </section>
 
         {% for section in ordered_sections %}

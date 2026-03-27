@@ -461,7 +461,7 @@ footer img {
   width: auto;
   height: 120px;
   overflow: hidden;
-  background: #fff;
+  background: var(--heritage-green);
   border-bottom: 1px solid #e5e5e5;
 }
 
