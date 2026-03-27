@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static formatting %}
 {% block title %}{{ object.name }} · Community · Heritage RCH{% endblock %}
 
 {% block og_image_url %}
@@ -187,7 +187,7 @@
             <a href="{{ h.get_absolute_url }}">{{ h.full_address|default:h.slug }}</a>
             — {{ h.get_status_display }}
             {% if h.price %}
-              · ${{ h.price|floatformat:0 }}
+              · ${{ h.price|comma0 }}
             {% endif %}
           </li>
         {% empty %}

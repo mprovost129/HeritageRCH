@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static formatting %}
 {% block title %}{{ object.full_address|default:"Home" }} · Heritage RCH{% endblock %}
 
 {% block og_image_url %}
@@ -92,7 +92,7 @@
         <h2 class="h5 mb-2">Interested in this home?</h2>
         {% if object.price %}
           <p class="fs-4 fw-semibold mb-1">
-            ${{ object.price|floatformat:0 }}
+            ${{ object.price|comma0 }}
           </p>
         {% else %}
           <p class="fs-6 text-muted mb-1">Pricing TBD</p>

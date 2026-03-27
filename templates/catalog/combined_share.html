@@ -1,4 +1,4 @@
-{% load static %}
+{% load static formatting %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -215,7 +215,7 @@
     <section class="text-center mb-2">
       <h1 class="h2 mb-2" style="color: var(--heritage-green-dark);">{{ object.title }}</h1>
       {% if object.description %}
-        <div class="mb-0 mx-auto hero-copy mobile-clamp" id="hero-desc">{{ object.description|linebreaksbr }}</div>
+        <div class="mb-0 mx-auto hero-copy" id="hero-desc">{{ object.description|linebreaksbr }}</div>
         <button type="button" class="hero-toggle" id="hero-toggle" aria-expanded="false">Read More</button>
       {% endif %}
     </section>
@@ -288,7 +288,7 @@
                 <div class="glance-chip"><div class="glance-label">Bedrooms</div><div class="glance-value">{{ section.object.beds|default:"-" }}</div></div>
                 <div class="glance-chip"><div class="glance-label">Bathrooms</div><div class="glance-value">{{ section.object.baths|default:"-" }}</div></div>
                 <div class="glance-chip"><div class="glance-label">Sq Ft</div><div class="glance-value">{% if section.object.sq_ft %}{{ section.object.sq_ft }}{% else %}-{% endif %}</div></div>
-                <div class="glance-chip"><div class="glance-label">Price</div><div class="glance-value">{% if section.object.price %}${{ section.object.price|floatformat:0 }}{% else %}TBD{% endif %}</div></div>
+                <div class="glance-chip"><div class="glance-label">Price</div><div class="glance-value">{% if section.object.price %}${{ section.object.price|comma0 }}{% else %}TBD{% endif %}</div></div>
                 <div class="glance-chip"><div class="glance-label">Address</div><div class="glance-value">{{ section.object.full_address|default:section.object.slug }}</div></div>
                 <div class="glance-chip"><div class="glance-label">Status</div><div class="glance-value">{{ section.object.get_status_display|default:"Available" }}</div></div>
               </div>
@@ -381,6 +381,21 @@
       }
 
       if (heroDesc && heroToggle) {
+        function syncHeroClampState() {
+          const isMobile = window.matchMedia("(max-width: 992px)").matches;
+          if (isMobile) {
+            if (heroToggle.getAttribute("aria-expanded") !== "true") {
+              heroDesc.classList.add("mobile-clamp");
+              heroToggle.textContent = "Read More";
+              heroToggle.setAttribute("aria-expanded", "false");
+            }
+          } else {
+            heroDesc.classList.remove("mobile-clamp");
+            heroToggle.setAttribute("aria-expanded", "false");
+            heroToggle.textContent = "Read More";
+          }
+        }
+
         heroToggle.addEventListener("click", function () {
           const expanded = heroToggle.getAttribute("aria-expanded") === "true";
           if (expanded) {
@@ -393,6 +408,9 @@
             heroToggle.textContent = "Read Less";
           }
         });
+
+        syncHeroClampState();
+        window.addEventListener("resize", syncHeroClampState);
       }
 
       function openLightbox(src, caption) {

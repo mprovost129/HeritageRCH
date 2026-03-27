@@ -1,4 +1,4 @@
-{% load static %}
+{% load static formatting %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -21,7 +21,7 @@
       <p class="text-muted mb-0">
         {{ object.beds }} bd · {{ object.baths }} ba
         {% if object.sq_ft %} · {{ object.sq_ft }} sq ft{% endif %}
-        {% if object.price %} · ${{ object.price|floatformat:0 }}{% endif %}
+        {% if object.price %} · ${{ object.price|comma0 }}{% endif %}
       </p>
     </section>
 

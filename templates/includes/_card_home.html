@@ -1,3 +1,4 @@
+{% load formatting %}
 {# expects: obj = AvailableHome #}
 <div class="card h-100 shadow-sm">
   <div class="ratio ratio-4x3">
@@ -27,7 +28,7 @@
 
     {% if obj.price %}
       <p class="fw-semibold mb-1">
-        ${{ obj.price|floatformat:0 }}
+        ${{ obj.price|comma0 }}
       </p>
     {% endif %}
 
