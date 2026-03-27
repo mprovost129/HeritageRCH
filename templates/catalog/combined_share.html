@@ -46,6 +46,18 @@
     .info-col .info-panel { border: 1px solid color-mix(in srgb, var(--heritage-green) 20%, #d9dde2); border-radius: 0.65rem; padding: 0.85rem; background: #fff; }
     .info-col .info-panel + .info-panel { margin-top: 0.75rem; }
     .info-title { margin-bottom: 0.45rem; color: var(--heritage-green-dark); }
+    .jump-links { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+    .jump-link {
+      display: inline-block;
+      border: 1px solid color-mix(in srgb, var(--heritage-green) 30%, #d9dde2);
+      border-radius: 999px;
+      padding: 0.18rem 0.55rem;
+      font-size: 0.78rem;
+      color: var(--heritage-green-dark);
+      text-decoration: none;
+      background: color-mix(in srgb, var(--heritage-green) 6%, #fff);
+    }
+    .jump-link:hover { text-decoration: none; background: color-mix(in srgb, var(--heritage-green) 12%, #fff); }
 
     .glance { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.45rem; }
     .glance-chip { border: 1px solid color-mix(in srgb, var(--heritage-green) 25%, #dfe3e8); border-radius: 0.5rem; padding: 0.4rem 0.5rem; background: color-mix(in srgb, var(--heritage-green) 4%, #fff); }
@@ -126,9 +138,27 @@
       </div>
 
       <div class="col-lg-5 info-col">
+        <section class="info-panel" id="jump-nav">
+          <h2 class="h6 info-title mb-2">Jump To</h2>
+          <div class="jump-links">
+            <a class="jump-link" href="#at-a-glance">At A Glance</a>
+            <a class="jump-link" href="#section-details">Section Details</a>
+            <a class="jump-link" href="#facts-features">Facts &amp; Features</a>
+            {% for section in ordered_sections %}
+              {% if section.key == "home" and section.object.info_sections %}
+                {% for info in section.object.info_sections %}
+                  {% if info.subheader %}
+                    <a class="jump-link" href="#facts-sub-{{ forloop.counter }}">{{ info.subheader }}</a>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          </div>
+        </section>
+
         {% for section in ordered_sections %}
           {% if section.key == "home" %}
-            <section class="info-panel">
+            <section class="info-panel" id="at-a-glance">
               <h2 class="h5 info-title mb-3">At A Glance</h2>
               <div class="glance">
                 <div class="glance-chip"><div class="glance-label">Bedrooms</div><div class="glance-value">{{ section.object.beds|default:"-" }}</div></div>
@@ -142,7 +172,7 @@
           {% endif %}
         {% endfor %}
 
-        <section class="info-panel">
+        <section class="info-panel" id="section-details">
           <h2 class="h5 info-title">Section Details</h2>
           {% for section in ordered_sections %}
             <div class="section-summary">
@@ -160,12 +190,12 @@
 
         {% for section in ordered_sections %}
           {% if section.key == "home" and section.object.info_sections %}
-            <section class="info-panel facts-wrap">
+            <section class="info-panel facts-wrap" id="facts-features">
               <h2 class="h5 facts-header">Facts &amp; Features</h2>
               <p class="facts-intro">Detailed home information.</p>
 
               {% for info in section.object.info_sections %}
-                <div class="compact-subsection">
+                <div class="compact-subsection" id="facts-sub-{{ forloop.counter }}">
                   {% ifchanged info.header %}
                     {% if info.header %}<h3 class="compact-header">{{ info.header }}</h3>{% endif %}
                   {% endifchanged %}
