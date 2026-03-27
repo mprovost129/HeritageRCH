@@ -12,24 +12,24 @@
     .share-wrap { max-width: 1080px; }
     .hero-copy { max-width: 920px; }
     .glance { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.5rem; margin-top: 1rem; }
-    .glance-chip { border: 1px solid #dfe3e8; border-radius: 0.5rem; padding: 0.45rem 0.55rem; background: #fff; }
+    .glance-chip { border: 1px solid color-mix(in srgb, var(--heritage-green) 25%, #dfe3e8); border-radius: 0.5rem; padding: 0.45rem 0.55rem; background: color-mix(in srgb, var(--heritage-green) 4%, #fff); }
     .glance-label { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: #6c757d; margin-bottom: 0.1rem; }
-    .glance-value { font-size: 0.95rem; font-weight: 600; color: #1f2c3a; line-height: 1.2; }
+    .glance-value { font-size: 0.95rem; font-weight: 600; color: var(--heritage-green-dark); line-height: 1.2; }
 
-    .media-section { border-top: 1px solid #e6e6e6; padding-top: 0.9rem; margin-top: 0.9rem; }
+    .media-section { border-top: 1px solid color-mix(in srgb, var(--heritage-green) 20%, #e6e6e6); padding-top: 0.9rem; margin-top: 0.9rem; }
     .media-title { margin-bottom: 0.2rem; }
     .media-subtitle { margin-bottom: 0.55rem; color: #6c757d; font-size: 0.92rem; }
     .photo-grid { margin-top: 0.2rem; }
-    .photo-cell { border: 1px solid #eee; border-radius: 0.4rem; overflow: hidden; }
+    .photo-cell { border: 1px solid color-mix(in srgb, var(--heritage-green) 22%, #eee); border-radius: 0.4rem; overflow: hidden; }
     .photo-caption { font-size: 0.78rem; color: #6c757d; margin-top: 0.2rem; }
 
-    .facts-wrap { border-top: 2px solid #d9dde2; margin-top: 1.4rem; padding-top: 1rem; }
+    .facts-wrap { border-top: 2px solid var(--heritage-green); margin-top: 1.4rem; padding-top: 1rem; }
     .facts-header { margin-bottom: 0.3rem; }
     .facts-intro { margin-bottom: 0.6rem; color: #6c757d; font-size: 0.92rem; }
-    .compact-header { margin-top: 0.75rem; margin-bottom: 0.2rem; font-size: 0.75rem; letter-spacing: 0.08em; color: #6c757d; text-transform: uppercase; }
-    .compact-subsection { border-top: 1px solid #d9dde2; padding-top: 0.42rem; margin-top: 0.42rem; }
+    .compact-header { margin-top: 0.75rem; margin-bottom: 0.2rem; font-size: 0.75rem; letter-spacing: 0.08em; color: var(--heritage-green); text-transform: uppercase; }
+    .compact-subsection { border-top: 1px solid color-mix(in srgb, var(--heritage-green) 20%, #d9dde2); padding-top: 0.42rem; margin-top: 0.42rem; }
     .compact-subsection:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
-    .compact-subheader { margin-bottom: 0.25rem; font-size: 0.98rem; font-weight: 600; }
+    .compact-subheader { margin-bottom: 0.25rem; font-size: 0.98rem; font-weight: 600; color: var(--heritage-green-dark); }
     .compact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.2rem 1rem; margin-bottom: 0.4rem; }
     .compact-item { display: flex; gap: 0.35rem; line-height: 1.35; }
     .compact-item-key { color: #6c757d; font-size: 0.84rem; min-width: 130px; }
@@ -49,13 +49,13 @@
 <body>
   {% if object.share_banner_image %}
     <div class="community-share-banner-wrap">
-      <img src="{{ object.share_banner_image.url }}" alt="{{ object.title }} banner" class="community-share-banner-image">
+      <img src="{{ object.share_banner_image.url }}" alt="{{ object.title }} banner" class="community-share-banner-image" style="display: flex; justify-content: center; align-items: center">
     </div>
   {% endif %}
 
   <main class="container py-4 share-wrap">
     <section class="text-center mb-3">
-      <h1 class="h2 mb-2">{{ object.title }}</h1>
+      <h1 class="h2 mb-2" style="color: var(--heritage-green-dark);">{{ object.title }}</h1>
       {% if object.description %}
         <p class="text-muted mb-0 mx-auto hero-copy">{{ object.description }}</p>
       {% endif %}
