@@ -1,21 +1,19 @@
 {% extends 'base.html' %}
-{% block title %}Edit Site Settings{% endblock %}
+{% block title %}Edit Client Share Page{% endblock %}
 {% block content %}
 <div class="container portal-form-page py-5">
   <div class="portal-form-header mb-4">
-    <h1 class="h3 mb-1">Edit Site Settings</h1>
-    <p class="text-muted mb-0">Control contact info, homepage messaging, and social links.</p>
+    <h1 class="h3 mb-1">{{ view.object.pk|yesno:'Edit,Add' }} Client Share Page</h1>
+    <p class="text-muted mb-0">Choose one home, one floor plan, and one community, then share in one private link.</p>
   </div>
 
   <div class="portal-form-shell p-4">
-    <div class="d-flex justify-content-end mb-3">
-      <a href="{% url 'employee_portal:combined_share_list' %}" class="btn btn-outline-primary btn-sm">Manage Client Share Pages</a>
-    </div>
     <form method="post" enctype="multipart/form-data" data-portal-form>
       {% csrf_token %}
       {% if form.non_field_errors %}
         <div class="alert alert-danger">{{ form.non_field_errors }}</div>
       {% endif %}
+
       {% for field in form %}
         {% if field.is_hidden %}
           {{ field }}
@@ -23,6 +21,7 @@
           <div class="form-check mb-3">
             {{ field }}
             <label class="form-check-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
             {% if field.errors %}<div class="text-danger small mt-1">{{ field.errors }}</div>{% endif %}
           </div>
         {% else %}
@@ -35,9 +34,20 @@
         {% endif %}
       {% endfor %}
 
+      <div class="portal-form-shell p-4 mb-4">
+        <div class="portal-section-title">Client Share URL</div>
+        {% if object.pk %}
+          <label class="form-label">Share URL</label>
+          <input type="text" class="form-control" readonly value="{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:combined_share' slug=object.slug token=object.share_token %}">
+          <div class="form-text">This page is private and only accessible with this full link.</div>
+        {% else %}
+          <div class="text-muted small">Save first to generate your share URL.</div>
+        {% endif %}
+      </div>
+
       <div class="d-flex flex-wrap gap-2 mt-2">
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-        <a href="{% url 'employee_portal:dashboard' %}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary">Save Client Share Page</button>
+        <a href="{% url 'employee_portal:combined_share_list' %}" class="btn btn-secondary">Cancel</a>
       </div>
     </form>
   </div>

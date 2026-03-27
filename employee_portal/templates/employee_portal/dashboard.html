@@ -8,6 +8,7 @@
     <li class="list-group-item"><a href="{% url 'employee_portal:community_list' %}">Manage Communities</a></li>
     <li class="list-group-item"><a href="{% url 'employee_portal:plan_list' %}">Manage Floor Plans</a></li>
     <li class="list-group-item"><a href="{% url 'employee_portal:home_list' %}">Manage Available Homes</a></li>
+    <li class="list-group-item"><a href="{% url 'employee_portal:combined_share_list' %}">Manage Client Share Pages</a></li>
     {% if user.is_superuser or user.is_staff %}
       <li class="list-group-item"><a href="{% url 'employee_portal:user_list' %}">Manage Users</a></li>
     {% endif %}

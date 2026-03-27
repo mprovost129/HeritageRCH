@@ -4,6 +4,8 @@ from django.contrib.contenttypes.admin import GenericTabularInline
 from .models import (
     Community,
     AvailableHome,
+    FloorPlan,
+    CombinedClientSharePage,
     Amenity,
     Photo,
     Lead,
@@ -95,6 +97,31 @@ class AvailableHomeAdmin(FeaturedAdminMixin, admin.ModelAdmin):
     autocomplete_fields = ("community",)
     ordering = ("featured_rank", "-created")
     inlines = [PhotoInline]
+
+
+@admin.register(FloorPlan)
+class FloorPlanAdmin(FeaturedAdminMixin, admin.ModelAdmin):
+    list_display = (
+        "name",
+        "beds",
+        "baths",
+        "sq_ft_min",
+        "sq_ft_max",
+        "is_featured",
+        "featured_rank",
+    )
+    list_filter = ("beds", "baths", "is_featured")
+    search_fields = ("name", "description")
+    prepopulated_fields = {"slug": ("name",)}
+    ordering = ("featured_rank", "name")
+    inlines = [PhotoInline]
+
+
+@admin.register(CombinedClientSharePage)
+class CombinedClientSharePageAdmin(admin.ModelAdmin):
+    list_display = ("title", "home", "plan", "community", "share_enabled", "created")
+    list_filter = ("share_enabled",)
+    search_fields = ("title", "home__address_1", "plan__name", "community__name")
 
 
 # ---------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 from django import forms
-from catalog.models import Community, FloorPlan, AvailableHome
+from catalog.models import Community, FloorPlan, AvailableHome, CombinedClientSharePage
 import json
 from django.core.exceptions import ValidationError
 
@@ -105,3 +105,30 @@ class AvailableHomeForm(forms.ModelForm):
 
     def clean_info_sections(self):
         return normalize_info_sections(self.cleaned_data.get("info_sections", ""), "Home")
+
+
+class CombinedClientSharePageForm(forms.ModelForm):
+    class Meta:
+        model = CombinedClientSharePage
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        apply_bootstrap_classes(self)
+        self.fields["section_one"].label = "Section 1"
+        self.fields["section_two"].label = "Section 2"
+        self.fields["section_three"].label = "Section 3"
+        self.fields["section_one"].help_text = "Top section on the client share page."
+        self.fields["section_two"].help_text = "Middle section on the client share page."
+        self.fields["section_three"].help_text = "Bottom section on the client share page."
+
+    def clean(self):
+        cleaned_data = super().clean()
+        order = [
+            cleaned_data.get("section_one"),
+            cleaned_data.get("section_two"),
+            cleaned_data.get("section_three"),
+        ]
+        if len([value for value in order if value]) != len(set([value for value in order if value])):
+            raise ValidationError("Section order must contain each section only once.")
+        return cleaned_data

@@ -178,6 +178,60 @@ class AvailableHome(TimeStamped):
     def get_share_url(self):
         return reverse("catalog:home_share", args=[self.slug, str(self.share_token)])
 
+
+class CombinedShareSection(models.TextChoices):
+    HOME = "home", "Available Home"
+    PLAN = "plan", "Floor Plan"
+    COMMUNITY = "community", "Community"
+
+
+class CombinedClientSharePage(TimeStamped):
+    slug = models.SlugField(max_length=160, unique=True)
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    share_banner_image = models.ImageField(upload_to="combined_shares/share_banners/", blank=True, null=True)
+    share_enabled = models.BooleanField(default=False)
+    share_token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False, db_index=True)
+
+    home = models.ForeignKey(AvailableHome, on_delete=models.CASCADE, related_name="combined_share_pages")
+    plan = models.ForeignKey("FloorPlan", on_delete=models.CASCADE, related_name="combined_share_pages")
+    community = models.ForeignKey("Community", on_delete=models.CASCADE, related_name="combined_share_pages")
+
+    section_one = models.CharField(
+        max_length=20,
+        choices=CombinedShareSection.choices,
+        default=CombinedShareSection.HOME,
+    )
+    section_two = models.CharField(
+        max_length=20,
+        choices=CombinedShareSection.choices,
+        default=CombinedShareSection.PLAN,
+    )
+    section_three = models.CharField(
+        max_length=20,
+        choices=CombinedShareSection.choices,
+        default=CombinedShareSection.COMMUNITY,
+    )
+
+    class Meta:  # type: ignore
+        ordering = ("title",)
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)[:150]
+        return super().save(*args, **kwargs)
+
+    def get_share_url(self):
+        return reverse("catalog:combined_share", args=[self.slug, str(self.share_token)])
+
+    @property
+    def ordered_section_keys(self):
+        return [self.section_one, self.section_two, self.section_three]
+
+
 class LeadSource(models.TextChoices):
     GLOBAL = "site", "Website"
     PLAN = "plan", "Plan Page"

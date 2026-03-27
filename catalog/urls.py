@@ -5,6 +5,7 @@ from django.urls import path
 from .views.community import CommunityListView, CommunityDetailView, CommunityShareView
 from .views.plan import PlanListView, PlanDetailView, PlanShareView
 from .views.home import HomeListView, HomeDetailView, HomeShareView
+from .views.client_share import CombinedClientShareView
 
 app_name = "catalog"
 urlpatterns = [
@@ -17,4 +18,5 @@ urlpatterns = [
     path("homes/", HomeListView.as_view(), name="home_list"),
     path("homes/<slug:slug>/share/<uuid:token>/", HomeShareView.as_view(), name="home_share"),
     path("homes/<slug:slug>/", HomeDetailView.as_view(), name="home_detail"),
+    path("client-share/<slug:slug>/share/<uuid:token>/", CombinedClientShareView.as_view(), name="combined_share"),
 ]

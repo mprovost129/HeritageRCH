@@ -37,6 +37,11 @@ urlpatterns = [
     path("homes/add/", views.AvailableHomeCreateView.as_view(), name="home_add"),
     path("homes/<int:pk>/edit/", views.AvailableHomeUpdateView.as_view(), name="home_edit"),
     path("homes/<int:pk>/delete/", views.AvailableHomeDeleteView.as_view(), name="home_delete"),
+    # Combined client share pages
+    path("client-share-pages/", views.CombinedClientSharePageListView.as_view(), name="combined_share_list"),
+    path("client-share-pages/add/", views.CombinedClientSharePageCreateView.as_view(), name="combined_share_add"),
+    path("client-share-pages/<int:pk>/edit/", views.CombinedClientSharePageUpdateView.as_view(), name="combined_share_edit"),
+    path("client-share-pages/<int:pk>/delete/", views.CombinedClientSharePageDeleteView.as_view(), name="combined_share_delete"),
     # User management
     path("users/", views.UserListView.as_view(), name="user_list"),
     path("users/add/", views.UserCreateView.as_view(), name="user_add"),

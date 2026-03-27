@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Manage Client Share Pages{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <h1 class="mb-4">Client Share Pages</h1>
+  <a href="{% url 'employee_portal:combined_share_add' %}" class="btn btn-primary mb-3">Add Client Share Page</a>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Home</th>
+        <th>Plan</th>
+        <th>Community</th>
+        <th>Enabled</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for obj in pages %}
+      <tr>
+        <td>{{ obj.title }}</td>
+        <td>{{ obj.home.full_address|default:obj.home.slug }}</td>
+        <td>{{ obj.plan.name }}</td>
+        <td>{{ obj.community.name }}</td>
+        <td>{{ obj.share_enabled|yesno:"Yes,No" }}</td>
+        <td>
+          <a href="{% url 'employee_portal:combined_share_edit' obj.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+          <a href="{% url 'employee_portal:combined_share_delete' obj.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="6">No client share pages found.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Delete Client Share Page{% endblock %}
+{% block content %}
+<div class="container py-5" style="max-width:640px;">
+  <h1 class="h4 mb-3">Delete Client Share Page</h1>
+  <p>Are you sure you want to delete "<strong>{{ object.title }}</strong>"?</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a href="{% url 'employee_portal:combined_share_list' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

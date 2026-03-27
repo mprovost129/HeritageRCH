@@ -261,8 +261,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, UpdateView
 from pages.models import SiteSettings
 from django.urls import reverse_lazy
-from catalog.models import Community, FloorPlan, AvailableHome
-from .forms import CommunityForm, FloorPlanForm, AvailableHomeForm
+from catalog.models import Community, FloorPlan, AvailableHome, CombinedClientSharePage
+from .forms import CommunityForm, FloorPlanForm, AvailableHomeForm, CombinedClientSharePageForm
 from django.views.generic import (
     TemplateView, UpdateView, ListView, CreateView, DeleteView
 )
@@ -356,3 +356,30 @@ class AvailableHomeDeleteView(LoginRequiredMixin, DeleteView):
     model = AvailableHome
     template_name = "employee_portal/home_confirm_delete.html"
     success_url = reverse_lazy("employee_portal:home_list")
+
+
+# Combined Client Share Page CRUD
+class CombinedClientSharePageListView(LoginRequiredMixin, ListView):
+    model = CombinedClientSharePage
+    template_name = "employee_portal/combined_share_list.html"
+    context_object_name = "pages"
+
+
+class CombinedClientSharePageCreateView(LoginRequiredMixin, CreateView):
+    model = CombinedClientSharePage
+    form_class = CombinedClientSharePageForm
+    template_name = "employee_portal/combined_share_form.html"
+    success_url = reverse_lazy("employee_portal:combined_share_list")
+
+
+class CombinedClientSharePageUpdateView(LoginRequiredMixin, UpdateView):
+    model = CombinedClientSharePage
+    form_class = CombinedClientSharePageForm
+    template_name = "employee_portal/combined_share_form.html"
+    success_url = reverse_lazy("employee_portal:combined_share_list")
+
+
+class CombinedClientSharePageDeleteView(LoginRequiredMixin, DeleteView):
+    model = CombinedClientSharePage
+    template_name = "employee_portal/combined_share_confirm_delete.html"
+    success_url = reverse_lazy("employee_portal:combined_share_list")
