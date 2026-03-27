@@ -535,18 +535,10 @@ footer img {
   margin-top: 1rem;
 }
 
-.combined-share-page {
+.combined-share-page .panel-card {
   border: 1px solid color-mix(in srgb, var(--heritage-green) 22%, #d9dde2);
   border-radius: 0.75rem;
   background: #fff;
-  box-shadow: 0 4px 14px rgba(3, 67, 37, 0.08);
-  padding: 0.9rem;
-}
-
-.panel-card {
-  border: 1px solid color-mix(in srgb, var(--heritage-green) 22%, #d9dde2);
-  border-radius: 0.75rem;
-  background: #1f7e4b;
   box-shadow: 0 4px 14px rgba(3, 67, 37, 0.08);
   padding: 0.9rem;
 }
