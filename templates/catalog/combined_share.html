@@ -9,22 +9,37 @@
   <link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'site.css' %}">
   <style>
-    .compact-wrap { max-width: 1040px; }
-    .compact-section { margin-bottom: 1.75rem; padding-bottom: 1rem; border-bottom: 1px solid #e6e6e6; }
-    .compact-summary { margin-bottom: 0.75rem; }
-    .compact-meta { margin: 0; font-size: 0.95rem; color: #6c757d; }
-    .compact-header { margin-top: 0.75rem; margin-bottom: 0.25rem; font-size: 0.75rem; letter-spacing: 0.08em; color: #6c757d; text-transform: uppercase; }
-    .compact-subheader { margin-bottom: 0.25rem; font-size: 0.98rem; font-weight: 600; }
-    .compact-subsection { border-top: 1px solid #d9dde2; padding-top: 0.45rem; margin-top: 0.45rem; }
+    .share-wrap { max-width: 1080px; }
+    .hero-copy { max-width: 920px; }
+    .glance { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.5rem; margin-top: 1rem; }
+    .glance-chip { border: 1px solid #dfe3e8; border-radius: 0.5rem; padding: 0.45rem 0.55rem; background: #fff; }
+    .glance-label { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: #6c757d; margin-bottom: 0.1rem; }
+    .glance-value { font-size: 0.95rem; font-weight: 600; color: #1f2c3a; line-height: 1.2; }
+
+    .media-section { border-top: 1px solid #e6e6e6; padding-top: 0.9rem; margin-top: 0.9rem; }
+    .media-title { margin-bottom: 0.2rem; }
+    .media-subtitle { margin-bottom: 0.55rem; color: #6c757d; font-size: 0.92rem; }
+    .photo-grid { margin-top: 0.2rem; }
+    .photo-cell { border: 1px solid #eee; border-radius: 0.4rem; overflow: hidden; }
+    .photo-caption { font-size: 0.78rem; color: #6c757d; margin-top: 0.2rem; }
+
+    .facts-wrap { border-top: 2px solid #d9dde2; margin-top: 1.4rem; padding-top: 1rem; }
+    .facts-header { margin-bottom: 0.3rem; }
+    .facts-intro { margin-bottom: 0.6rem; color: #6c757d; font-size: 0.92rem; }
+    .compact-header { margin-top: 0.75rem; margin-bottom: 0.2rem; font-size: 0.75rem; letter-spacing: 0.08em; color: #6c757d; text-transform: uppercase; }
+    .compact-subsection { border-top: 1px solid #d9dde2; padding-top: 0.42rem; margin-top: 0.42rem; }
     .compact-subsection:first-of-type { border-top: 0; padding-top: 0; margin-top: 0; }
-    .compact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.2rem 1rem; margin-bottom: 0.5rem; }
+    .compact-subheader { margin-bottom: 0.25rem; font-size: 0.98rem; font-weight: 600; }
+    .compact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.2rem 1rem; margin-bottom: 0.4rem; }
     .compact-item { display: flex; gap: 0.35rem; line-height: 1.35; }
     .compact-item-key { color: #6c757d; font-size: 0.84rem; min-width: 130px; }
     .compact-item-value { font-weight: 500; font-size: 0.9rem; }
-    .compact-photos { margin-top: 0.5rem; }
-    .compact-thumb { border-radius: 0.375rem; overflow: hidden; border: 1px solid #eee; }
-    .compact-caption { font-size: 0.78rem; color: #6c757d; margin-top: 0.2rem; }
+
+    @media (max-width: 992px) {
+      .glance { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
     @media (max-width: 768px) {
+      .glance { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .compact-grid { grid-template-columns: 1fr; }
       .compact-item { flex-direction: column; gap: 0.05rem; }
       .compact-item-key { min-width: 0; }
@@ -38,47 +53,80 @@
     </div>
   {% endif %}
 
-  <main class="container py-4 compact-wrap">
-    <section class="text-center mb-4">
+  <main class="container py-4 share-wrap">
+    <section class="text-center mb-3">
       <h1 class="h2 mb-2">{{ object.title }}</h1>
       {% if object.description %}
-        <p class="text-muted mb-0 mx-auto" style="max-width: 900px;">{{ object.description }}</p>
+        <p class="text-muted mb-0 mx-auto hero-copy">{{ object.description }}</p>
       {% endif %}
+
+      {% for section in ordered_sections %}
+        {% if section.key == "home" %}
+          <div class="glance text-start">
+            <div class="glance-chip">
+              <div class="glance-label">Bedrooms</div>
+              <div class="glance-value">{{ section.object.beds|default:"-" }}</div>
+            </div>
+            <div class="glance-chip">
+              <div class="glance-label">Bathrooms</div>
+              <div class="glance-value">{{ section.object.baths|default:"-" }}</div>
+            </div>
+            <div class="glance-chip">
+              <div class="glance-label">Sq Ft</div>
+              <div class="glance-value">{% if section.object.sq_ft %}{{ section.object.sq_ft }}{% else %}-{% endif %}</div>
+            </div>
+            <div class="glance-chip">
+              <div class="glance-label">Price</div>
+              <div class="glance-value">{% if section.object.price %}${{ section.object.price|floatformat:0 }}{% else %}TBD{% endif %}</div>
+            </div>
+            <div class="glance-chip">
+              <div class="glance-label">Address</div>
+              <div class="glance-value">{{ section.object.full_address|default:section.object.slug }}</div>
+            </div>
+            <div class="glance-chip">
+              <div class="glance-label">Status</div>
+              <div class="glance-value">{{ section.object.get_status_display|default:"Available" }}</div>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
     </section>
 
     {% for section in ordered_sections %}
-      <section class="compact-section">
-        <div class="mb-2">
-          <h2 class="h4 mb-1">{{ section.title }}</h2>
-        </div>
+      <section class="media-section">
+        <h2 class="h4 media-title">{{ section.title }} Photos</h2>
 
-        <div class="compact-summary">
-          {% if section.key == "home" %}
-            <h3 class="h5 mb-1">{{ section.object.full_address|default:section.object.slug }}</h3>
-            <p class="compact-meta">
-              {{ section.object.beds }} bd &middot; {{ section.object.baths }} ba
-              {% if section.object.sq_ft %} &middot; {{ section.object.sq_ft }} sq ft{% endif %}
-              {% if section.object.price %} &middot; ${{ section.object.price|floatformat:0 }}{% endif %}
-            </p>
-          {% elif section.key == "plan" %}
-            <h3 class="h5 mb-1">{{ section.object.name }}</h3>
-            <p class="compact-meta">
-              {{ section.object.beds }} bd &middot; {{ section.object.baths }} ba
-              {% if section.object.sq_ft_min and section.object.sq_ft_max %}
-                &middot; {{ section.object.sq_ft_min }} - {{ section.object.sq_ft_max }} sq ft
-              {% elif section.object.sq_ft_min %}
-                &middot; {{ section.object.sq_ft_min }}+ sq ft
-              {% endif %}
-            </p>
-          {% elif section.key == "community" %}
-            <h3 class="h5 mb-1">{{ section.object.name }}</h3>
-            <p class="compact-meta">
-              {% if section.object.tagline %}{{ section.object.tagline }}{% else %}{{ section.object.city }}{% if section.object.state %}, {{ section.object.state }}{% endif %}{% endif %}
-            </p>
-          {% endif %}
-        </div>
+        {% if section.key == "home" %}
+          <p class="media-subtitle">{{ section.object.full_address|default:section.object.slug }}</p>
+        {% elif section.key == "plan" %}
+          <p class="media-subtitle">{{ section.object.name }}</p>
+        {% elif section.key == "community" %}
+          <p class="media-subtitle">{{ section.object.name }}{% if section.object.tagline %} - {{ section.object.tagline }}{% endif %}</p>
+        {% endif %}
 
-        {% if section.object.info_sections %}
+        <div class="row g-2 photo-grid">
+          {% for photo in section.object.photos.all %}
+            <div class="col-6 col-md-3 col-lg-2">
+              <div class="photo-cell">
+                <div class="community-gallery-thumb-wrap">
+                  <img src="{{ photo.image_url }}" alt="{{ photo.caption }}" class="img-fluid community-gallery-thumb">
+                </div>
+              </div>
+              {% if photo.caption %}<div class="photo-caption">{{ photo.caption }}</div>{% endif %}
+            </div>
+          {% empty %}
+            <div class="col text-muted">No photos available yet.</div>
+          {% endfor %}
+        </div>
+      </section>
+    {% endfor %}
+
+    {% for section in ordered_sections %}
+      {% if section.key == "home" and section.object.info_sections %}
+        <section class="facts-wrap">
+          <h2 class="h4 facts-header">Facts &amp; Features</h2>
+          <p class="facts-intro">Detailed home information.</p>
+
           {% for info in section.object.info_sections %}
             <div class="compact-subsection">
               {% ifchanged info.header %}
@@ -97,23 +145,8 @@
               {% endif %}
             </div>
           {% endfor %}
-        {% endif %}
-
-        <div class="row g-2 compact-photos">
-          {% for photo in section.object.photos.all %}
-            <div class="col-6 col-md-3 col-lg-2">
-              <div class="compact-thumb">
-                <div class="community-gallery-thumb-wrap">
-                  <img src="{{ photo.image_url }}" alt="{{ photo.caption }}" class="img-fluid community-gallery-thumb">
-                </div>
-              </div>
-              {% if photo.caption %}<div class="compact-caption">{{ photo.caption }}</div>{% endif %}
-            </div>
-          {% empty %}
-            <div class="col text-muted">No photos available yet.</div>
-          {% endfor %}
-        </div>
-      </section>
+        </section>
+      {% endif %}
     {% endfor %}
   </main>
 </body>
