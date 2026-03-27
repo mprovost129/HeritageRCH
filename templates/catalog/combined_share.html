@@ -34,6 +34,23 @@
 
     .share-wrap { max-width: 1140px; }
     .hero-copy { max-width: 920px; color: #4b5563; line-height: 1.45; }
+    .hero-copy.mobile-clamp {
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .hero-toggle {
+      margin-top: 0.5rem;
+      border: 1px solid color-mix(in srgb, var(--heritage-green) 25%, #d9dde2);
+      color: var(--heritage-green-dark);
+      background: color-mix(in srgb, var(--heritage-green) 6%, #fff);
+      border-radius: 999px;
+      padding: 0.3rem 0.8rem;
+      min-height: 44px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
 
     .split-layout { margin-top: 1rem; }
     .panel-card {
@@ -49,6 +66,21 @@
     .photo-grid { margin-top: 0.2rem; }
     .photo-cell { border: 1px solid color-mix(in srgb, var(--heritage-green) 22%, #eee); border-radius: 0.4rem; overflow: hidden; }
     .photo-caption { font-size: 0.78rem; color: #6c757d; margin-top: 0.2rem; }
+    .photo-open-btn {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      margin: 0;
+      display: block;
+      min-height: 44px;
+      text-align: left;
+    }
+    .photo-open-btn:focus-visible {
+      outline: 2px solid var(--heritage-green);
+      outline-offset: 2px;
+      border-radius: 0.45rem;
+    }
 
     .info-col .info-panel { border: 1px solid color-mix(in srgb, var(--heritage-green) 20%, #d9dde2); border-radius: 0.65rem; padding: 0.85rem; background: #fff; box-shadow: 0 3px 12px rgba(3, 67, 37, 0.06); }
     .info-col .info-panel + .info-panel { margin-top: 0.75rem; }
@@ -59,6 +91,7 @@
       font-size: 0.9rem;
       color: var(--heritage-green-dark);
       background: color-mix(in srgb, var(--heritage-green) 6%, #fff);
+      min-height: 44px;
     }
 
     .glance { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.45rem; }
@@ -82,13 +115,92 @@
     .compact-item { display: flex; gap: 0.3rem; line-height: 1.3; }
     .compact-item-key { color: #6c757d; font-size: 0.82rem; min-width: 124px; }
     .compact-item-value { font-weight: 500; font-size: 0.88rem; }
+    .mobile-jump-btn {
+      position: fixed;
+      right: 0.9rem;
+      bottom: 0.9rem;
+      z-index: 1040;
+      border: 0;
+      border-radius: 999px;
+      background: var(--heritage-green);
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 8px 20px rgba(3, 67, 37, 0.28);
+      min-height: 44px;
+      padding: 0.5rem 0.95rem;
+      display: none;
+    }
+
+    .lightbox-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.82);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1060;
+      padding: 1rem;
+    }
+    .lightbox-modal.is-open { display: flex; }
+    .lightbox-content { position: relative; width: min(96vw, 1200px); }
+    .lightbox-close {
+      position: absolute;
+      top: -0.25rem;
+      right: -0.25rem;
+      border: 0;
+      border-radius: 999px;
+      width: 40px;
+      height: 40px;
+      background: #fff;
+      color: #111;
+      font-size: 1.3rem;
+      line-height: 1;
+      font-weight: 700;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+    }
+    .lightbox-img {
+      width: 100%;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 0.5rem;
+      background: #111;
+    }
+    .lightbox-caption {
+      margin-top: 0.4rem;
+      color: #f0f0f0;
+      font-size: 0.88rem;
+      text-align: center;
+    }
 
     @media (max-width: 992px) {
       .info-col .info-panel { margin-top: 0.8rem; }
+      .mobile-jump-btn { display: inline-flex; align-items: center; justify-content: center; }
+      .info-col { background: transparent; padding: 0; border-radius: 0; }
+    }
+    @media (min-width: 993px) {
+      .hero-toggle { display: none; }
+      .info-col {
+        background: color-mix(in srgb, var(--heritage-green) 4%, #f8faf9);
+        border: 1px solid color-mix(in srgb, var(--heritage-green) 14%, #e3e7e5);
+        border-radius: 0.8rem;
+        padding: 0.5rem;
+      }
     }
     @media (max-width: 768px) {
+      .community-share-banner-wrap { height: 72px !important; }
+      .community-share-banner-image { max-height: 64px !important; }
+      .panel-card, .info-col .info-panel { padding: 0.65rem; }
+      .facts-intro { font-size: 0.82rem; }
+      .compact-header { font-size: 0.68rem; }
+      .compact-subheader { font-size: 0.88rem; }
+      .compact-item-key { font-size: 0.76rem; }
+      .compact-item-value { font-size: 0.83rem; }
       .compact-item { flex-direction: column; gap: 0.04rem; }
       .compact-item-key { min-width: 0; }
+    }
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .community-share-banner-wrap { height: 90px !important; }
+      .community-share-banner-image { max-height: 82px !important; }
     }
   </style>
 </head>
@@ -103,7 +215,8 @@
     <section class="text-center mb-2">
       <h1 class="h2 mb-2" style="color: var(--heritage-green-dark);">{{ object.title }}</h1>
       {% if object.description %}
-        <div class="mb-0 mx-auto hero-copy">{{ object.description|linebreaksbr }}</div>
+        <div class="mb-0 mx-auto hero-copy mobile-clamp" id="hero-desc">{{ object.description|linebreaksbr }}</div>
+        <button type="button" class="hero-toggle" id="hero-toggle" aria-expanded="false">Read More</button>
       {% endif %}
     </section>
 
@@ -124,11 +237,19 @@
             <div class="row g-2 photo-grid">
               {% for photo in section.object.photos.all %}
                 <div class="col-6 col-md-4 col-xl-3">
-                  <div class="photo-cell">
-                    <div class="community-gallery-thumb-wrap">
-                      <img src="{{ photo.image_url }}" alt="{{ photo.caption }}" class="img-fluid community-gallery-thumb">
+                  <button
+                    type="button"
+                    class="photo-open-btn"
+                    data-lightbox-src="{{ photo.image_url }}"
+                    data-lightbox-caption="{{ photo.caption|default:'' }}"
+                    aria-label="Open photo {{ forloop.counter }}"
+                  >
+                    <div class="photo-cell">
+                      <div class="community-gallery-thumb-wrap">
+                        <img src="{{ photo.image_url }}" alt="{{ photo.caption }}" class="img-fluid community-gallery-thumb">
+                      </div>
                     </div>
-                  </div>
+                  </button>
                   {% if photo.caption %}<div class="photo-caption">{{ photo.caption }}</div>{% endif %}
                 </div>
               {% empty %}
@@ -221,15 +342,90 @@
       </div>
     </div>
   </main>
+  <button type="button" class="mobile-jump-btn" id="mobile-jump-btn">Jump To</button>
+
+  <div class="lightbox-modal" id="photo-lightbox" aria-hidden="true">
+    <div class="lightbox-content">
+      <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Close image">&times;</button>
+      <img src="" alt="" class="lightbox-img" id="lightbox-img">
+      <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+  </div>
+
   <script>
     (function () {
       const jumpSelect = document.getElementById("jump-select");
-      if (!jumpSelect) return;
-      jumpSelect.addEventListener("change", function () {
-        const target = jumpSelect.value;
-        if (target) {
-          window.location.hash = target.replace("#", "");
+      const mobileJumpBtn = document.getElementById("mobile-jump-btn");
+      const heroDesc = document.getElementById("hero-desc");
+      const heroToggle = document.getElementById("hero-toggle");
+      const lightbox = document.getElementById("photo-lightbox");
+      const lightboxImg = document.getElementById("lightbox-img");
+      const lightboxCaption = document.getElementById("lightbox-caption");
+      const lightboxClose = document.getElementById("lightbox-close");
+
+      if (jumpSelect) {
+        jumpSelect.addEventListener("change", function () {
+          const target = jumpSelect.value;
+          if (target) {
+            window.location.hash = target.replace("#", "");
+          }
+        });
+      }
+
+      if (mobileJumpBtn && jumpSelect) {
+        mobileJumpBtn.addEventListener("click", function () {
+          const jumpNav = document.getElementById("jump-nav");
+          if (jumpNav) jumpNav.scrollIntoView({ behavior: "smooth", block: "start" });
+          setTimeout(function () { jumpSelect.focus(); }, 240);
+        });
+      }
+
+      if (heroDesc && heroToggle) {
+        heroToggle.addEventListener("click", function () {
+          const expanded = heroToggle.getAttribute("aria-expanded") === "true";
+          if (expanded) {
+            heroDesc.classList.add("mobile-clamp");
+            heroToggle.setAttribute("aria-expanded", "false");
+            heroToggle.textContent = "Read More";
+          } else {
+            heroDesc.classList.remove("mobile-clamp");
+            heroToggle.setAttribute("aria-expanded", "true");
+            heroToggle.textContent = "Read Less";
+          }
+        });
+      }
+
+      function openLightbox(src, caption) {
+        if (!lightbox || !lightboxImg || !lightboxCaption) return;
+        lightboxImg.src = src || "";
+        lightboxImg.alt = caption || "Photo";
+        lightboxCaption.textContent = caption || "";
+        lightbox.classList.add("is-open");
+        lightbox.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeLightbox() {
+        if (!lightbox || !lightboxImg) return;
+        lightbox.classList.remove("is-open");
+        lightbox.setAttribute("aria-hidden", "true");
+        lightboxImg.src = "";
+        document.body.style.overflow = "";
+      }
+
+      document.addEventListener("click", function (event) {
+        const trigger = event.target.closest(".photo-open-btn");
+        if (trigger) {
+          openLightbox(trigger.getAttribute("data-lightbox-src"), trigger.getAttribute("data-lightbox-caption"));
+          return;
         }
+        if (event.target === lightbox) {
+          closeLightbox();
+        }
+      });
+      if (lightboxClose) lightboxClose.addEventListener("click", closeLightbox);
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") closeLightbox();
       });
     })();
   </script>
